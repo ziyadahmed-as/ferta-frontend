@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Mail, Lock, Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, Loader2, ArrowRight, CheckCircle2, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
@@ -39,24 +39,25 @@ const LoginPage = () => {
         className="w-full max-w-lg bg-white dark:bg-zinc-900 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 p-10 md:p-16 shadow-2xl shadow-indigo-500/5"
       >
         <div className="text-center mb-12">
-          <Link href="/" className="inline-block mb-8">
-            <div className="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 mx-auto">
-              <Lock size={32} />
+          <Link href="/" className="flex flex-col items-center gap-4 group mb-8">
+            <div className="w-16 h-16 bg-indigo-600 rounded-[2rem] flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
+              <BookOpen size={32} />
             </div>
+            <span className="text-2xl font-black tracking-tighter text-zinc-900 dark:text-white italic">Fatra<span className="text-indigo-600">Edu</span></span>
           </Link>
-          <h1 className="text-4xl font-black text-zinc-900 dark:text-white tracking-tighter mb-4">Welcome Back</h1>
-          <p className="text-zinc-600 dark:text-zinc-400 font-medium text-lg">Continue your learning journey today.</p>
+          <h1 className="text-2xl lg:text-3xl font-black text-zinc-900 dark:text-white tracking-tighter mb-2 italic">Welcome Back</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 font-medium text-sm italic opacity-80 uppercase tracking-widest">Continue your learning journey today.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {isRegistered && (
-            <div className="p-5 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800 rounded-3xl text-emerald-700 dark:text-emerald-400 text-sm font-bold flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
-              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white shrink-0">
+            <div className="p-6 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800 rounded-[2rem] text-emerald-700 dark:text-emerald-400 text-sm font-bold flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg shadow-emerald-500/20">
                 <CheckCircle2 size={24} />
               </div>
               <div>
-                <p className="text-base font-black">Registration Successful!</p>
-                <p className="font-medium opacity-80">Please sign in with your new credentials.</p>
+                <p className="text-xs font-black uppercase tracking-widest italic">Registration Successful!</p>
+                <p className="text-[10px] font-medium opacity-80 uppercase tracking-tighter mt-1 italic">Sign in with your new credentials</p>
               </div>
             </div>
           )}
@@ -68,25 +69,25 @@ const LoginPage = () => {
           )}
           
           <div className="flex flex-col gap-2">
-            <label htmlFor="username" className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 ml-4 mb-2">Username</label>
-            <div className="relative">
+            <label htmlFor="username" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 ml-4 mb-1 italic font-mono">Username</label>
+            <div className="relative group">
               <input
                 id="username"
                 type="text"
-                placeholder="Your username"
+                placeholder="Institutional ID"
                 title="Username"
                 required
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-3xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white font-medium"
+                className="w-full pl-14 pr-6 py-4 bg-zinc-50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white text-sm font-medium placeholder:italic placeholder:opacity-50"
               />
-              <Mail className="absolute left-6 top-5 text-zinc-400" size={20} />
+              <Mail className="absolute left-6 top-4 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 ml-4 mb-2">Password</label>
-            <div className="relative">
+            <label htmlFor="password" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 ml-4 mb-1 italic font-mono">Access Key</label>
+            <div className="relative group">
               <input
                 id="password"
                 type="password"
@@ -95,27 +96,27 @@ const LoginPage = () => {
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full pl-14 pr-6 py-5 bg-zinc-50 dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-3xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white font-bold tracking-widest"
+                className="w-full pl-14 pr-6 py-4 bg-zinc-50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white text-sm font-black tracking-[0.5em] placeholder:tracking-normal placeholder:italic placeholder:opacity-50"
               />
-              <Lock className="absolute left-6 top-5 text-zinc-400" size={20} />
+              <Lock className="absolute left-6 top-4 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[2rem] font-black text-lg flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
+            className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 mt-4 italic"
           >
-            {loading ? <Loader2 className="animate-spin" size={24} /> : (
-                <>Sign In Now <ArrowRight size={24}/></>
+            {loading ? <Loader2 className="animate-spin" size={20} /> : (
+                <>Initialize Session <ArrowRight size={20}/></>
             )}
           </button>
         </form>
 
         <div className="mt-12 text-center pt-8 border-t border-zinc-100 dark:border-zinc-800">
-          <p className="text-zinc-600 dark:text-zinc-400 font-medium">
-            New here?{" "}
-            <Link href="/register" className="text-indigo-600 font-black hover:underline underline-offset-4">Create Account</Link>
+          <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest italic">
+            First Protocol?{" "}
+            <Link href="/register" className="text-indigo-600 font-black hover:underline underline-offset-4">Create Node</Link>
           </p>
         </div>
       </motion.div>

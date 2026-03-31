@@ -9,6 +9,7 @@ interface User {
   username: string;
   email: string;
   role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
+  is_superuser?: boolean;
 }
 
 interface AuthContextType {

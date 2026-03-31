@@ -32,19 +32,19 @@ const Hero = () => {
             className="mb-8"
           >
             <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 drop-shadow-sm font-mono">Precision-Engineered Learning</h2>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-zinc-900 dark:text-white leading-[1.0] tracking-tighter mb-6">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white leading-[1.1] tracking-tighter mb-6 italic">
               Strategic <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Skill Acquisition</span>
             </h1>
-            <p className="text-zinc-600 dark:text-zinc-400 text-base font-medium max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+            <p className="text-zinc-600 dark:text-zinc-400 text-sm font-medium max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed opacity-80">
               Accelerating the digital transformation of professional skills through AI-orchestrated education and real-time mentor synchronization.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 mb-12">
-              <Link href="/courses" className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[1.5rem] font-black text-lg flex items-center gap-3 transition-all shadow-xl shadow-indigo-500/20 hover:scale-105 active:scale-95 group">
-                Initialize Portal <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
+              <Link href="/courses" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2 transition-all shadow-xl shadow-indigo-500/20 hover:scale-105 active:scale-95 group">
+                Initialize Portal <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link href="/register?role=instructor" className="px-8 py-4 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 rounded-[1.5rem] font-black text-lg flex items-center gap-3 transition-all hover:border-indigo-600/30">
-                 Join Our Faculty <BookOpen size={20} />
+              <Link href="/register?role=instructor" className="px-6 py-3 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2 transition-all hover:border-indigo-600/30">
+                 Join Our Faculty <BookOpen size={18} />
               </Link>
             </div>
           </motion.div>

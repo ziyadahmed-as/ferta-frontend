@@ -47,10 +47,10 @@ const Features = () => {
   return (
     <section className="py-24 bg-white dark:bg-black px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-4">Core Platform Features</h2>
-          <h3 className="text-4xl lg:text-6xl font-black text-zinc-900 dark:text-white mb-8 tracking-tighter">Everything you need to <span className="text-indigo-600 italic">Teach and Learn</span></h3>
-          <p className="text-zinc-600 dark:text-zinc-400 text-xl leading-relaxed">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 font-mono italic">Core Platform Features</h2>
+          <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-6 tracking-tighter italic">Everything you need to <span className="text-indigo-600">Teach and Learn</span></h3>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed opacity-80">
             A complete suite of modern tools designed for instructors to build successful courses and for students to have a world-class learning experience.
           </p>
         </div>
@@ -66,11 +66,11 @@ const Features = () => {
               whileHover={{ scale: 1.05 }}
               className="p-10 bg-zinc-50 dark:bg-zinc-900/50 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 hover:border-indigo-600/30 transition-all duration-300"
             >
-              <div className={`w-16 h-16 ${feature.bg} rounded-2xl flex items-center justify-center mb-8 shadow-xl shadow-zinc-200/20 dark:shadow-none`}>
-                {React.cloneElement(feature.icon as React.ReactElement<{ size: number }>, { size: 32 })}
+              <div className={`w-12 h-12 ${feature.bg} rounded-xl flex items-center justify-center mb-6 shadow-xl shadow-zinc-200/20 dark:shadow-none transition-transform`}>
+                {React.cloneElement(feature.icon as React.ReactElement<{ size: number }>, { size: 24 })}
               </div>
-              <h4 className="text-2xl font-bold text-zinc-900 dark:text-white mb-4 leading-tight">{feature.title}</h4>
-              <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
+              <h4 className="text-lg font-black text-zinc-900 dark:text-white mb-3 leading-tight italic">{feature.title}</h4>
+              <p className="text-zinc-500 dark:text-zinc-400 text-xs leading-relaxed font-medium">
                 {feature.description}
               </p>
             </motion.div>

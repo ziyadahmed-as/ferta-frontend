@@ -14,7 +14,7 @@ const Footer = () => {
               <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
                 <BookOpen size={24} />
               </div>
-              <span className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">
+              <span className="text-xl font-black tracking-tighter text-zinc-900 dark:text-white italic">
                 Fatra<span className="text-indigo-600">Edu</span>
               </span>
             </Link>

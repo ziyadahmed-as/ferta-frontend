@@ -47,9 +47,9 @@ const Stats = () => {
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-16">
         <div className="max-w-xl">
-           <h2 className="text-sm font-black uppercase tracking-[0.4em] text-indigo-400 mb-6 font-mono font-black">Institutional Growth Metrics</h2>
-           <h3 className="text-4xl lg:text-6xl font-black text-white mb-8 tracking-tighter leading-tight">Powering the <span className="text-indigo-500">Global Knowledge</span> Economy</h3>
-           <p className="text-zinc-400 text-xl leading-relaxed">
+           <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-6 font-mono font-black italic">Institutional Growth Metrics</h2>
+           <h3 className="text-2xl lg:text-3xl font-black text-white mb-6 tracking-tighter leading-tight italic">Powering the <span className="text-indigo-500">Global Knowledge</span> Economy</h3>
+           <p className="text-zinc-500 text-sm leading-relaxed opacity-80">
              Our community is architected for rapid, high-impact growth. We provide students with the infrastructure to thrive in the modern economy and faculty with the tools to engineer successful educational businesses.
            </p>
         </div>
@@ -68,10 +68,10 @@ const Stats = () => {
                     {stat.icon}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-5xl font-black text-white mb-3 tracking-tighter transition-colors group-hover:text-indigo-400">
+                  <span className="text-3xl font-black text-white mb-2 tracking-tighter transition-colors group-hover:text-indigo-400 italic">
                     {stat.value}
                   </span>
-                  <span className="text-zinc-500 font-bold uppercase tracking-widest text-sm">
+                  <span className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] font-mono">
                     {stat.label}
                   </span>
                 </div>

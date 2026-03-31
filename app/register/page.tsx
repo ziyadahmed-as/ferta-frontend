@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Mail, Lock, User, Briefcase, GraduationCap, Link as LinkIcon, FileText, Loader2, ArrowRight, Globe, Award, CheckCircle2 } from "lucide-react";
+import { Mail, Lock, User, Briefcase, GraduationCap, Link as LinkIcon, FileText, Loader2, ArrowRight, Globe, Award, CheckCircle2, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -85,19 +85,19 @@ const RegisterPage = () => {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-lg text-center p-12 bg-zinc-50 dark:bg-zinc-900 rounded-[3rem] border border-zinc-200 dark:border-zinc-800"
+          className="w-full max-w-lg text-center p-12 bg-zinc-50 dark:bg-zinc-900 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 shadow-2xl"
         >
-          <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center text-white mx-auto mb-8 shadow-xl shadow-emerald-500/20">
-            <CheckCircle2 size={40} />
+          <div className="w-16 h-16 bg-emerald-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-8 shadow-xl shadow-emerald-500/20">
+            <CheckCircle2 size={32} />
           </div>
-          <h1 className="text-4xl font-black text-zinc-900 dark:text-white mb-4">You're All Set!</h1>
-          <p className="text-zinc-600 dark:text-zinc-400 text-lg mb-8">
+          <h1 className="text-2xl font-black text-zinc-900 dark:text-white mb-2 italic tracking-tighter">You're All Set!</h1>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm mb-8 font-medium italic opacity-80 uppercase tracking-widest">
             {role === "INSTRUCTOR" 
               ? "Your application has been received. Redirecting you to login..." 
               : "Welcome to the community! Redirecting you to login..."}
           </p>
-          <Link href="/login" className="inline-flex items-center gap-2 text-indigo-600 font-bold hover:underline underline-offset-4">
-            Go to Login Now <ArrowRight size={20} />
+          <Link href="/login" className="inline-flex items-center gap-2 text-indigo-600 font-black text-[10px] uppercase tracking-widest hover:underline underline-offset-4 italic">
+            Go to Login Now <ArrowRight size={16} />
           </Link>
         </motion.div>
       </div>
@@ -115,12 +115,18 @@ const RegisterPage = () => {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-12 flex flex-col items-center"
         >
-          <h1 className="text-5xl md:text-6xl font-black text-zinc-900 dark:text-white tracking-tighter mb-6">
-            {role === "INSTRUCTOR" ? "Instructor Registration" : "Create Account"}
+          <Link href="/" className="flex flex-col items-center gap-4 group mb-10">
+            <div className="w-16 h-16 bg-indigo-600 rounded-[2rem] flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
+               <BookOpen size={32} />
+            </div>
+            <span className="text-2xl font-black tracking-tighter text-zinc-900 dark:text-white italic">Fatra<span className="text-indigo-600">Edu</span></span>
+          </Link>
+          <h1 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white tracking-tighter mb-4 italic">
+            {role === "INSTRUCTOR" ? "Instructor Registration" : "Scholar Identity Enrollment"}
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400 font-medium text-lg max-w-2xl mx-auto">
+          <p className="text-zinc-500 dark:text-zinc-400 font-medium text-sm italic opacity-80 uppercase tracking-widest max-w-xl mx-auto">
             {role === "INSTRUCTOR" 
               ? "Join our community of expert educators and share your knowledge with the world." 
               : "Join thousands of learners and educators building the future of skills."}
@@ -129,26 +135,26 @@ const RegisterPage = () => {
 
         {/* Role Selector */}
         {!isRoleLocked && (
-          <div className="flex bg-zinc-100 dark:bg-zinc-900 p-2 rounded-3xl mb-12 border border-zinc-200 dark:border-zinc-800 gap-2">
+          <div className="flex bg-zinc-100 dark:bg-zinc-900 p-1.5 rounded-2xl mb-12 border border-zinc-200 dark:border-zinc-800 gap-1.5 backdrop-blur-md">
             <button
               onClick={() => setRole("STUDENT")}
-              className={`px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-3 ${
+              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 italic ${
                 role === "STUDENT" 
-                  ? "bg-white dark:bg-black text-indigo-600 shadow-xl" 
+                  ? "bg-white dark:bg-black text-indigo-600 shadow-xl border border-zinc-200/50 dark:border-zinc-800/50" 
                   : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
               }`}
             >
-              <User size={20} /> I'm a Student
+              <User size={14} /> Student Node
             </button>
             <button
               onClick={() => setRole("INSTRUCTOR")}
-              className={`px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-3 ${
+              className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 italic ${
                 role === "INSTRUCTOR" 
-                  ? "bg-white dark:bg-black text-indigo-600 shadow-xl" 
+                  ? "bg-white dark:bg-black text-indigo-600 shadow-xl border border-zinc-200/50 dark:border-zinc-800/50" 
                   : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
               }`}
             >
-              <Award size={20} /> I'm an Instructor
+              <Award size={14} /> Faculty Member
             </button>
           </div>
         )}
@@ -168,9 +174,9 @@ const RegisterPage = () => {
 
           {/* Common Fields */}
           <div className="space-y-6">
-            <h3 className="text-xl font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
-              <span className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center text-sm">1</span>
-              Basic Information
+            <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3 italic tracking-tighter">
+              <span className="w-8 h-8 bg-zinc-950 dark:bg-white dark:text-black text-white rounded-lg flex items-center justify-center text-[10px] font-mono">01</span>
+              Identity Details
             </h3>
             
             <div className="flex flex-col gap-2">
@@ -242,9 +248,9 @@ const RegisterPage = () => {
           </div>
 
           <div className="space-y-6">
-            <h3 className="text-xl font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
-              <span className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center text-sm">2</span>
-              Security
+            <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3 italic tracking-tighter">
+              <span className="w-8 h-8 bg-zinc-950 dark:bg-white dark:text-black text-white rounded-lg flex items-center justify-center text-[10px] font-mono">02</span>
+              Access Configuration
             </h3>
 
             <div className="flex flex-col gap-2">
@@ -294,9 +300,9 @@ const RegisterPage = () => {
                 className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mt-4 pt-12 border-t border-zinc-100 dark:border-zinc-800"
               >
                 <div className="space-y-6">
-                  <h3 className="text-xl font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
-                    <span className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center text-sm">3</span>
-                    Professional Details
+                  <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3 italic tracking-tighter">
+                    <span className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center text-[10px] font-mono">03</span>
+                    Professional Registry
                   </h3>
                   
                   <div className="flex flex-col gap-2">
@@ -362,9 +368,9 @@ const RegisterPage = () => {
                 </div>
 
                 <div className="space-y-6">
-                  <h3 className="text-xl font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3">
-                    <span className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center text-sm">4</span>
-                    Links & Portfolio
+                  <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-2 flex items-center gap-3 italic tracking-tighter">
+                    <span className="w-8 h-8 bg-indigo-600 text-white rounded-lg flex items-center justify-center text-[10px] font-mono">04</span>
+                    Network Presence
                   </h3>
 
                   <div className="flex flex-col gap-2">
@@ -434,19 +440,19 @@ const RegisterPage = () => {
             )}
           </AnimatePresence>
 
-          <div className="md:col-span-2 pt-8 flex flex-col items-center gap-6">
+          <div className="md:col-span-2 pt-8 flex flex-col items-center gap-4">
             <button
               type="submit"
               disabled={loading}
-              className="w-full max-w-md py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-3xl font-black text-xl flex items-center justify-center gap-3 transition-all shadow-2xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+              className="w-full max-w-md py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 transition-all shadow-2xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 italic"
             >
-              {loading ? <Loader2 className="animate-spin" size={24} /> : (
-                <>Complete Registration <ArrowRight size={24}/></>
+              {loading ? <Loader2 className="animate-spin" size={20} /> : (
+                <>Finalize Enrollment <ArrowRight size={20}/></>
               )}
             </button>
-            <p className="text-zinc-500 dark:text-zinc-400 font-medium">
-              Already have an account?{" "}
-              <Link href="/login" className="text-indigo-600 font-black hover:underline underline-offset-4">Sign In</Link>
+            <p className="text-zinc-500 font-bold text-[10px] uppercase tracking-widest italic mt-2">
+              Already a Scholar?{" "}
+              <Link href="/login" className="text-indigo-600 font-black hover:underline underline-offset-4">Sign In Portal</Link>
             </p>
           </div>
         </motion.form>

@@ -4,33 +4,49 @@ import React, { useState } from "react";
 import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import api from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
+
 const Chatbot = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! How can I help you today?", sender: "bot" },
+    { id: 1, text: "Welcome to the institutional knowledge hub. How can I assist your learning path today?", sender: "bot" },
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
-  const handleSend = (e: React.FormEvent) => {
+  const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
+    if (!inputText.trim() || isTyping) return;
 
-    const newUserMsg = { id: Date.now(), text: inputText, sender: "user" };
+    const query = inputText.trim();
+    const newUserMsg = { id: Date.now(), text: query, sender: "user" };
     setMessages((prev) => [...prev, newUserMsg]);
     setInputText("");
     setIsTyping(true);
 
-    // Simulate bot response
-    setTimeout(() => {
+    try {
+      const endpoint = user ? "/ai/learning-assistant/" : "/ai/chat/";
+      const response = await api.post(endpoint, { query });
+      
       const botResponse = {
         id: Date.now() + 1,
-        text: "Thanks for reaching out! I'm your AI assistant. Currently, I'm in study mode, but feel free to ask about our courses!",
+        text: response.data.response || response.data.summary || "Signal processed. How else can I assist?",
         sender: "bot",
       };
       setMessages((prev) => [...prev, botResponse]);
+    } catch (err: any) {
+      console.error("AI Communication Error:", err);
+      const errorMsg = {
+        id: Date.now() + 1,
+        text: "System signal interrupted. AI services are currently operating in offline mode. Please verify your clearance levels.",
+        sender: "bot",
+      };
+      setMessages((prev) => [...prev, errorMsg]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (
