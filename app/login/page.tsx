@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Mail, Lock, Loader2, ArrowRight, CheckCircle2, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
-const LoginPage = () => {
+const LoginContent = () => {
   const { login } = useAuth();
   const searchParams = useSearchParams();
   const isRegistered = searchParams.get("registered") === "true";
@@ -29,10 +29,6 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black px-6 py-20 relative overflow-hidden">
-      {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-indigo-50/50 dark:from-indigo-900/10 to-transparent -z-10" />
-      
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -63,63 +59,77 @@ const LoginPage = () => {
           )}
 
           {error && (
-            <div className="p-4 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-2xl text-rose-600 dark:text-rose-400 text-sm font-bold animate-in fade-in zoom-in duration-300">
+            <div className="p-4 bg-rose-50 dark:bg-rose-900/10 border border-rose-200 dark:border-rose-800 rounded-2xl text-rose-600 dark:text-rose-400 text-xs font-bold italic text-center animate-in shake duration-500">
               {error}
             </div>
           )}
-          
-          <div className="flex flex-col gap-2">
-            <label htmlFor="username" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 ml-4 mb-1 italic font-mono">Username</label>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-6 italic">Access Identity (Username)</label>
             <div className="relative group">
+              <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={20} />
               <input
-                id="username"
                 type="text"
-                placeholder="Institutional ID"
-                title="Username"
                 required
+                title="Username"
+                className="w-full pl-16 pr-6 py-5 bg-zinc-50 dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-[2rem] focus:ring-4 focus:ring-indigo-600/10 outline-none font-medium transition-all text-sm italic"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full pl-14 pr-6 py-4 bg-zinc-50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white text-sm font-medium placeholder:italic placeholder:opacity-50"
+                placeholder="Institutional ID..."
               />
-              <Mail className="absolute left-6 top-4 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400 ml-4 mb-1 italic font-mono">Access Key</label>
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400 ml-6 italic">Secure Entry Key</label>
             <div className="relative group">
+              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={20} />
               <input
-                id="password"
                 type="password"
-                placeholder="••••••••"
-                title="Password"
                 required
+                title="Password"
+                className="w-full pl-16 pr-6 py-5 bg-zinc-50 dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-[2rem] focus:ring-4 focus:ring-indigo-600/10 outline-none font-medium transition-all text-sm italic"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full pl-14 pr-6 py-4 bg-zinc-50 dark:bg-black/50 border border-zinc-200 dark:border-zinc-800 rounded-2xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white text-sm font-black tracking-[0.5em] placeholder:tracking-normal placeholder:italic placeholder:opacity-50"
+                placeholder="Access Key..."
               />
-              <Lock className="absolute left-6 top-4 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={18} />
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 transition-all shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 mt-4 italic"
+            className="w-full py-5 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-[2.5rem] font-black text-xs uppercase tracking-[0.4em] mt-4 shadow-2xl hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3 italic"
           >
-            {loading ? <Loader2 className="animate-spin" size={20} /> : (
-                <>Initialize Session <ArrowRight size={20}/></>
-            )}
+            {loading ? <Loader2 className="animate-spin" size={20} /> : <>Initialize Node <ArrowRight size={20} /></>}
           </button>
         </form>
 
-        <div className="mt-12 text-center pt-8 border-t border-zinc-100 dark:border-zinc-800">
-          <p className="text-zinc-500 font-bold text-xs uppercase tracking-widest italic">
-            First Protocol?{" "}
-            <Link href="/register" className="text-indigo-600 font-black hover:underline underline-offset-4">Create Node</Link>
+        <div className="mt-12 text-center">
+          <p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium italic">
+            New Faculty Member? {" "}
+            <Link href="/register" className="text-indigo-600 font-black hover:underline underline-offset-8 uppercase tracking-widest ml-2">
+              Enroll Here
+            </Link>
           </p>
         </div>
       </motion.div>
+  );
+};
+
+const LoginPage = () => {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-black px-6 py-20 relative overflow-hidden">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-indigo-50/50 dark:from-indigo-900/10 to-transparent -z-10" />
+      
+      <Suspense fallback={
+        <div className="h-96 w-full max-w-lg bg-zinc-900 rounded-[3rem] animate-pulse flex items-center justify-center">
+            <Loader2 className="text-white animate-spin" size={48} />
+        </div>
+      }>
+        <LoginContent />
+      </Suspense>
     </div>
   );
 };

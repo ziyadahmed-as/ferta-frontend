@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Mail, Lock, User, Briefcase, GraduationCap, Link as LinkIcon, FileText, Loader2, ArrowRight, Globe, Award, CheckCircle2, BookOpen } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
 
-const RegisterPage = () => {
+const RegisterContent = () => {
   const { register } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -457,6 +456,20 @@ const RegisterPage = () => {
           </div>
         </motion.form>
       </div>
+    </div>
+  );
+};
+
+const RegisterPage = () => {
+  return (
+    <div className="min-h-screen bg-white dark:bg-black py-24 px-6 relative overflow-hidden">
+        <Suspense fallback={
+          <div className="h-screen flex items-center justify-center bg-zinc-950 text-white font-black tracking-widest animate-pulse italic uppercase">
+             Hydrating Registry...
+          </div>
+        }>
+            <RegisterContent />
+        </Suspense>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import api from "@/lib/api";
@@ -8,13 +8,16 @@ import { BookOpen, Search, Layers, Users, Clock, ArrowRight, Filter, SlidersHori
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
-const CoursesCatalog = () => {
+const CatalogContent = () => {
+  const searchParams = useSearchParams();
+  const initialCategory = searchParams.get("category");
   const [courses, setCourses] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(initialCategory);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,9 +44,6 @@ const CoursesCatalog = () => {
   });
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
-      <Navbar />
-      
       <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
         {/* Header Shard */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
@@ -166,10 +166,23 @@ const CoursesCatalog = () => {
           </div>
         )}
       </main>
-      
-      <Footer />
-    </div>
   );
+};
+
+const CoursesCatalog = () => {
+    return (
+        <div className="min-h-screen bg-white dark:bg-black">
+            <Navbar />
+            <Suspense fallback={
+                <div className="min-h-screen flex items-center justify-center font-black tracking-widest italic animate-pulse uppercase text-zinc-500">
+                    Decrypting Knowledge Network...
+                </div>
+            }>
+                <CatalogContent />
+            </Suspense>
+            <Footer />
+        </div>
+    );
 };
 
 export default CoursesCatalog;
