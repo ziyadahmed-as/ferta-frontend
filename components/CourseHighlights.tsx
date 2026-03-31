@@ -28,7 +28,10 @@ const CourseHighlights = () => {
     const fetchCourses = async () => {
       try {
         const response = await api.get("/courses/courses/");
-        setCourses(response.data.results.slice(0, 4));
+        const coursesData = Array.isArray(response.data) ? response.data : response.data.results;
+        if (Array.isArray(coursesData)) {
+          setCourses(coursesData.slice(0, 4));
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {

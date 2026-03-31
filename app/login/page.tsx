@@ -53,11 +53,13 @@ const LoginPage = () => {
           )}
           
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 ml-4 mb-2">Username</label>
+            <label htmlFor="username" className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 ml-4 mb-2">Username</label>
             <div className="relative">
               <input
+                id="username"
                 type="text"
                 placeholder="Your username"
+                title="Username"
                 required
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -68,11 +70,13 @@ const LoginPage = () => {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 ml-4 mb-2">Password</label>
+            <label htmlFor="password" className="text-xs font-black uppercase tracking-widest text-zinc-500 dark:text-zinc-400 ml-4 mb-2">Password</label>
             <div className="relative">
               <input
+                id="password"
                 type="password"
                 placeholder="••••••••"
+                title="Password"
                 required
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}

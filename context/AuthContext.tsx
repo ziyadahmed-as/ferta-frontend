@@ -55,8 +55,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (data: any) => {
     try {
-      await api.post("/users/register/", data);
-      await login({ username: data.username, password: data.password });
+      const isFormData = data instanceof FormData;
+      await api.post("/users/register/", data, {
+        headers: isFormData ? { "Content-Type": "multipart/form-data" } : {},
+      });
+      
+      // Extract username and password for login
+      const loginCredentials = isFormData 
+        ? { username: data.get("username"), password: data.get("password") }
+        : { username: data.username, password: data.password };
+        
+      await login(loginCredentials);
     } catch (error) {
       console.error("Registration failed:", error);
       throw error;
