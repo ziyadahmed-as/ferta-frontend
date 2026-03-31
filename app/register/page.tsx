@@ -4,11 +4,24 @@ import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Mail, Lock, User, Briefcase, GraduationCap, Link as LinkIcon, FileText, Loader2, ArrowRight, Globe, Award, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
 const RegisterPage = () => {
   const { register } = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [role, setRole] = useState<"STUDENT" | "INSTRUCTOR">("STUDENT");
+  const [isRoleLocked, setIsRoleLocked] = useState(false);
+
+  useEffect(() => {
+    const paramRole = searchParams.get("role")?.toUpperCase();
+    if (paramRole === "INSTRUCTOR" || paramRole === "STUDENT") {
+      setRole(paramRole as "STUDENT" | "INSTRUCTOR");
+      setIsRoleLocked(true);
+    }
+  }, [searchParams]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [success, setSuccess] = useState(false);
@@ -56,6 +69,10 @@ const RegisterPage = () => {
     try {
       await register(submissionData);
       setSuccess(true);
+      // Wait 3 seconds then redirect to login
+      setTimeout(() => {
+        router.push("/login?registered=true");
+      }, 3000);
     } catch (err: any) {
       setError(err.response?.data || { detail: "Registration failed. Please check your information." });
       setLoading(false);
@@ -76,11 +93,11 @@ const RegisterPage = () => {
           <h1 className="text-4xl font-black text-zinc-900 dark:text-white mb-4">You're All Set!</h1>
           <p className="text-zinc-600 dark:text-zinc-400 text-lg mb-8">
             {role === "INSTRUCTOR" 
-              ? "Your application has been received. Our team will review your profile shortly." 
-              : "Welcome to the community! Redirecting you to your dashboard..."}
+              ? "Your application has been received. Redirecting you to login..." 
+              : "Welcome to the community! Redirecting you to login..."}
           </p>
-          <Link href="/" className="inline-flex items-center gap-2 text-indigo-600 font-bold hover:underline underline-offset-4">
-            Go to Homepage <ArrowRight size={20} />
+          <Link href="/login" className="inline-flex items-center gap-2 text-indigo-600 font-bold hover:underline underline-offset-4">
+            Go to Login Now <ArrowRight size={20} />
           </Link>
         </motion.div>
       </div>
@@ -100,35 +117,41 @@ const RegisterPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl md:text-6xl font-black text-zinc-900 dark:text-white tracking-tighter mb-6">Create Account</h1>
+          <h1 className="text-5xl md:text-6xl font-black text-zinc-900 dark:text-white tracking-tighter mb-6">
+            {role === "INSTRUCTOR" ? "Instructor Registration" : "Create Account"}
+          </h1>
           <p className="text-zinc-600 dark:text-zinc-400 font-medium text-lg max-w-2xl mx-auto">
-            Join thousands of learners and educators building the future of skills.
+            {role === "INSTRUCTOR" 
+              ? "Join our community of expert educators and share your knowledge with the world." 
+              : "Join thousands of learners and educators building the future of skills."}
           </p>
         </motion.div>
 
         {/* Role Selector */}
-        <div className="flex bg-zinc-100 dark:bg-zinc-900 p-2 rounded-3xl mb-12 border border-zinc-200 dark:border-zinc-800 gap-2">
-          <button
-            onClick={() => setRole("STUDENT")}
-            className={`px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-3 ${
-              role === "STUDENT" 
-                ? "bg-white dark:bg-black text-indigo-600 shadow-xl" 
-                : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-            }`}
-          >
-            <User size={20} /> I'm a Student
-          </button>
-          <button
-            onClick={() => setRole("INSTRUCTOR")}
-            className={`px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-3 ${
-              role === "INSTRUCTOR" 
-                ? "bg-white dark:bg-black text-indigo-600 shadow-xl" 
-                : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
-            }`}
-          >
-            <Award size={20} /> I'm an Instructor
-          </button>
-        </div>
+        {!isRoleLocked && (
+          <div className="flex bg-zinc-100 dark:bg-zinc-900 p-2 rounded-3xl mb-12 border border-zinc-200 dark:border-zinc-800 gap-2">
+            <button
+              onClick={() => setRole("STUDENT")}
+              className={`px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-3 ${
+                role === "STUDENT" 
+                  ? "bg-white dark:bg-black text-indigo-600 shadow-xl" 
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+              }`}
+            >
+              <User size={20} /> I'm a Student
+            </button>
+            <button
+              onClick={() => setRole("INSTRUCTOR")}
+              className={`px-8 py-4 rounded-2xl font-black transition-all flex items-center gap-3 ${
+                role === "INSTRUCTOR" 
+                  ? "bg-white dark:bg-black text-indigo-600 shadow-xl" 
+                  : "text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300"
+              }`}
+            >
+              <Award size={20} /> I'm an Instructor
+            </button>
+          </div>
+        )}
 
         <motion.form 
           layout

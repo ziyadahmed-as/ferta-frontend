@@ -2,12 +2,15 @@
 
 import React, { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
+import { Mail, Lock, Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 
 const LoginPage = () => {
   const { login } = useAuth();
+  const searchParams = useSearchParams();
+  const isRegistered = searchParams.get("registered") === "true";
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,6 +49,18 @@ const LoginPage = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+          {isRegistered && (
+            <div className="p-5 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800 rounded-3xl text-emerald-700 dark:text-emerald-400 text-sm font-bold flex items-center gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+              <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white shrink-0">
+                <CheckCircle2 size={24} />
+              </div>
+              <div>
+                <p className="text-base font-black">Registration Successful!</p>
+                <p className="font-medium opacity-80">Please sign in with your new credentials.</p>
+              </div>
+            </div>
+          )}
+
           {error && (
             <div className="p-4 bg-rose-50 dark:bg-rose-900/20 border border-rose-200 dark:border-rose-800 rounded-2xl text-rose-600 dark:text-rose-400 text-sm font-bold animate-in fade-in zoom-in duration-300">
               {error}

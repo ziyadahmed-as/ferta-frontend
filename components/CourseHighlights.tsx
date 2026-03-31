@@ -27,13 +27,13 @@ const CourseHighlights = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await api.get("/courses/courses/");
+        const response = await api.get("/courses/courses/popular/");
         const coursesData = Array.isArray(response.data) ? response.data : response.data.results;
         if (Array.isArray(coursesData)) {
           setCourses(coursesData.slice(0, 4));
         }
       } catch (error) {
-        console.error("Error fetching courses:", error);
+        console.error("Error fetching popular courses:", error);
       } finally {
         setLoading(false);
       }

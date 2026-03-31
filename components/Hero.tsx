@@ -2,7 +2,8 @@
 
 import React from "react";
 import Image from "next/image";
-import { MoveRight, Star, CheckCircle2, Trophy, Clock } from "lucide-react";
+import Link from "next/link";
+import { MoveRight, Star, CheckCircle2, Trophy, Clock, ArrowRight, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Hero = () => {
@@ -24,37 +25,28 @@ const Hero = () => {
             <span>Over 2,000+ courses listed</span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl lg:text-7xl font-extrabold tracking-tight text-zinc-900 dark:text-white leading-[1.1] mb-8"
-          >
-            Unlock Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-600">Future</span> with Fatra Edu
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg lg:text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed mb-10 max-w-2xl mx-auto lg:mx-0"
-          >
-            Join the most comprehensive learning platform featuring AI-assisted course building and integrated live streaming. Start your journey today and learn from industry leaders.
-          </motion.p>
-
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-8"
           >
-            <button className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-2 transition-all shadow-xl shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98]">
-              Browse Courses
-              <MoveRight size={20} />
-            </button>
-            <button className="w-full sm:w-auto px-8 py-4 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-zinc-900 dark:text-white rounded-2xl font-bold text-lg border border-zinc-200 dark:border-zinc-800 transition-all hover:scale-[1.02] active:scale-[0.98]">
-              Become Instructor
-            </button>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 drop-shadow-sm font-mono">Precision-Engineered Learning</h2>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-zinc-900 dark:text-white leading-[1.0] tracking-tighter mb-6">
+              Strategic <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Skill Acquisition</span>
+            </h1>
+            <p className="text-zinc-600 dark:text-zinc-400 text-base font-medium max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
+              Accelerating the digital transformation of professional skills through AI-orchestrated education and real-time mentor synchronization.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 mb-12">
+              <Link href="/courses" className="px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[1.5rem] font-black text-lg flex items-center gap-3 transition-all shadow-xl shadow-indigo-500/20 hover:scale-105 active:scale-95 group">
+                Initialize Portal <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link href="/register?role=instructor" className="px-8 py-4 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white border border-zinc-200 dark:border-zinc-800 rounded-[1.5rem] font-black text-lg flex items-center gap-3 transition-all hover:border-indigo-600/30">
+                 Join Our Faculty <BookOpen size={20} />
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div

@@ -1,15 +1,42 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Users, GraduationCap, Globe2, Shapes } from "lucide-react";
 import { motion } from "framer-motion";
+import api from "@/lib/api";
+
+const formatCount = (num: number) => {
+  if (num >= 1000) {
+    return (num / 1000).toFixed(0) + "K+";
+  }
+  return num + "+";
+};
 
 const Stats = () => {
+  const [statsData, setStatsData] = useState({
+    students_count: 0,
+    instructors_count: 0,
+    countries_count: 0,
+    courses_count: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await api.get("/courses/courses/platform_stats/");
+        setStatsData(response.data);
+      } catch (error) {
+        console.error("Error fetching platform stats:", error);
+      }
+    };
+    fetchStats();
+  }, []);
+
   const stats = [
-    { label: "Active Students", value: "45K+", icon: <Users size={28} /> },
-    { label: "Expert Instructors", value: "2K+", icon: <GraduationCap size={28} /> },
-    { label: "Countries Served", value: "115+", icon: <Globe2 size={28} /> },
-    { label: "Courses Available", value: "12K+", icon: <Shapes size={28} /> }
+    { label: "Active Students", value: formatCount(statsData.students_count), icon: <Users size={28} /> },
+    { label: "Expert Instructors", value: formatCount(statsData.instructors_count), icon: <GraduationCap size={28} /> },
+    { label: "Countries Served", value: statsData.countries_count + "+", icon: <Globe2 size={28} /> },
+    { label: "Courses Available", value: formatCount(statsData.courses_count), icon: <Shapes size={28} /> }
   ];
 
   return (
@@ -20,10 +47,10 @@ const Stats = () => {
 
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-16">
         <div className="max-w-xl">
-           <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-6 font-mono">Join the Global Movement</h2>
-           <h3 className="text-4xl lg:text-6xl font-black text-white mb-8 tracking-tighter leading-tight">Elevate Your Career with <span className="text-indigo-500">World Class</span> Education</h3>
+           <h2 className="text-sm font-black uppercase tracking-[0.4em] text-indigo-400 mb-6 font-mono font-black">Institutional Growth Metrics</h2>
+           <h3 className="text-4xl lg:text-6xl font-black text-white mb-8 tracking-tighter leading-tight">Powering the <span className="text-indigo-500">Global Knowledge</span> Economy</h3>
            <p className="text-zinc-400 text-xl leading-relaxed">
-             Our community is growing rapidly every day. We provide students with the resources they need to thrive in the modern economy and instructors with the tools to build their businesses.
+             Our community is architected for rapid, high-impact growth. We provide students with the infrastructure to thrive in the modern economy and faculty with the tools to engineer successful educational businesses.
            </p>
         </div>
 
