@@ -7,12 +7,12 @@ import Link from "next/link";
 import api from "@/lib/api";
 
 const defaultCategories = [
-  { id: 1, name: "Entrance Exam & GAT Prep", slug: "entrance-exam", description: "Prepare for university entrance exams with expert guidance", icon: Brain, color: "from-blue-500 to-indigo-600", bg: "bg-blue-50", course_count: 124 },
+  { id: 1, name: "Entrance Exam & GAT Prep", slug: "entrance-exam", description: "Prepare for university entrance exams with expert guidance", icon: Brain, color: "from-indigo-500 to-violet-600", bg: "bg-indigo-50", course_count: 124 },
   { id: 2, name: "Technology Courses", slug: "technology", description: "Master modern tech skills from web dev to AI and cloud", icon: Code2, color: "from-teal-500 to-emerald-600", bg: "bg-teal-50", course_count: 56 },
   { id: 3, name: "Soft Skills", slug: "soft-skills", description: "Leadership, communication and professional development", icon: Heart, color: "from-pink-500 to-rose-600", bg: "bg-pink-50", course_count: 31 },
   { id: 4, name: "Digital Design", slug: "design", description: "UI/UX design, graphic design and visual communication", icon: Palette, color: "from-purple-500 to-violet-600", bg: "bg-purple-50", course_count: 42 },
   { id: 5, name: "Business & Finance", slug: "business", description: "Entrepreneurship, accounting and business management", icon: Globe, color: "from-orange-500 to-amber-600", bg: "bg-orange-50", course_count: 38 },
-  { id: 6, name: "Language Learning", slug: "languages", description: "Learn Arabic, English and more with native speakers", icon: BookOpen, color: "from-cyan-500 to-blue-600", bg: "bg-cyan-50", course_count: 27 },
+  { id: 6, name: "Language Learning", slug: "languages", description: "Learn Arabic, English and more with native speakers", icon: BookOpen, color: "from-cyan-500 to-indigo-600", bg: "bg-cyan-50", course_count: 27 },
 ];
 
 const CategoryExplore = () => {
@@ -40,7 +40,7 @@ const CategoryExplore = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-blue-600 font-semibold text-sm mb-2">Explore Categories</p>
+            <p className="text-indigo-600 font-semibold text-sm mb-2">Explore Categories</p>
             <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-3">Browse Top Categories</h2>
             <p className="text-slate-500 max-w-lg mx-auto text-sm">
               Choose from our comprehensive range of courses in multiple disciplines
@@ -66,9 +66,9 @@ const CategoryExplore = () => {
                 >
                   <Link
                     href={`/courses?category=${cat.slug || cat.name}`}
-                    className={`flex flex-col items-center gap-3 p-5 rounded-2xl ${cat.bg || "bg-slate-50"} dark:bg-slate-700/50 border border-transparent hover:border-blue-200 dark:hover:border-blue-700/40 hover:shadow-md transition-all group text-center`}
+                    className={`flex flex-col items-center gap-3 p-5 rounded-2xl ${cat.bg || "bg-slate-50"} dark:bg-slate-700/50 border border-transparent hover:border-indigo-200 dark:hover:border-indigo-700/40 hover:shadow-md transition-all group text-center`}
                   >
-                    <div className={`w-12 h-12 bg-gradient-to-br ${cat.color || "from-blue-500 to-indigo-600"} rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
+                    <div className={`w-12 h-12 bg-gradient-to-br ${cat.color || "from-indigo-500 to-violet-600"} rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                       <IconComponent size={22} className="text-white" />
                     </div>
                     <div>
@@ -85,7 +85,7 @@ const CategoryExplore = () => {
         </div>
 
         <div className="text-center mt-8">
-          <Link href="/courses" className="inline-flex items-center gap-2 text-sm text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+          <Link href="/courses" className="inline-flex items-center gap-2 text-sm text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">
             View all categories <ArrowRight size={16} />
           </Link>
         </div>

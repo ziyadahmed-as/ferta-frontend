@@ -109,14 +109,14 @@ const Chatbot = () => {
                   <div className={`flex gap-3 max-w-[85%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-auto shadow-sm ${
                       msg.sender === "user" 
-                        ? "bg-blue-100 text-blue-600" 
+                        ? "bg-indigo-100 text-indigo-600" 
                         : "bg-indigo-100 text-indigo-600"
                     }`}>
                       {msg.sender === "user" ? <User size={16} /> : <Bot size={16} />}
                     </div>
                     <div className={`p-4 rounded-3xl text-sm font-medium leading-relaxed ${
                       msg.sender === "user" 
-                        ? "bg-blue-600 text-white rounded-br-none shadow-md shadow-blue-500/10" 
+                        ? "bg-indigo-600 text-white rounded-br-none shadow-md shadow-indigo-500/10" 
                         : "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 shadow-sm border border-slate-100 dark:border-slate-700 rounded-bl-none"
                     }`}>
                       {msg.text}
@@ -143,8 +143,8 @@ const Chatbot = () => {
 
             {/* Input Area */}
             <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
-              <form onSubmit={handleSend} className="flex gap-2 items-center bg-slate-50 dark:bg-slate-800 p-2 rounded-2xl border border-slate-200 dark:border-slate-700 focus-within:border-blue-300 dark:focus-within:border-blue-600 transition-all">
-                <button type="button" className="p-2 text-slate-400 hover:text-blue-500 transition-colors">
+              <form onSubmit={handleSend} className="flex gap-2 items-center bg-slate-50 dark:bg-slate-800 p-2 rounded-2xl border border-slate-200 dark:border-slate-700 focus-within:border-indigo-300 dark:focus-within:border-indigo-600 transition-all">
+                <button type="button" className="p-2 text-slate-400 hover:text-indigo-500 transition-colors">
                   <Paperclip size={18} />
                 </button>
                 <input
@@ -155,7 +155,7 @@ const Chatbot = () => {
                   title="Message Input"
                   className="flex-1 bg-transparent border-none outline-none font-medium text-slate-700 dark:text-slate-200 py-2 px-1 text-sm placeholder:text-slate-400"
                 />
-                <button type="button" className="p-2 text-slate-400 hover:text-blue-500 transition-colors hidden sm:block">
+                <button type="button" className="p-2 text-slate-400 hover:text-indigo-500 transition-colors hidden sm:block">
                   <Smile size={18} />
                 </button>
                 <button
@@ -163,7 +163,7 @@ const Chatbot = () => {
                   disabled={!inputText.trim() || isTyping}
                   title="Send Message"
                   aria-label="Send Message"
-                  className="w-10 h-10 gradient-primary text-white rounded-xl flex items-center justify-center transition-all shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:shadow-none active:scale-95"
+                  className="w-10 h-10 gradient-primary text-white rounded-xl flex items-center justify-center transition-all shadow-md shadow-indigo-500/20 disabled:opacity-50 disabled:shadow-none active:scale-95"
                 >
                   <Send size={18} />
                 </button>
@@ -179,7 +179,7 @@ const Chatbot = () => {
         whileHover={{ scale: 1.05, y: -2 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 gradient-primary text-white rounded-3xl flex items-center justify-center shadow-2xl shadow-blue-500/40 hover:shadow-blue-500/60 transition-all border-none relative group"
+        className="w-16 h-16 gradient-primary text-white rounded-3xl flex items-center justify-center shadow-2xl shadow-indigo-500/40 hover:shadow-indigo-500/60 transition-all border-none relative group"
         title={isOpen ? "Close Assistant" : "Chat with AI"}
         aria-label={isOpen ? "Close Assistant" : "Chat with AI"}
       >
@@ -192,7 +192,7 @@ const Chatbot = () => {
           ) : (
             <motion.div key="msg" initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }} className="relative">
               <MessageCircle size={28} className="fill-white/10" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-blue-600 rounded-full" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 border-2 border-indigo-600 rounded-full" />
             </motion.div>
           )}
         </AnimatePresence>

@@ -40,28 +40,28 @@ const Stats = () => {
   ];
 
   return (
-    <section className="py-20 px-6 relative overflow-hidden stats-gradient">
+    <section className="py-20 px-6 relative overflow-hidden bg-white dark:bg-zinc-950">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-3">Trusted by Thousands of Learners</h2>
-          <p className="text-blue-100 text-sm max-w-md mx-auto">Join our growing community of students and instructors worldwide</p>
+        <div className="text-center mb-12 relative z-10">
+          <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-3 tracking-tight">Trusted by Thousands of Learners</h2>
+          <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-md mx-auto font-medium">Join our growing community of students and instructors worldwide</p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
            {stats.map((stat, idx) => (
-             <motion.div
-               key={idx}
-               initial={{ opacity: 0, y: 20 }}
-               whileInView={{ opacity: 1, y: 0 }}
-               viewport={{ once: true }}
-               transition={{ delay: idx * 0.1 }}
-               className="text-center p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20"
-             >
-                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white mx-auto mb-4">
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="text-center p-6 bg-zinc-50 dark:bg-zinc-900/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
+              >
+                <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center text-indigo-600 mx-auto mb-4">
                     {stat.icon}
                 </div>
-                <span className="text-3xl font-bold text-white block mb-1">{stat.value}</span>
-                <span className="text-blue-100 text-sm">{stat.label}</span>
-             </motion.div>
+                <span className="text-3xl font-black text-zinc-900 dark:text-white block mb-1 tracking-tighter">{stat.value}</span>
+                <span className="text-zinc-500 dark:text-zinc-400 text-xs font-bold uppercase tracking-widest">{stat.label}</span>
+              </motion.div>
            ))}
         </div>
       </div>

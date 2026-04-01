@@ -57,7 +57,7 @@ const CourseHighlights = () => {
   }
 
   return (
-    <section className="py-24 bg-zinc-50 dark:bg-zinc-950 px-6 overflow-hidden">
+    <section className="py-24 bg-white dark:bg-zinc-950 px-6 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">

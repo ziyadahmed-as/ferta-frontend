@@ -37,14 +37,10 @@ const Hero = () => {
     <>
       {/* Hero Section */}
       <section className="relative min-h-screen flex flex-col">
-        {/* Background Image with Blue Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={HERO_BG}
-            alt="Students learning"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-800/85 via-indigo-700/80 to-purple-800/75" />
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 z-0 bg-white">
+          <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white to-transparent" />
         </div>
 
         {/* Navbar spacer */}
@@ -58,22 +54,22 @@ const Hero = () => {
             transition={{ duration: 0.7 }}
             className="max-w-3xl mx-auto"
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight">
-              Explore Learning Paths
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
+              Explore <span className="text-indigo-600">Learning</span> Paths
             </h1>
-            <p className="text-lg md:text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto font-medium">
               Choose from our comprehensive range of courses designed for every stage of your educational journey
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/courses"
-                className="px-8 py-4 bg-white text-blue-800 rounded-xl font-bold text-sm hover:bg-blue-50 transition-all shadow-lg shadow-blue-900/20 hover:scale-105 active:scale-95"
+                className="px-8 py-4 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 hover:scale-105 active:scale-95"
               >
                 Browse Courses
               </Link>
               <Link
                 href="/register"
-                className="px-8 py-4 border-2 border-white text-white rounded-xl font-bold text-sm hover:bg-white/10 transition-all hover:scale-105 active:scale-95"
+                className="px-8 py-4 border-2 border-indigo-200 text-indigo-600 rounded-xl font-bold text-sm hover:bg-indigo-50 transition-all hover:scale-105 active:scale-95"
               >
                 Get Started Free
               </Link>
@@ -93,14 +89,14 @@ const Hero = () => {
               >
                 <Link
                   href={`/courses?category=${cat.slug}`}
-                  className="block bg-white/15 backdrop-blur-md border border-white/30 rounded-2xl p-6 hover:bg-white/25 transition-all group"
+                  className="block bg-white border border-slate-100 rounded-3xl p-6 hover:shadow-2xl hover:shadow-indigo-500/10 hover:border-indigo-100 transition-all group"
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-white font-semibold text-base mb-1 group-hover:text-blue-200 transition-colors">{cat.name}</h3>
-                      <p className="text-blue-200 text-sm">{cat.course_count || "—"} Courses</p>
+                      <h3 className="text-slate-900 font-bold text-base mb-1 group-hover:text-indigo-600 transition-colors">{cat.name}</h3>
+                      <p className="text-slate-500 text-sm font-medium">{cat.course_count || "—"} Courses</p>
                     </div>
-                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white text-xl font-bold shrink-0">
+                    <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center text-xl font-bold shrink-0 shadow-inner">
                       {idx === 0 ? "📚" : idx === 1 ? "💻" : "🎯"}
                     </div>
                   </div>

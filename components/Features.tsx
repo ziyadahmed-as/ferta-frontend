@@ -15,8 +15,8 @@ const Features = () => {
     {
       title: "Live Streaming",
       description: "Host real-time interactive classes with students around the globe with high-quality video support.",
-      icon: <Video className="text-blue-600" />,
-      bg: "bg-blue-50 dark:bg-blue-900/20"
+      icon: <Video className="text-violet-600" />,
+      bg: "bg-violet-50 dark:bg-violet-900/20"
     },
     {
       title: "Student Community",
@@ -39,8 +39,8 @@ const Features = () => {
     {
       title: "Multi-device Learning",
       description: "Responsive platform optimized for mobile, tablet, and desktop for learning on the go.",
-      icon: <Laptop className="text-sky-600" />,
-      bg: "bg-sky-50 dark:bg-sky-900/20"
+      icon: <Laptop className="text-cyan-600" />,
+      bg: "bg-cyan-50 dark:bg-cyan-900/20"
     }
   ];
 

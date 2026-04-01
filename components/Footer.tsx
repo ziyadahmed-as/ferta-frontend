@@ -69,7 +69,7 @@ const Footer = () => {
                 placeholder="your@email.com"
                 className="w-full pl-4 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
               />
-              <button className="absolute right-2 top-2 w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white">
+              <button title="Subscribe to newsletter" className="absolute right-2 top-2 w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white">
                 <ArrowRight size={14} />
               </button>
             </div>
