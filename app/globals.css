@@ -36,10 +36,15 @@ body {
 /* Glass Card Effect */
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.8);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Stats Section Gradient */
+.stats-gradient {
+  background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
 }
 
 .dark .glass-card {

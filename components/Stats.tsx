@@ -40,21 +40,13 @@ const Stats = () => {
   ];
 
   return (
-    <section className="py-24 bg-zinc-950 px-6 relative overflow-hidden">
-      {/* Decorative Gradients */}
-      <div className="absolute top-0 right-0 w-[50%] h-full bg-indigo-600/5 blur-[120px] rounded-full -z-10" />
-      <div className="absolute bottom-0 left-0 w-[40%] h-[60%] bg-blue-600/5 blur-[120px] rounded-full -z-10" />
-
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-16">
-        <div className="max-w-xl">
-           <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-6 font-mono font-black italic">Institutional Growth Metrics</h2>
-           <h3 className="text-2xl lg:text-3xl font-black text-white mb-6 tracking-tighter leading-tight italic">Powering the <span className="text-indigo-500">Global Knowledge</span> Economy</h3>
-           <p className="text-zinc-500 text-sm leading-relaxed opacity-80">
-             Our community is architected for rapid, high-impact growth. We provide students with the infrastructure to thrive in the modern economy and faculty with the tools to engineer successful educational businesses.
-           </p>
+    <section className="py-20 px-6 relative overflow-hidden stats-gradient">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-white mb-3">Trusted by Thousands of Learners</h2>
+          <p className="text-blue-100 text-sm max-w-md mx-auto">Join our growing community of students and instructors worldwide</p>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 flex-1 w-full max-w-2xl">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
            {stats.map((stat, idx) => (
              <motion.div
                key={idx}
@@ -62,19 +54,13 @@ const Stats = () => {
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
                transition={{ delay: idx * 0.1 }}
-               className="p-10 bg-zinc-900 border border-zinc-800/50 rounded-[2.5rem] group hover:border-indigo-500/30 transition-all duration-300"
+               className="text-center p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20"
              >
-                <div className="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center text-indigo-500 mb-8 border border-zinc-700/50 group-hover:scale-110 transition-transform duration-300">
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-white mx-auto mb-4">
                     {stat.icon}
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-3xl font-black text-white mb-2 tracking-tighter transition-colors group-hover:text-indigo-400 italic">
-                    {stat.value}
-                  </span>
-                  <span className="text-zinc-500 font-bold uppercase tracking-widest text-[10px] font-mono">
-                    {stat.label}
-                  </span>
-                </div>
+                <span className="text-3xl font-bold text-white block mb-1">{stat.value}</span>
+                <span className="text-blue-100 text-sm">{stat.label}</span>
              </motion.div>
            ))}
         </div>

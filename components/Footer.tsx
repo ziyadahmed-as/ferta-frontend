@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { BookOpen, Twitter, Linkedin, Instagram, Youtube, Mail, ArrowRight } from "lucide-react";
+import { BookOpen, Share2, MessageCircle, Globe, ExternalLink, Mail, ArrowRight } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -21,8 +21,8 @@ const Footer = () => {
               Building the future of education with comprehensive courses for every stage of your learning journey.
             </p>
             <div className="flex items-center gap-3">
-              {[Twitter, Linkedin, Instagram, Youtube].map((Icon, i) => (
-                <a key={i} href="#" className="w-8 h-8 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all">
+              {[Share2, MessageCircle, Globe, ExternalLink].map((Icon, i) => (
+                <a key={i} href="#" title="Social link" className="w-8 h-8 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all">
                   <Icon size={15} />
                 </a>
               ))}
