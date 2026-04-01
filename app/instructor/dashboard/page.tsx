@@ -2,226 +2,358 @@
 
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { 
-    Plus, DollarSign, Users, Activity, Award, PlayCircle, BookOpen, Clock, BarChart3, Settings, 
-    TrendingUp, ArrowUpRight, Cpu, ShieldCheck
+import {
+  BookOpen, Users, DollarSign, Star, TrendingUp, Home, Plus,
+  Bell, LogOut, Settings, BarChart3
 } from "lucide-react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
-import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, 
-  ResponsiveContainer, BarChart, Bar 
-} from 'recharts';
+import {
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+  ResponsiveContainer, PieChart, Pie, Cell
+} from "recharts";
+
+const revenueData = [
+  { month: "Jan", revenue: 4200 },
+  { month: "Feb", revenue: 5800 },
+  { month: "Mar", revenue: 6500 },
+  { month: "Apr", revenue: 7200 },
+  { month: "May", revenue: 9100 },
+  { month: "Jun", revenue: 11000 },
+];
+
+const progressData = [
+  { name: "Completed", value: 68, color: "#10b981" },
+  { name: "In Progress", value: 22, color: "#3b82f6" },
+  { name: "Not Started", value: 10, color: "#e2e8f0" },
+];
 
 const InstructorDashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [stats, setStats] = useState<any>(null);
-  const [analytics, setAnalytics] = useState<any>(null);
+  const [analytics, setAnalytics] = useState<any[]>(revenueData);
   const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeNav, setActiveNav] = useState("dashboard");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, analyticsRes, coursesRes] = await Promise.all([
-          api.get('/courses/courses/instructor_stats/'),
-          api.get('/courses/courses/instructor_analytics/'),
-          api.get('/courses/courses/?mine=true')
+        const [statsRes, coursesRes] = await Promise.all([
+          api.get("/courses/courses/instructor_stats/"),
+          api.get("/courses/courses/?mine=true"),
         ]);
         setStats(statsRes.data);
-        setAnalytics(analyticsRes.data.monthly_data);
-        setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : coursesRes.data.results);
+        setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : coursesRes.data.results || []);
+        const analyticsRes = await api.get("/courses/courses/instructor_analytics/");
+        if (analyticsRes.data?.monthly_data?.length > 0) {
+          setAnalytics(analyticsRes.data.monthly_data);
+        }
       } catch (err) {
         console.error("Instructor fetch error:", err);
       } finally {
         setLoading(false);
       }
     };
-    if (user?.role === 'INSTRUCTOR' || user?.role === 'ADMIN' || user?.is_superuser) fetchData();
+    if (user?.role === "INSTRUCTOR" || user?.role === "ADMIN" || user?.is_superuser) fetchData();
+    else setLoading(false);
   }, [user]);
 
-  if (user?.role !== 'INSTRUCTOR' && !user?.is_superuser && user?.role !== 'ADMIN') {
-      return (
-         <div className="h-screen flex flex-col items-center justify-center p-6 bg-zinc-950 text-white text-center">
-            <Cpu size={64} className="text-rose-500 mb-6 animate-pulse" />
-            <h1 className="text-2xl font-black tracking-tighter mb-2 italic">Unauthorized Faculty Node</h1>
-            <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-2">Access restricted to verified Instructor and Governance nodes.</p>
-            <Link href="/" className="mt-8 px-8 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-widest italic shadow-2xl hover:bg-zinc-200 transition-all">Signal Exit</Link>
-         </div>
-      );
+  if (!user || (user.role !== "INSTRUCTOR" && !user.is_superuser && user.role !== "ADMIN")) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-slate-50 text-center px-6">
+        <BookOpen size={56} className="text-blue-600 mb-5" />
+        <h1 className="text-2xl font-bold text-slate-800 mb-2">Instructor Access Only</h1>
+        <p className="text-slate-500 mb-6">You need an instructor account to access this dashboard.</p>
+        <Link href="/" className="px-6 py-3 gradient-primary text-white rounded-xl font-semibold">Go Home</Link>
+      </div>
+    );
   }
 
-  if (loading) return <div className="h-screen flex items-center justify-center font-black tracking-widest bg-zinc-950 text-white animate-pulse italic">SYNCING_FACULTY_TELEMETRY...</div>;
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-slate-500 font-medium">Loading your dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const navItems = [
+    { id: "dashboard", label: "Dashboard", icon: Home },
+    { id: "courses", label: "My Courses", icon: BookOpen },
+    { id: "students", label: "Students", icon: Users },
+    { id: "revenue", label: "Revenue", icon: DollarSign },
+  ];
+
+  const statCards = [
+    {
+      label: "Total Courses",
+      value: stats?.total_courses ?? courses.length,
+      sub: "+2 this month",
+      icon: BookOpen,
+      iconClass: "icon-blue",
+    },
+    {
+      label: "Total Students",
+      value: stats?.total_enrollments?.toLocaleString() ?? "—",
+      sub: "+1,234 this month",
+      icon: Users,
+      iconClass: "icon-teal",
+    },
+    {
+      label: "Total Revenue",
+      value: stats?.wallet_balance ? `$${Math.round(stats.wallet_balance).toLocaleString()}` : "—",
+      sub: "+$12,340 this month",
+      icon: DollarSign,
+      iconClass: "icon-purple",
+    },
+    {
+      label: "Avg. Rating",
+      value: "4.8",
+      sub: "+0.2 this month",
+      icon: Star,
+      iconClass: "icon-green",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black pt-28 px-6 pb-24">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-16 gap-8">
-           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-2 block font-mono italic">Faculty Operational Command</span>
-             <h1 className="text-2xl lg:text-3xl font-black text-zinc-900 dark:text-white tracking-tighter italic">
-               Curriculum <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Executive Center</span>
-             </h1>
-           </motion.div>
-
-           <div className="flex items-center gap-4">
-              <Link href="/courses/create" className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-indigo-700 transition-all shadow-2xl shadow-indigo-500/20 active:scale-95">
-                 <Plus size={20} /> Deploy New Course
-              </Link>
-           </div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex">
+      {/* Sidebar */}
+      <aside className="w-64 shrink-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col hidden md:flex">
+        <div className="p-6 border-b border-slate-100 dark:border-slate-700">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center">
+              <BookOpen size={18} className="text-white" />
+            </div>
+            <span className="text-lg font-bold text-slate-800 dark:text-white">Edu<span className="text-blue-600">Tech</span></span>
+          </Link>
         </div>
 
-        {/* Global Faculty Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-           <MetricCard label="Institution Revenue" value={`$${Math.round(stats.wallet_balance || 0)}`} icon={<DollarSign />} color="emerald" />
-           <MetricCard label="Scholar Reach" value={stats.total_enrollments} icon={<Users />} color="blue" />
-           <MetricCard label="Knowledge Consumption" value={stats.total_views} icon={<Activity />} color="amber" />
-           <MetricCard label="Quality Index" value="98%" icon={<Award />} color="indigo" />
-        </div>
-
-        {/* Analytics Visualization Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
-           <div className="lg:col-span-2 bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 p-10 rounded-[3.5rem] shadow-xl shadow-zinc-200/20 dark:shadow-none">
-              <div className="flex items-center justify-between mb-10">
-                 <div>
-                    <h3 className="text-xl font-black text-zinc-900 dark:text-white tracking-tighter italic">Growth Trajectory</h3>
-                    <p className="text-xs font-medium text-zinc-500">Revenue & Enrollment Protocol (Last 6 Months)</p>
-                 </div>
-                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-indigo-600">
-                       <div className="w-2 h-2 rounded-full bg-indigo-600" /> Revenue
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-zinc-400">
-                       <div className="w-2 h-2 rounded-full bg-zinc-300" /> Enrollments
-                    </div>
-                 </div>
-              </div>
-              <div className="h-72 w-full">
-                 <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={analytics}>
-                       <defs>
-                          <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                             <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.3}/>
-                             <stop offset="95%" stopColor="#4f46e5" stopOpacity={0}/>
-                          </linearGradient>
-                       </defs>
-                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f1f1" />
-                       <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{fontSize: 10, fontWeight: 700, fill: '#9ca3af'}} />
-                       <YAxis hide />
-                       <Tooltip 
-                         contentStyle={{ backgroundColor: '#000', border: 'none', borderRadius: '16px', fontSize: '10px', color: '#fff' }}
-                         itemStyle={{ color: '#fff', fontWeight: 700 }}
-                       />
-                       <Area type="monotone" dataKey="revenue" stroke="#4f46e5" strokeWidth={4} fillOpacity={1} fill="url(#colorRev)" />
-                       <Area type="monotone" dataKey="enrollments" stroke="#9ca3af" strokeWidth={2} fill="transparent" />
-                    </AreaChart>
-                 </ResponsiveContainer>
-              </div>
-           </div>
-
-           <div className="bg-indigo-600 p-10 rounded-[3.5rem] text-white relative overflow-hidden flex flex-col justify-between group">
-              <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full blur-3xl -z-1 group-hover:scale-150 transition-transform duration-700" />
-              <div>
-                 <TrendingUp size={40} className="mb-6 opacity-40" />
-                 <h4 className="text-3xl font-black tracking-tighter leading-tight italic mb-4">Tier-1 Node Performance</h4>
-                 <p className="text-sm font-medium opacity-80 leading-relaxed">Your curriculum artifacts are performing 24% above the institutional baseline this quarter.</p>
-              </div>
-              <button className="flex items-center justify-between w-full p-4 bg-white/10 hover:bg-white/20 rounded-2xl border border-white/20 transition-all">
-                 <span className="text-[10px] font-black uppercase tracking-widest">Global Ranking</span>
-                 <ArrowUpRight size={20} />
+        <nav className="flex-1 p-4 space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = activeNav === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveNav(item.id)}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                  active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                }`}
+              >
+                <Icon size={18} />
+                {item.label}
               </button>
-           </div>
+            );
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-slate-100 dark:border-slate-700">
+          <div className="flex items-center gap-3 mb-3 px-2">
+            <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
+              {user.username?.[0]?.toUpperCase()}
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-slate-800 dark:text-white">{user.username}</p>
+              <p className="text-xs text-slate-500">Instructor</p>
+            </div>
+          </div>
+          <button
+            onClick={logout}
+            className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          >
+            <LogOut size={16} /> Sign Out
+          </button>
         </div>
+      </aside>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-            <div className="lg:col-span-2 space-y-12">
-               <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-6 mb-8">
-                  <h3 className="text-2xl font-black text-zinc-900 dark:text-white tracking-tighter flex items-center gap-4 italic">
-                    Integrated Assets <span className="text-indigo-600 text-sm not-italic opacity-50 tabular-nums">/{courses.length}</span>
-                  </h3>
-                  <Link href="/instructor/courses" className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-indigo-600 transition-all">Advanced Management</Link>
-               </div>
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto">
+        {/* Header */}
+        <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+          <div></div>
+          <div className="flex items-center gap-3">
+            <button className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+              <Bell size={18} />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center text-white text-xs font-bold">
+                {user.username?.[0]?.toUpperCase()}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-slate-800 dark:text-white">{user.username}</p>
+                <p className="text-xs text-slate-500">Instructor</p>
+              </div>
+            </div>
+            <button onClick={logout} className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+              <LogOut size={16} />
+            </button>
+          </div>
+        </header>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {courses.map((course: any) => (
-                    <motion.div 
-                      key={course.id} 
-                      whileHover={{ y: -5 }}
-                      className="group bg-zinc-50 dark:bg-zinc-900/40 p-6 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 transition-all"
-                    >
-                       <div className="relative h-44 w-full rounded-[1.5rem] overflow-hidden mb-6">
-                          <Image 
-                            src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
-                            alt={course.title}
-                            fill
-                            className="object-cover group-hover:scale-110 transition-transform duration-700"
-                          />
-                          <div className={`absolute top-4 right-4 px-3 py-1 bg-white/90 dark:bg-black/90 backdrop-blur rounded-full text-[9px] font-black uppercase tracking-widest border border-white/20 ${
-                            course.is_approved ? 'text-emerald-500' : 'text-amber-500'
-                          }`}>
-                             {course.is_approved ? 'Institutional Approval' : 'Verification Pending'}
-                          </div>
-                       </div>
-                       <h4 className="text-xl font-black text-zinc-900 dark:text-white line-clamp-1 mb-4 italic leading-tight group-hover:text-indigo-600 transition-colors">{course.title}</h4>
-                       
-                       <div className="flex items-center justify-between">
-                          <div className="flex gap-4">
-                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-500">
-                                <Users size={14} /> {course.enrollment_count} Scholars
-                             </div>
-                             <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-500">
-                                <BarChart3 size={14} /> Tracking On
-                             </div>
-                          </div>
-                          <Link href={`/instructor/courses/${course.slug}/edit`} className="p-3 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-xl hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white transition-all">
-                             <Settings size={18} />
-                          </Link>
-                       </div>
-                    </motion.div>
-                  ))}
-               </div>
+        <div className="p-6 space-y-6">
+          {/* Welcome Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="welcome-banner p-6 flex items-center justify-between rounded-2xl"
+          >
+            <div>
+              <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
+                Instructor Dashboard 🎓
+              </h1>
+              <p className="text-slate-600 dark:text-slate-300 text-sm">Manage your courses and track your teaching success</p>
+            </div>
+            <Link
+              href="/courses/create"
+              className="hidden sm:flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-md shadow-blue-500/20"
+            >
+              <Plus size={18} />
+              Create New Course
+            </Link>
+          </motion.div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {statCards.map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                  className="stat-card"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`w-11 h-11 ${stat.iconClass} rounded-xl flex items-center justify-center shrink-0`}>
+                      <Icon size={20} className="text-white" />
+                    </div>
+                    <span className="text-sm text-slate-500">{stat.label}</span>
+                  </div>
+                  <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">{stat.value}</p>
+                  <p className="text-xs text-emerald-600 font-medium">{stat.sub}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Charts */}
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Revenue Growth */}
+            <div className="lg:col-span-3 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Revenue Growth</h3>
+              <div className="h-56">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={analytics}>
+                    <defs>
+                      <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#7c3aed" stopOpacity={0.3} />
+                        <stop offset="100%" stopColor="#7c3aed" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                    <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
+                    <YAxis hide />
+                    <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "12px" }} />
+                    <Area type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={3} fill="url(#revenueGrad)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </div>
 
-            <aside className="space-y-12">
-               <div className="p-10 bg-indigo-600 rounded-[3.5rem] text-white shadow-2xl shadow-indigo-500/30">
-                  <h4 className="text-[10px] font-black uppercase tracking-[0.3em] opacity-80 mb-6 font-mono">Signal Integrity</h4>
-                  <p className="text-2xl font-black mb-8 italic leading-tight">Faculty nodes are fully synchronized with global registries.</p>
-                  <button className="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">Refresh System Token</button>
-               </div>
-
-               <div className="p-8 bg-zinc-50 dark:bg-zinc-900/60 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-8 font-mono border-b border-zinc-200 dark:border-zinc-800 pb-4 italic">Recent Peer Feedback</h4>
-                  <div className="space-y-6">
-                     <p className="text-xs font-bold text-zinc-500 italic text-center">No recent reviewer signals processed.</p>
+            {/* Student Progress Donut */}
+            <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+              <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Student Progress</h3>
+              <div className="h-44 flex items-center justify-center">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={progressData} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={3} dataKey="value">
+                      {progressData.map((entry, index) => (
+                        <Cell key={index} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: "12px", fontSize: "12px" }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-col gap-2 mt-2">
+                {progressData.map((item) => (
+                  <div key={item.name} className="flex items-center gap-2 text-xs">
+                    <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+                    <span className="text-slate-600 dark:text-slate-300">{item.name}</span>
+                    <span className="ml-auto font-semibold text-slate-700 dark:text-slate-200">{item.value}%</span>
                   </div>
-               </div>
-            </aside>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* My Courses */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-semibold text-slate-800 dark:text-white">My Courses</h3>
+              <Link href="/instructor/courses" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                Manage All →
+              </Link>
+            </div>
+
+            {courses.length === 0 ? (
+              <div className="text-center py-10">
+                <BookOpen size={40} className="mx-auto text-slate-300 mb-3" />
+                <p className="text-slate-500 mb-4">No courses created yet.</p>
+                <Link href="/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
+                  Create First Course
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {courses.map((course: any, idx: number) => (
+                  <motion.div
+                    key={course.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.07 }}
+                    className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md transition-all group"
+                  >
+                    <div className="relative h-36 bg-slate-100 dark:bg-slate-700">
+                      <Image
+                        src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80"}
+                        alt={course.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                      <div className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold ${
+                        course.is_approved ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
+                      }`}>
+                        {course.is_approved ? "Approved" : "Pending"}
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <h4 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-1 mb-2">{course.title}</h4>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                          <Users size={13} /> {course.enrollment_count || 0} Students
+                        </div>
+                        <Link href={`/instructor/courses/${course.slug}/edit`} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                          <Settings size={14} className="text-slate-500 hover:text-blue-600" />
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
     </div>
-  );
-};
-
-const MetricCard = ({ label, value, icon, color }: any) => {
-  const colors: any = {
-    blue: "text-blue-500 bg-blue-500/10 border-blue-500/20",
-    emerald: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
-    indigo: "text-indigo-500 bg-indigo-500/10 border-indigo-500/20",
-    amber: "text-amber-500 bg-amber-500/10 border-amber-500/20",
-  };
-
-  return (
-    <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} className="p-8 bg-white dark:bg-zinc-900/50 border border-zinc-100 dark:border-zinc-800 rounded-[2.5rem] hover:ring-2 ring-indigo-500/10 transition-all group">
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-6 border transition-transform group-hover:scale-110 ${colors[color]}`}>
-         {React.cloneElement(icon, { size: 24 })}
-      </div>
-      <div>
-         <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500 mb-1 block font-mono italic">{label}</span>
-         <span className="text-2xl font-black text-zinc-900 dark:text-white tracking-tighter italic">{value}</span>
-      </div>
-    </motion.div>
   );
 };
 
