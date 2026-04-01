@@ -114,6 +114,7 @@ const CreateCoursePage = () => {
                                         required
                                         type="text" 
                                         name="title"
+                                        title="Course Title"
                                         placeholder="e.g. Master UX/UI Design in 2026"
                                         value={formData.title}
                                         onChange={handleChange}
@@ -129,6 +130,7 @@ const CreateCoursePage = () => {
                                         <select 
                                             required
                                             name="category"
+                                            title="Select Course Category"
                                             value={formData.category}
                                             onChange={handleChange}
                                             className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-bold text-slate-700 dark:text-white transition-all text-sm appearance-none cursor-pointer"
@@ -147,6 +149,8 @@ const CreateCoursePage = () => {
                                                 required
                                                 type="number" 
                                                 name="price"
+                                                title="Course Price"
+                                                placeholder="0"
                                                 min="0"
                                                 value={formData.price}
                                                 onChange={handleChange}
@@ -163,6 +167,7 @@ const CreateCoursePage = () => {
                                     <textarea 
                                         required
                                         name="description"
+                                        title="Course Description"
                                         placeholder="Outline the learning objectives and course trajectory..."
                                         rows={5}
                                         value={formData.description}

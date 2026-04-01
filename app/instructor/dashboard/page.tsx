@@ -178,7 +178,7 @@ const InstructorDashboard = () => {
         <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
           <div></div>
           <div className="flex items-center gap-3">
-            <button className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+            <button title="Notifications" className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
               <Bell size={18} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </button>
@@ -191,7 +191,7 @@ const InstructorDashboard = () => {
                 <p className="text-xs text-slate-500">Instructor</p>
               </div>
             </div>
-            <button onClick={logout} className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+            <button onClick={logout} title="Sign Out" className="p-2 text-slate-400 hover:text-red-500 transition-colors">
               <LogOut size={16} />
             </button>
           </div>
@@ -211,7 +211,7 @@ const InstructorDashboard = () => {
               <p className="text-slate-600 dark:text-slate-300 text-sm">Manage your courses and track your teaching success</p>
             </div>
             <Link
-              href="/courses/create"
+              href="/instructor/courses/create"
               className="hidden sm:flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-md shadow-blue-500/20"
             >
               <Plus size={18} />
@@ -308,7 +308,7 @@ const InstructorDashboard = () => {
               <div className="text-center py-10">
                 <BookOpen size={40} className="mx-auto text-slate-300 mb-3" />
                 <p className="text-slate-500 mb-4">No courses created yet.</p>
-                <Link href="/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
+                <Link href="/instructor/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
                   Create First Course
                 </Link>
               </div>
@@ -341,7 +341,7 @@ const InstructorDashboard = () => {
                         <div className="flex items-center gap-1.5 text-xs text-slate-500">
                           <Users size={13} /> {course.enrollment_count || 0} Students
                         </div>
-                        <Link href={`/instructor/courses/${course.slug}/edit`} className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                        <Link href={`/instructor/courses/${course.id}/edit`} title="Edit Course" className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
                           <Settings size={14} className="text-slate-500 hover:text-blue-600" />
                         </Link>
                       </div>
