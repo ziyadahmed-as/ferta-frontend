@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ArrowRight, BookOpen, Monitor, Heart, Code2, Brain, Palette, Globe } from "lucide-react";
+import { ArrowRight, BookOpen, Monitor, Heart, Code2, Brain, Palette, Globe, Shapes } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import api from "@/lib/api";
 
 const defaultCategories = [
-  { id: 1, name: "Entrance Exam & GAT Prep", slug: "entrance-exam", description: "Prepare for university entrance exams with expert guidance", icon: Brain, color: "from-indigo-500 to-violet-600", bg: "bg-indigo-50", course_count: 124 },
-  { id: 2, name: "Technology Courses", slug: "technology", description: "Master modern tech skills from web dev to AI and cloud", icon: Code2, color: "from-teal-500 to-emerald-600", bg: "bg-teal-50", course_count: 56 },
-  { id: 3, name: "Soft Skills", slug: "soft-skills", description: "Leadership, communication and professional development", icon: Heart, color: "from-pink-500 to-rose-600", bg: "bg-pink-50", course_count: 31 },
-  { id: 4, name: "Digital Design", slug: "design", description: "UI/UX design, graphic design and visual communication", icon: Palette, color: "from-purple-500 to-violet-600", bg: "bg-purple-50", course_count: 42 },
-  { id: 5, name: "Business & Finance", slug: "business", description: "Entrepreneurship, accounting and business management", icon: Globe, color: "from-orange-500 to-amber-600", bg: "bg-orange-50", course_count: 38 },
-  { id: 6, name: "Language Learning", slug: "languages", description: "Learn Arabic, English and more with native speakers", icon: BookOpen, color: "from-cyan-500 to-indigo-600", bg: "bg-cyan-50", course_count: 27 },
+  { id: 1, name: "Programing", slug: "programing", description: "Master the art of software engineering from Python to TypeScript", icon: Code2, color: "from-blue-500 to-indigo-600", bg: "bg-blue-50", course_count: 124 },
+  { id: 2, name: "AI", slug: "ai", description: "Deep dive into machine learning, neural networks and large language models", icon: Brain, color: "from-violet-500 to-purple-600", bg: "bg-purple-50", course_count: 56 },
+  { id: 3, name: "mathematics", slug: "mathematics", description: "Advanced calculus, algebra and discrete mathematics for scientists", icon: Shapes, color: "from-teal-500 to-emerald-600", bg: "bg-teal-50", course_count: 31 },
+  { id: 4, name: "Biology", slug: "biology", description: "Explore cellular biology, genetics and evolutionary mechanics", icon: Heart, color: "from-pink-500 to-rose-600", bg: "bg-rose-50", course_count: 42 },
+  { id: 5, name: "physics", slug: "physics", description: "Quantum mechanics, thermodynamics and relativistic astrophysics", icon: Monitor, color: "from-orange-500 to-amber-600", bg: "bg-orange-50", course_count: 38 },
+  { id: 6, name: "English", slug: "english", description: "Master linguistic nuance and advanced academic writing structures", icon: Globe, color: "from-cyan-500 to-indigo-600", bg: "bg-cyan-50", course_count: 27 },
 ];
 
 const CategoryExplore = () => {
@@ -32,7 +32,7 @@ const CategoryExplore = () => {
   const displayCategories = categories.length > 0 ? categories : defaultCategories;
 
   return (
-    <section className="py-20 bg-white dark:bg-slate-800 px-6">
+    <section className="py-20 bg-white dark:bg-zinc-950 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <motion.div
@@ -66,7 +66,7 @@ const CategoryExplore = () => {
                 >
                   <Link
                     href={`/courses?category=${cat.slug || cat.name}`}
-                    className={`flex flex-col items-center gap-3 p-5 rounded-2xl ${cat.bg || "bg-slate-50"} dark:bg-slate-700/50 border border-transparent hover:border-indigo-200 dark:hover:border-indigo-700/40 hover:shadow-md transition-all group text-center`}
+                    className={`flex flex-col items-center gap-3 p-5 rounded-2xl bg-white dark:bg-zinc-900/50 border border-slate-100 dark:border-zinc-800 hover:border-indigo-200 dark:hover:border-indigo-700/40 hover:shadow-md transition-all group text-center`}
                   >
                     <div className={`w-12 h-12 bg-gradient-to-br ${cat.color || "from-indigo-500 to-violet-600"} rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
                       <IconComponent size={22} className="text-white" />

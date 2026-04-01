@@ -112,7 +112,7 @@ const LearnPage = () => {
   };
 
   if (loading) return (
-    <div className="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+    <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
         <p className="text-slate-500 font-medium">Hydrating your learning environment...</p>
@@ -121,7 +121,7 @@ const LearnPage = () => {
   );
 
   if (error) return (
-    <div className="h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 px-6 text-center">
+    <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 px-6 text-center">
       <X size={48} className="text-red-500 mb-4" />
       <h1 className="text-xl font-bold text-slate-800 dark:text-white mb-2">{error}</h1>
       <button onClick={() => router.push(`/courses/${id}`)} className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg">Back to Course</button>
@@ -161,7 +161,8 @@ const LearnPage = () => {
                 <div className="w-32 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full mt-1 overflow-hidden">
                     <div 
                         className="h-full gradient-primary rounded-full transition-all duration-500" 
-                        style={{ width: `${(completedLessons.length / (allLessons.length || 1)) * 100}%` }}
+                        title={`Progress: ${Math.round((completedLessons.length / (allLessons.length || 1)) * 100)}%`}
+                        style={{ width: `${(completedLessons.length / (allLessons.length || 1)) * 100}%` } as React.CSSProperties}
                     />
                 </div>
             </div>
@@ -179,7 +180,7 @@ const LearnPage = () => {
         <motion.div 
             initial={false}
             animate={{ width: sidebarOpen ? 350 : 0, opacity: sidebarOpen ? 1 : 0 }}
-            className={`flex-shrink-0 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto z-20 absolute lg:relative h-full transition-all`}
+            className={`flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto z-20 absolute lg:relative h-full transition-all`}
         >
           <div className="p-6">
             <h2 className="text-sm font-black uppercase text-slate-400 tracking-[0.2em] mb-6">Course Curriculum</h2>
@@ -205,7 +206,7 @@ const LearnPage = () => {
                           className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all group text-left ${
                             isActive 
                               ? "bg-white dark:bg-slate-800 shadow-md ring-1 ring-blue-500/10" 
-                              : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                              : "hover:bg-white dark:hover:bg-slate-800"
                           }`}
                         >
                           <div className={`mt-0.5 shrink-0 ${isDone ? "text-green-500" : isActive ? "text-blue-500" : "text-slate-300"}`}>
@@ -239,7 +240,7 @@ const LearnPage = () => {
         )}
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto flex flex-col bg-slate-50 dark:bg-slate-950/20">
+        <div className="flex-1 overflow-y-auto flex flex-col bg-white dark:bg-slate-950/20">
           <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 flex-1">
             <AnimatePresence mode="wait">
               <motion.div
@@ -350,7 +351,7 @@ const LearnPage = () => {
                                </div>
                              )}
                              {block.type === 'video_link' && block.url && (
-                               <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
+                               <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
                                    <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center">
                                        <Globe size={20} />
                                    </div>

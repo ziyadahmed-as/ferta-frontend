@@ -5,10 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/api";
 import { 
-  ArrowLeft, Save, Plus, Trash2, Editpx, GripVertical, 
-  Video, FileText, Image as ImageIcon, Type, Globe, 
+  ArrowLeft, Save, Plus, Trash2, Edit, GripVertical, 
+  Video, FileText, ImageIcon, Type, Globe, 
   ChevronDown, ChevronUp, PlayCircle, Loader2, Sparkles,
-  CheckCircle2, AlertCircle, Settings as SettingsIcon, Layout, Monitor
+  CheckCircle2, AlertCircle, SettingsIcon, Layout, Monitor
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -141,7 +141,7 @@ const EditCoursePage = () => {
     };
 
     if (loading) return (
-        <div className="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+        <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
             <div className="flex flex-col items-center gap-4">
                 <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
                 <p className="text-slate-500 font-medium tracking-widest uppercase text-xs">Accessing Knowledge Node...</p>
@@ -150,13 +150,14 @@ const EditCoursePage = () => {
     );
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 pb-24">
+        <div className="min-h-screen bg-white dark:bg-slate-900 pb-24">
             {/* Header */}
             <div className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex items-center gap-6">
                         <button 
                             onClick={() => router.push("/instructor/dashboard")}
+                            title="Back to Dashboard"
                             className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl text-slate-500 transition-all"
                         >
                             <ArrowLeft size={20} />
@@ -218,42 +219,53 @@ const EditCoursePage = () => {
                                 <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-8">Course Basics</h3>
                                 <form onSubmit={handleUpdateBasic} className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Title</label>
+                                        <label htmlFor="course-title" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Title</label>
                                         <input 
+                                            id="course-title"
                                             type="text" 
+                                            placeholder="Enter course title"
+                                            title="Course Title"
                                             value={course.title}
                                             onChange={(e) => setCourse({ ...course, title: e.target.value })}
-                                            className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold text-slate-800 dark:text-white"
+                                            className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold text-slate-800 dark:text-white"
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Category</label>
+                                            <label htmlFor="course-category" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Category</label>
                                             <select 
+                                                id="course-category"
+                                                title="Select Course Category"
                                                 value={course.category}
                                                 onChange={(e) => setCourse({ ...course, category: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold text-slate-800 dark:text-white appearance-none"
+                                                className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold text-slate-800 dark:text-white appearance-none"
                                             >
                                                 {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                                             </select>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Price ($)</label>
+                                            <label htmlFor="course-price" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Price ($)</label>
                                             <input 
+                                                id="course-price"
                                                 type="number" 
+                                                placeholder="0.00"
+                                                title="Course Price"
                                                 value={course.price}
                                                 onChange={(e) => setCourse({ ...course, price: e.target.value })}
-                                                className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold text-slate-800 dark:text-white"
+                                                className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-bold text-slate-800 dark:text-white"
                                             />
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Description</label>
+                                        <label htmlFor="course-description" className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Description</label>
                                         <textarea 
+                                            id="course-description"
                                             rows={6}
+                                            placeholder="Write a compelling course description..."
+                                            title="Course Description"
                                             value={course.description}
                                             onChange={(e) => setCourse({ ...course, description: e.target.value })}
-                                            className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-medium text-slate-700 dark:text-slate-300 leading-relaxed"
+                                            className="w-full px-5 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl outline-none font-medium text-slate-700 dark:text-slate-300 leading-relaxed"
                                         />
                                     </div>
                                     <button 
@@ -307,8 +319,12 @@ const EditCoursePage = () => {
                                                     <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center font-black text-xs">
                                                         {chapIdx + 1}
                                                     </div>
+                                                    <label htmlFor={`chapter-title-${chapter.id}`} className="sr-only">Chapter Title</label>
                                                     <input 
+                                                        id={`chapter-title-${chapter.id}`}
                                                         type="text" 
+                                                        placeholder="Chapter Title"
+                                                        title="Chapter Title"
                                                         value={chapter.title} 
                                                         onChange={(e) => {
                                                             const updated = course.chapters.map((c: any) => c.id === chapter.id ? { ...c, title: e.target.value } : c);
@@ -328,6 +344,7 @@ const EditCoursePage = () => {
                                                     <div className="h-4 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
                                                     <button 
                                                         onClick={() => handleDeleteChapter(chapter.id)}
+                                                        title="Delete Chapter"
                                                         className="p-2 text-slate-400 hover:text-red-500 transition-colors"
                                                     >
                                                         <Trash2 size={16} />
@@ -343,8 +360,12 @@ const EditCoursePage = () => {
                                                         <div key={lesson.id} className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-900/20 border border-slate-100 dark:border-slate-700 rounded-2xl group hover:border-blue-500/10 hover:bg-white dark:hover:bg-slate-800 transition-all">
                                                             <div className="flex items-center gap-4">
                                                                 <PlayCircle size={18} className="text-slate-300" />
+                                                                <label htmlFor={`lesson-title-${lesson.id}`} className="sr-only">Lesson Title</label>
                                                                 <input 
+                                                                    id={`lesson-title-${lesson.id}`}
                                                                     type="text" 
+                                                                    placeholder="Lesson Title"
+                                                                    title="Lesson Title"
                                                                     value={lesson.title}
                                                                     onChange={(e) => {
                                                                         const updated = course.chapters.map((c: any) => {
@@ -362,12 +383,14 @@ const EditCoursePage = () => {
                                                             <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                                                 <button 
                                                                     onClick={() => router.push(`/instructor/lessons/${lesson.id}/edit`)}
+                                                                    title="Edit Lesson Content"
                                                                     className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 text-blue-600 shadow-sm"
                                                                 >
                                                                     <Layout size={14} />
                                                                 </button>
                                                                 <button 
                                                                     onClick={() => handleDeleteLesson(chapter.id, lesson.id)}
+                                                                    title="Delete Lesson"
                                                                     className="p-2 text-slate-400 hover:text-red-500 transition-colors"
                                                                 >
                                                                     <Trash2 size={14} />

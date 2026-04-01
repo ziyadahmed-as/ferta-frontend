@@ -85,7 +85,7 @@ const CatalogContent = () => {
             <button 
               onClick={() => setSelectedCategory(null)}
               className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                !selectedCategory ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+                !selectedCategory ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
               }`}
             >
               All Categories
@@ -95,7 +95,7 @@ const CatalogContent = () => {
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.name)}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                  selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+                  selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
                 }`}
               >
                 {cat.name}
@@ -176,7 +176,7 @@ const CatalogContent = () => {
                       <span className="text-xl font-bold text-slate-900 dark:text-white">${c.price}</span>
                     </div>
 
-                    <Link href={`/courses/${c.id}`} className="mt-5 w-full py-3.5 bg-slate-50 dark:bg-slate-700/50 text-slate-900 dark:text-white rounded-xl flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider shadow-sm hover:gradient-primary hover:text-white transition-all group/btn active:scale-95">
+                    <Link href={`/courses/${c.id}`} className="mt-5 w-full py-3.5 bg-white dark:bg-slate-700/50 text-slate-900 dark:text-white rounded-xl flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider shadow-sm hover:gradient-primary hover:text-white transition-all group/btn active:scale-95">
                       View Course <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                     </Link>
                   </div>
@@ -217,10 +217,10 @@ const CatalogContent = () => {
 
 const CoursesCatalog = () => {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       <Navbar />
       <Suspense fallback={
-        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium tracking-wider uppercase text-xs">Loading Catalog...</p>
         </div>

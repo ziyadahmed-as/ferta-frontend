@@ -83,7 +83,7 @@ const RegisterContent = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-6">
+      <div className="min-h-screen flex items-center justify-center bg-white px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -109,7 +109,7 @@ const RegisterContent = () => {
   // Role Choice Screen
   if (step === "choose") {
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6 py-16">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -199,7 +199,7 @@ const RegisterContent = () => {
 
   // Registration Form
   return (
-    <div className="min-h-screen bg-slate-50 px-6 py-16">
+    <div className="min-h-screen bg-white px-6 py-16">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-10">
@@ -351,7 +351,7 @@ const FormField = ({ icon, label, id, type = "text", required, name, placeholder
       <input
         id={id} type={type} name={name} placeholder={placeholder}
         required={required} value={value} onChange={onChange}
-        className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all`}
+        className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all`}
       />
     </div>
   </div>
@@ -360,7 +360,7 @@ const FormField = ({ icon, label, id, type = "text", required, name, placeholder
 const RegisterPage = () => {
   return (
     <Suspense fallback={
-      <div className="h-screen flex items-center justify-center bg-slate-50">
+      <div className="h-screen flex items-center justify-center bg-white">
         <Loader2 className="text-blue-600 animate-spin" size={40} />
       </div>
     }>

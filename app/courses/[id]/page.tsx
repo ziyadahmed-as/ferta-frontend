@@ -59,7 +59,7 @@ const CourseDetail = () => {
   };
 
   if (loading) return (
-    <div className="h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+    <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
       <div className="flex flex-col items-center gap-4">
         <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
         <p className="text-slate-500 font-medium">Loading course details...</p>
@@ -68,7 +68,7 @@ const CourseDetail = () => {
   );
 
   if (!course) return (
-    <div className="h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 text-center px-6">
+    <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6">
       <Layout size={56} className="text-slate-300 mb-5" />
       <h1 className="text-2xl font-bold text-slate-800 dark:text-white mb-2">Course Not Found</h1>
       <p className="text-slate-500 mb-6">The course you are looking for does not exist or has been removed.</p>
@@ -77,7 +77,7 @@ const CourseDetail = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-white dark:bg-slate-900">
       <Navbar />
       
       {/* Hero Section */}
@@ -251,7 +251,7 @@ const CourseDetail = () => {
                 {course.chapters && course.chapters.length > 0 ? (
                   course.chapters.map((chapter: any, i: number) => (
                     <div key={chapter.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
-                      <div className="p-5 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
+                      <div className="p-5 flex items-center justify-between bg-white dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
                         <h4 className="font-bold text-slate-800 dark:text-white flex items-center gap-3">
                           <span className="text-xs text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Section {i+1}</span>
                           {chapter.title}
@@ -260,7 +260,7 @@ const CourseDetail = () => {
                       </div>
                       <div className="divide-y divide-slate-50 dark:divide-slate-700">
                         {chapter.lessons?.map((lesson: any) => (
-                          <div key={lesson.id} className="flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group cursor-pointer">
+                          <div key={lesson.id} className="flex items-center justify-between p-4 hover:bg-white dark:hover:bg-slate-700/50 transition-colors group cursor-pointer">
                             <div className="flex items-center gap-4">
                               <PlayCircle size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
                               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{lesson.title}</span>

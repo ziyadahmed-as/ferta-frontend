@@ -80,7 +80,7 @@ const AdminDashboard = () => {
 
   if (!user || (user.role !== "ADMIN" && !user.is_superuser)) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-slate-50 text-center px-6">
+      <div className="h-screen flex flex-col items-center justify-center bg-white text-center px-6">
         <ShieldCheck size={56} className="text-indigo-600 mb-5" />
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Admin Access Required</h1>
         <p className="text-slate-500 mb-6">You need administrator privileges to access this panel.</p>
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-slate-50">
+      <div className="h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium">Loading admin panel...</p>
@@ -139,7 +139,7 @@ const AdminDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex">
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex">
       {/* Sidebar */}
       <aside className="w-64 shrink-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col hidden md:flex">
         <div className="p-6 border-b border-slate-100 dark:border-slate-700">
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
                 key={item.id}
                 onClick={() => setActiveModule(item.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                  active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700"
                 }`}
               >
                 <Icon size={18} />

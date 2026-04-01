@@ -45,7 +45,7 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-24 bg-white dark:bg-black px-6">
+    <section className="py-24 bg-white dark:bg-zinc-950 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 font-mono italic">Core Platform Features</h2>
@@ -64,7 +64,7 @@ const Features = () => {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ scale: 1.05 }}
-              className="p-10 bg-zinc-50 dark:bg-zinc-900/50 rounded-[3rem] border border-zinc-200 dark:border-zinc-800 hover:border-indigo-600/30 transition-all duration-300"
+              className="text-center p-6 bg-white dark:bg-zinc-900/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
             >
               <div className={`w-12 h-12 ${feature.bg} rounded-xl flex items-center justify-center mb-6 shadow-xl shadow-zinc-200/20 dark:shadow-none transition-transform`}>
                 {React.cloneElement(feature.icon as React.ReactElement<{ size: number }>, { size: 24 })}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, BookOpen, Bell, LogOut, ChevronDown, User as UserIcon } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +57,9 @@ const Navbar = () => {
         </div>
 
         {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4">
+          <ThemeToggle />
+          <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
           {user ? (
             <div className="flex items-center gap-3">
               <button title="Notifications" className="relative w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
@@ -123,31 +126,36 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Toggle */}
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile Toggle & Theme */}
+        <div className="flex md:hidden items-center gap-3">
+          <ThemeToggle />
+          <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-4 px-6 flex flex-col gap-3">
-          <Link href="/" onClick={() => setIsOpen(false)} className="text-sm font-medium py-2 text-slate-700 dark:text-slate-300">Home</Link>
-          <Link href="/courses" onClick={() => setIsOpen(false)} className="text-sm font-medium py-2 text-slate-700 dark:text-slate-300">Courses</Link>
-          <Link href="/register?role=instructor" onClick={() => setIsOpen(false)} className="text-sm font-medium py-2 text-slate-700 dark:text-slate-300">Teach</Link>
-          <Link href="/about" onClick={() => setIsOpen(false)} className="text-sm font-medium py-2 text-slate-700 dark:text-slate-300">About</Link>
-          <hr className="border-slate-200 dark:border-slate-700" />
-          {user ? (
-            <>
-              <Link href={getDashboardLink()} onClick={() => setIsOpen(false)} className="py-2.5 px-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-xl text-sm font-semibold text-center">Dashboard</Link>
-              <button onClick={() => { setIsOpen(false); logout(); }} className="py-2.5 px-4 text-red-600 border border-red-200 rounded-xl text-sm font-semibold">Sign Out</button>
-            </>
-          ) : (
-            <>
-              <Link href="/login" onClick={() => setIsOpen(false)} className="py-2.5 px-4 text-center border border-slate-300 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-semibold">Login</Link>
-              <Link href="/register" onClick={() => setIsOpen(false)} className="py-2.5 px-4 text-center text-white gradient-primary rounded-xl text-sm font-semibold">Sign Up</Link>
-            </>
-          )}
+        <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 px-6 flex flex-col gap-4 shadow-2xl">
+          <Link href="/" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Home</Link>
+          <Link href="/courses" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Courses</Link>
+          <Link href="/register?role=instructor" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Teach</Link>
+          <Link href="/about" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">About</Link>
+          
+          <div className="mt-4 flex flex-col gap-3">
+            {user ? (
+              <>
+                <Link href={getDashboardLink()} onClick={() => setIsOpen(false)} className="py-3 px-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-xl text-sm font-black uppercase tracking-widest text-center shadow-sm">Dashboard</Link>
+                <button onClick={() => { setIsOpen(false); logout(); }} className="py-3 px-4 text-red-600 border border-red-100 dark:border-red-900/30 rounded-xl text-sm font-black uppercase tracking-widest shadow-sm">Sign Out</button>
+              </>
+            ) : (
+              <>
+                <Link href="/login" onClick={() => setIsOpen(false)} className="py-3 px-4 text-center border-2 border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-black uppercase tracking-widest shadow-sm">Login</Link>
+                <Link href="/register" onClick={() => setIsOpen(false)} className="py-3 px-4 text-center text-white gradient-primary rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-blue-500/20">Sign Up</Link>
+              </>
+            )}
+          </div>
         </div>
       )}
     </nav>

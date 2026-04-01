@@ -29,7 +29,7 @@ const AboutPage = () => {
       </section>
 
       {/* Core Values / Shards */}
-      <section className="py-32 px-6 bg-zinc-50 dark:bg-zinc-900/30">
+      <section className="py-32 px-6 bg-white dark:bg-zinc-900/30">
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
             <ValueShard 
                icon={<ShieldCheck size={40}/>} 

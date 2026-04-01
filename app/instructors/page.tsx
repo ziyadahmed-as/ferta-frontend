@@ -52,7 +52,7 @@ const InstructorsCatalog = () => {
         </div>
 
         {/* Global Search Signal */}
-        <div className="bg-zinc-50 dark:bg-zinc-900/50 backdrop-blur-xl border border-zinc-100 dark:border-zinc-800 p-6 rounded-[3rem] mb-16 shadow-2xl shadow-zinc-200/10">
+        <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-zinc-100 dark:border-zinc-800 p-6 rounded-[3rem] mb-16 shadow-2xl shadow-zinc-200/10">
            <div className="relative group">
               <Search className="absolute left-8 top-5 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={24} />
               <input 
@@ -70,7 +70,7 @@ const InstructorsCatalog = () => {
         {loading ? (
              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {[1,2,3,4,5,6,7,8].map(i => (
-                   <div key={i} className="h-96 bg-zinc-100 dark:bg-zinc-900 rounded-[3rem] animate-pulse" />
+                   <div key={i} className="h-96 bg-white dark:bg-zinc-900 rounded-[3rem] animate-pulse" />
                 ))}
              </div>
         ) : (
@@ -89,7 +89,7 @@ const InstructorsCatalog = () => {
                     {/* Brand Shard */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-bl-full -z-10 group-hover:bg-indigo-500/10 transition-colors" />
                     
-                    <div className="w-32 h-32 bg-zinc-100 dark:bg-zinc-800 rounded-[2.5rem] flex items-center justify-center text-zinc-900 dark:text-white font-black text-5xl mb-8 shadow-2xl group-hover:scale-105 transition-transform duration-500 italic border-4 border-white dark:border-zinc-900 overflow-hidden relative">
+                    <div className="w-32 h-32 bg-white dark:bg-zinc-800 rounded-[2.5rem] flex items-center justify-center text-zinc-900 dark:text-white font-black text-5xl mb-8 shadow-2xl group-hover:scale-105 transition-transform duration-500 italic border-4 border-white dark:border-zinc-900 overflow-hidden relative">
                         {inst.profile_image ? (
                              <Image fill src={inst.profile_image} alt={inst.username} className="object-cover" />
                         ) : (

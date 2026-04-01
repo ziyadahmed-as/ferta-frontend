@@ -30,7 +30,8 @@ export function ProfileDropdown() {
     <div className="relative" ref={dropdownRef}>
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 group p-1 pr-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-full hover:border-indigo-600/30 transition-all active:scale-95"
+        title="Account Settings"
+        className="flex items-center gap-2 group p-1 pr-3 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-full hover:border-indigo-600/30 transition-all active:scale-95"
       >
         <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-black text-xs shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
            {user.username?.[0].toUpperCase() || "U"}

@@ -13,7 +13,7 @@ const ProfilePage = () => {
     return (
         <div className="min-h-screen bg-white dark:bg-black pt-28 px-6 pb-24">
             <div className="max-w-4xl mx-auto">
-                <div className="flex flex-col md:flex-row items-center gap-12 mb-16 px-8 py-12 bg-zinc-50 dark:bg-zinc-900/50 rounded-[4rem] border border-zinc-100 dark:border-zinc-800 shadow-2xl relative overflow-hidden group">
+                <div className="flex flex-col md:flex-row items-center gap-12 mb-16 px-8 py-12 bg-white dark:bg-zinc-900/50 rounded-[4rem] border border-zinc-100 dark:border-zinc-800 shadow-2xl relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/5 rounded-full blur-[100px] -z-1 group-hover:scale-150 transition-all duration-1000" />
                     
                     <div className="w-32 h-32 bg-indigo-600 rounded-[2.5rem] flex items-center justify-center text-white text-5xl font-black shadow-xl shadow-indigo-600/20 group-hover:rotate-6 transition-all">
@@ -57,7 +57,7 @@ const ProfilePage = () => {
 };
 
 const ProfileCard = ({ title, icon, details }: any) => (
-    <div className="p-10 bg-zinc-50 dark:bg-zinc-900/40 rounded-[3rem] border border-zinc-100 dark:border-zinc-800">
+    <div className="p-10 bg-white dark:bg-zinc-900/40 rounded-[3rem] border border-zinc-100 dark:border-zinc-800">
         <div className="flex items-center gap-3 mb-8 text-indigo-600">
             {icon}
             <h3 className="text-sm font-black uppercase tracking-widest italic">{title}</h3>

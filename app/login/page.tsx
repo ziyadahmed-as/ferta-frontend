@@ -35,17 +35,15 @@ const LoginContent = () => {
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4">
       {/* Background */}
-      <div className="absolute inset-0">
-        <img src={HERO_BG} alt="Background" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-800/85 via-indigo-700/80 to-purple-800/85" />
-      </div>
+      <div className="absolute inset-0 bg-white" />
+      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-20" />
 
       {/* Logo */}
       <div className="absolute top-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
         <div className="w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center shadow-lg">
           <BookOpen size={24} className="text-white" />
         </div>
-        <span className="text-white text-xl font-bold">EduTech</span>
+        <span className="text-slate-800 text-xl font-bold">Edu<span className="text-indigo-600">Tech</span></span>
       </div>
 
       {/* Login Card */}
@@ -53,11 +51,11 @@ const LoginContent = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 w-full max-w-md bg-white/15 backdrop-blur-xl border border-white/25 rounded-3xl p-8 shadow-2xl mt-16"
+        className="relative z-10 w-full max-w-md bg-white border border-slate-200 rounded-3xl p-8 shadow-2xl mt-16"
       >
         <div className="text-center mb-7">
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back!</h1>
-          <p className="text-blue-100 text-sm">Sign in to continue your learning journey</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Welcome Back!</h1>
+          <p className="text-slate-500 text-sm">Sign in to continue your learning journey</p>
         </div>
 
         {isRegistered && (
@@ -79,9 +77,9 @@ const LoginContent = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email / Username */}
           <div>
-            <label className="block text-sm font-medium text-blue-100 mb-1.5">Email Address</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" size={18} />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
                 type="text"
                 required
@@ -89,16 +87,16 @@ const LoginContent = () => {
                 placeholder="your.email@example.com"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full pl-11 pr-4 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all text-sm"
+                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-300 focus:bg-white transition-all text-sm"
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-blue-100 mb-1.5">Password</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-white/50" size={18} />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
                 type={showPassword ? "text" : "password"}
                 required
@@ -106,12 +104,12 @@ const LoginContent = () => {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full pl-11 pr-12 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-white/50 focus:bg-white/15 transition-all text-sm"
+                className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-300 focus:bg-white transition-all text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white/80 transition-colors"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -121,10 +119,10 @@ const LoginContent = () => {
           {/* Remember & Forgot */}
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="w-4 h-4 rounded border-white/30 bg-white/10" />
-              <span className="text-sm text-blue-100">Remember me</span>
+              <input type="checkbox" className="w-4 h-4 rounded border-slate-300" />
+              <span className="text-sm text-slate-600">Remember me</span>
             </label>
-            <button type="button" className="text-sm text-purple-300 hover:text-white transition-colors font-medium">
+            <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 transition-colors font-medium">
               Forgot password?
             </button>
           </div>
@@ -141,9 +139,9 @@ const LoginContent = () => {
 
         {/* Divider */}
         <div className="my-5 flex items-center gap-3">
-          <div className="flex-1 h-px bg-white/20" />
-          <span className="text-xs text-white/50 font-medium">Or continue with</span>
-          <div className="flex-1 h-px bg-white/20" />
+          <div className="flex-1 h-px bg-slate-100" />
+          <span className="text-xs text-slate-400 font-medium">Or continue with</span>
+          <div className="flex-1 h-px bg-slate-100" />
         </div>
 
         {/* Social Login */}
@@ -166,9 +164,9 @@ const LoginContent = () => {
         </div>
 
         {/* Sign up link */}
-        <p className="text-center text-sm text-blue-100 mt-5">
+        <p className="text-center text-sm text-slate-500 mt-5">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-white font-semibold hover:underline underline-offset-2">
+          <Link href="/register" className="text-indigo-600 font-semibold hover:underline underline-offset-2">
             Sign up
           </Link>
         </p>

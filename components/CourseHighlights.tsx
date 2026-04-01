@@ -43,12 +43,12 @@ const CourseHighlights = () => {
 
   if (loading) {
     return (
-      <section className="py-24 bg-zinc-50 dark:bg-zinc-950 px-6">
+      <section className="py-24 bg-white dark:bg-zinc-950 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
-            <div className="w-48 h-8 bg-zinc-200 dark:bg-zinc-800 rounded animate-pulse mb-8" />
+            <div className="w-48 h-8 bg-white dark:bg-zinc-800 rounded animate-pulse mb-8" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
                 {[1,2,3,4].map(idx => (
-                    <div key={idx} className="h-96 bg-zinc-200 dark:bg-zinc-800 rounded-3xl animate-pulse" />
+                    <div key={idx} className="h-96 bg-white dark:bg-zinc-800 rounded-3xl animate-pulse" />
                 ))}
             </div>
         </div>
@@ -79,7 +79,7 @@ const CourseHighlights = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="group bg-white dark:bg-zinc-900 rounded-[2rem] overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 hover:-translate-y-2"
+              className="p-6 sm:p-8 lg:p-10 bg-white dark:bg-zinc-900/50 rounded-[2.5rem] lg:rounded-[3rem] border border-zinc-200 dark:border-zinc-800 hover:border-indigo-600/30 transition-all duration-300 hover:-translate-y-2"
             >
               <div className="relative h-56 w-full overflow-hidden">
                 <Image

@@ -34,7 +34,7 @@ const FeaturedCourses = () => {
   if (loading || courses.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white dark:bg-slate-900 px-6">
+    <section className="py-20 bg-white dark:bg-zinc-950 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-10">
           <div>
@@ -57,10 +57,10 @@ const FeaturedCourses = () => {
             >
               <Link
                 href={`/courses/${course.slug}`}
-                className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all h-full"
+                className="group flex flex-col bg-white dark:bg-zinc-900/50 rounded-2xl border border-slate-200 dark:border-zinc-800 overflow-hidden hover:shadow-lg transition-all h-full"
               >
                 {/* Thumbnail */}
-                <div className="relative h-44 bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                <div className="relative h-44 bg-slate-100 dark:bg-zinc-800/50 overflow-hidden">
                   <Image
                     src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80"}
                     alt={course.title}
@@ -87,7 +87,7 @@ const FeaturedCourses = () => {
                   {course.instructor_name && (
                     <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{course.instructor_name}</p>
                   )}
-                  <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-slate-700">
+                  <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-zinc-800/50">
                     <div className="flex items-center gap-1 text-amber-500">
                       <Star size={13} fill="currentColor" />
                       <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">4.8</span>
