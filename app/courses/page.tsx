@@ -4,7 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import api from "@/lib/api";
-import { BookOpen, Search, Layers, Users, Clock, ArrowRight, Filter, SlidersHorizontal } from "lucide-react";
+import { BookOpen, Search, Layers, Users, Clock, ArrowRight, Filter, SlidersHorizontal, Star, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -26,8 +26,8 @@ const CatalogContent = () => {
           api.get("/courses/courses/"),
           api.get("/courses/categories/")
         ]);
-        setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : coursesRes.data.results);
-        setCategories(catsRes.data);
+        setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : coursesRes.data.results || []);
+        setCategories(catsRes.data || []);
       } catch (err) {
         console.error("Catalog fetch error:", err);
       } finally {
@@ -44,145 +44,191 @@ const CatalogContent = () => {
   });
 
   return (
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
-        {/* Header Shard */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
-           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-2 block font-mono italic">Institutional Asset Registry</span>
-              <h1 className="text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tighter italic">
-                 Explore the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Knowledge Network</span>
-              </h1>
-           </motion.div>
-           <p className="text-zinc-500 font-medium text-sm max-w-md italic opacity-80 uppercase tracking-widest text-right">
-              Hydrating your operational path with pre-vetted curriculum artifacts.
-           </p>
-        </div>
+    <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+      {/* Page Header */}
+      <div className="text-center mb-16">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <p className="text-blue-600 font-bold text-sm uppercase tracking-wider mb-3">Explore Our Programs</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
+            Comprehensive Course <span className="text-transparent bg-clip-text gradient-primary">Catalog</span>
+          </h1>
+          <p className="text-slate-500 max-w-2xl mx-auto text-lg">
+            Choose from our extensive range of courses designed to help you master new skills and advance your career.
+          </p>
+        </motion.div>
+      </div>
 
-        {/* Filter & Search Bar */}
-        <div className="bg-zinc-50 dark:bg-zinc-900/50 backdrop-blur-xl border border-zinc-100 dark:border-zinc-800 p-4 rounded-[2.5rem] mb-12 flex flex-col lg:flex-row gap-4 items-center shadow-xl shadow-zinc-200/20 dark:shadow-none">
-           <div className="relative flex-1 group">
-              <Search className="absolute left-6 top-4 text-zinc-400 group-focus-within:text-indigo-600 transition-colors" size={20} />
-              <input 
-                type="text" 
-                placeholder="Query institutional nodes..." 
-                title="Search Courses"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-16 pr-6 py-4 bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-2xl focus:ring-2 focus:ring-indigo-600/20 outline-none font-medium transition-all text-sm italic"
-              />
-           </div>
-           
-           <div className="flex items-center gap-3 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+      {/* Search & Filter Bar */}
+      <div className="mb-12 space-y-6">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="relative flex-1 group">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />
+            <input 
+              type="text" 
+              placeholder="Search for courses, skills, or instructors..." 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-blue-600/10 outline-none font-medium transition-all text-slate-800 dark:text-white shadow-sm"
+            />
+            {search && (
               <button 
-                onClick={() => setSelectedCategory(null)}
-                className={`px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all italic whitespace-nowrap ${
-                   !selectedCategory ? "bg-zinc-950 text-white shadow-xl" : "bg-white dark:bg-zinc-800 text-zinc-500 hover:bg-zinc-100"
-                }`}
+                onClick={() => setSearch("")}
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
               >
-                 All Artifacts
+                <X size={18} />
               </button>
-              {categories.map(cat => (
-                 <button 
-                   key={cat.id}
-                   onClick={() => setSelectedCategory(cat.name)}
-                   className={`px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all italic whitespace-nowrap ${
-                      selectedCategory === cat.name ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/20" : "bg-white dark:bg-zinc-800 text-zinc-500 hover:bg-zinc-100"
-                   }`}
-                 >
-                    {cat.name}
-                 </button>
-              ))}
-           </div>
-        </div>
-
-        {/* Results Grid */}
-        {loading ? (
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1,2,3,4,5,6].map(i => (
-                   <div key={i} className="h-[400px] bg-zinc-100 dark:bg-zinc-900 rounded-[3rem] animate-pulse" />
-                ))}
-             </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <AnimatePresence>
-               {filteredCourses.map((c, i) => (
-                 <motion.div
-                   layout
-                   initial={{ opacity: 0, scale: 0.9 }}
-                   animate={{ opacity: 1, scale: 1 }}
-                   exit={{ opacity: 0, scale: 0.9 }}
-                   transition={{ delay: i * 0.05 }}
-                   key={c.id}
-                   className="group bg-white dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-800 rounded-[3rem] overflow-hidden hover:border-indigo-600/30 transition-all flex flex-col shadow-xl shadow-zinc-200/10 dark:shadow-none"
-                 >
-                    <div className="relative h-56 overflow-hidden">
-                       {c.thumbnail ? (
-                         <Image fill src={c.thumbnail} alt={c.title} className="object-cover group-hover:scale-105 transition-transform duration-700" />
-                       ) : (
-                         <div className="w-full h-full bg-indigo-600 flex items-center justify-center text-white">
-                            <BookOpen size={48} className="opacity-20 translate-y-4" />
-                         </div>
-                       )}
-                       <div className="absolute top-6 left-6">
-                          <span className="px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl text-[10px] font-black uppercase tracking-widest text-indigo-600 italic shadow-lg">
-                             {c.category_name || "Institutional"}
-                          </span>
-                       </div>
-                    </div>
-                    
-                    <div className="p-8 flex-1 flex flex-col">
-                       <div className="flex items-center gap-3 mb-4">
-                          <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center border border-zinc-200 dark:border-zinc-700">
-                             <Users size={14} className="text-zinc-500" />
-                          </div>
-                          <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest italic">{c.instructor_name}</span>
-                       </div>
-                       
-                       <h3 className="text-xl font-black text-zinc-900 dark:text-white tracking-tighter mb-4 italic leading-tight group-hover:text-indigo-600 transition-colors">
-                          {c.title}
-                       </h3>
-                       
-                       <div className="mt-auto pt-6 border-t border-zinc-50 dark:border-zinc-800 flex items-center justify-between">
-                          <div className="flex items-center gap-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest italic">
-                             <span className="flex items-center gap-1.5"><Clock size={12}/> {c.course_type?.replace('_', ' ')}</span>
-                          </div>
-                          <span className="text-lg font-black text-zinc-900 dark:text-white tracking-tighter">${c.price}</span>
-                       </div>
-
-                       <Link href={`/courses/${c.id}`} className="mt-6 w-full py-4 bg-zinc-900 dark:bg-white text-white dark:text-black rounded-2xl flex items-center justify-center gap-2 group/btn font-black text-[10px] uppercase tracking-[0.2em] italic shadow-xl shadow-zinc-950/10 hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white transition-all">
-                          Initialize Node <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                       </Link>
-                    </div>
-                 </motion.div>
-               ))}
-            </AnimatePresence>
-            
-            {!loading && filteredCourses.length === 0 && (
-               <div className="col-span-full py-32 text-center">
-                  <BookOpen size={64} className="mx-auto text-zinc-200 mb-6" />
-                  <p className="text-zinc-500 font-black uppercase tracking-widest italic">No Institutional Nodes Found Matching Your Signal.</p>
-               </div>
             )}
           </div>
-        )}
-      </main>
+          
+          <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm overflow-x-auto scrollbar-hide">
+            <button 
+              onClick={() => setSelectedCategory(null)}
+              className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
+                !selectedCategory ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+              }`}
+            >
+              All Categories
+            </button>
+            {categories.map(cat => (
+              <button 
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.name)}
+                className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
+                  selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700"
+                }`}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Results Section */}
+      {loading ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {[1,2,3,4,5,6,7,8].map(i => (
+            <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden shadow-sm">
+              <div className="h-44 bg-slate-100 dark:bg-slate-700 animate-pulse" />
+              <div className="p-6 space-y-4">
+                <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-1/4 animate-pulse" />
+                <div className="h-6 bg-slate-100 dark:bg-slate-700 rounded w-3/4 animate-pulse" />
+                <div className="h-4 bg-slate-100 dark:bg-slate-700 rounded w-1/2 animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            <AnimatePresence mode="popLayout">
+              {filteredCourses.map((c, i) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ delay: i * 0.05 }}
+                  key={c.id}
+                  className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-600 transition-all flex flex-col shadow-sm hover:shadow-xl hover:shadow-blue-500/5"
+                >
+                  <Link href={`/courses/${c.id}`} className="block relative h-48 overflow-hidden">
+                    {c.thumbnail ? (
+                      <Image fill src={c.thumbnail} alt={c.title} className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
+                        <BookOpen size={40} className="text-slate-300" />
+                      </div>
+                    )}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 shadow-sm border border-white/20">
+                        {c.category_name}
+                      </span>
+                    </div>
+                  </Link>
+                  
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-500 border border-slate-200 dark:border-slate-600">
+                        <Users size={12} />
+                      </div>
+                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">{c.instructor_name}</span>
+                    </div>
+                    
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">
+                      {c.title}
+                    </h3>
+
+                    <div className="flex items-center gap-1 mb-4 text-amber-500">
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <Star size={14} fill="currentColor" />
+                      <span className="text-xs text-slate-400 ml-1">(4.8)</span>
+                    </div>
+                    
+                    <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-700">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-tight">
+                        <Clock size={12}/> 12 Hours
+                      </div>
+                      <span className="text-xl font-bold text-slate-900 dark:text-white">${c.price}</span>
+                    </div>
+
+                    <Link href={`/courses/${c.id}`} className="mt-5 w-full py-3.5 bg-slate-50 dark:bg-slate-700/50 text-slate-900 dark:text-white rounded-xl flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-wider shadow-sm hover:gradient-primary hover:text-white transition-all group/btn active:scale-95">
+                      View Course <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {!loading && filteredCourses.length === 0 && (
+            <div className="py-24 text-center">
+              <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search size={32} className="text-slate-300" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">No courses found</h3>
+              <p className="text-slate-500">Try adjusting your search or category filter to find what you're looking for.</p>
+              <button 
+                onClick={() => {setSearch(""); setSelectedCategory(null);}} 
+                className="mt-6 text-blue-600 font-bold hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
+
+          {/* Load More Button - Placeholder */}
+          {filteredCourses.length > 0 && !loading && (
+            <div className="text-center">
+              <button className="px-8 py-3.5 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 font-bold hover:border-blue-600 hover:text-blue-600 transition-all">
+                Load More Courses
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </main>
   );
 };
 
 const CoursesCatalog = () => {
-    return (
-        <div className="min-h-screen bg-white dark:bg-black">
-            <Navbar />
-            <Suspense fallback={
-                <div className="min-h-screen flex items-center justify-center font-black tracking-widest italic animate-pulse uppercase text-zinc-500">
-                    Decrypting Knowledge Network...
-                </div>
-            }>
-                <CatalogContent />
-            </Suspense>
-            <Footer />
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <Navbar />
+      <Suspense fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-slate-500 font-medium tracking-wider uppercase text-xs">Loading Catalog...</p>
         </div>
-    );
+      }>
+        <CatalogContent />
+      </Suspense>
+      <Footer />
+    </div>
+  );
 };
 
 export default CoursesCatalog;
