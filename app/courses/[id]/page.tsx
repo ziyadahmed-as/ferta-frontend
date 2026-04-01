@@ -174,10 +174,10 @@ const CourseDetail = () => {
                 
                 {isEnrolled ? (
                   <button 
-                    onClick={() => router.push(`/student/dashboard`)} 
+                    onClick={() => router.push(`/courses/${id}/learn`)} 
                     className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
                   >
-                    Go to Dashboard <ArrowRight size={18}/>
+                    Continue Learning <ArrowRight size={18}/>
                   </button>
                 ) : (
                   <button 

@@ -109,9 +109,8 @@ const StudentDashboard = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
-                }`}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                  }`}
               >
                 <Icon size={18} />
                 {item.label}
@@ -147,10 +146,10 @@ const StudentDashboard = () => {
             <div className="w-8 h-8 gradient-primary rounded-xl flex items-center justify-center md:hidden">
               <BookOpen size={16} className="text-white" />
             </div>
-            <span className="font-bold text-slate-800 dark:text-white md:hidden">EduTech</span>
+            <span className="font-bold text-slate-800 dark:text-white md:hidden">FetraTech</span>
           </div>
           <div className="flex items-center gap-3 ml-auto">
-            <button className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+            <button title="Notifications" className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Bell size={18} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </button>
@@ -301,8 +300,8 @@ const StudentDashboard = () => {
                         <div className="h-full gradient-primary rounded-full w-[45%]" />
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-500">45% Complete</span>
-                        <Link href={`/courses/${course.slug}`} className="text-xs text-blue-600 font-semibold hover:text-blue-700">Continue →</Link>
+                        <span className="text-xs text-slate-500">{course.completion_percentage || 0}% Complete</span>
+                        <Link href={`/courses/${course.id}/learn`} className="text-xs text-blue-600 font-semibold hover:text-blue-700">Continue →</Link>
                       </div>
                     </div>
                   </motion.div>
