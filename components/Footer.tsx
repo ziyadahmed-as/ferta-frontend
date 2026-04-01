@@ -2,81 +2,90 @@
 
 import React from "react";
 import Link from "next/link";
-import { BookOpen, Share2, MessageCircle, LifeBuoy, Mail, ArrowRight } from "lucide-react";
+import { BookOpen, Twitter, Linkedin, Instagram, Youtube, Mail, ArrowRight } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="pt-24 pb-12 bg-white dark:bg-black px-6 border-t border-zinc-200 dark:border-zinc-800">
-      <div className="max-w-7xl mx-auto flex flex-col items-center">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16 mb-20 w-full text-center md:text-left">
-          <div className="flex flex-col items-center md:items-start max-w-sm">
-            <Link href="/" className="flex items-center gap-2 group mb-8">
-              <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-                <BookOpen size={24} />
+    <footer className="bg-slate-900 text-slate-300 pt-16 pb-8 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+          {/* Brand */}
+          <div>
+            <Link href="/" className="flex items-center gap-2.5 mb-4 group">
+              <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center shadow-md">
+                <BookOpen size={20} className="text-white" />
               </div>
-              <span className="text-xl font-black tracking-tighter text-zinc-900 dark:text-white italic">
-                Fatra<span className="text-indigo-600">Edu</span>
-              </span>
+              <span className="text-lg font-bold text-white">EduTech</span>
             </Link>
-            <p className="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed mb-8">
-              Building the future of education with AI-powered tools and global live learning experiences.
+            <p className="text-sm text-slate-400 leading-relaxed mb-5">
+              Building the future of education with comprehensive courses for every stage of your learning journey.
             </p>
-            <div className="flex items-center gap-6">
-              <Link href="#" className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-2xl hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 transition-all">
-                 <Share2 size={20} />
-              </Link>
-              <Link href="#" className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-2xl hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 transition-all">
-                 <MessageCircle size={20} />
-              </Link>
-              <Link href="#" className="p-3 bg-zinc-50 dark:bg-zinc-900 rounded-2xl hover:bg-indigo-600 hover:text-white dark:hover:bg-indigo-600 transition-all">
-                 <LifeBuoy size={20} />
-              </Link>
+            <div className="flex items-center gap-3">
+              {[Twitter, Linkedin, Instagram, Youtube].map((Icon, i) => (
+                <a key={i} href="#" className="w-8 h-8 bg-slate-800 hover:bg-blue-600 rounded-lg flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <Icon size={15} />
+                </a>
+              ))}
             </div>
           </div>
 
+          {/* Courses */}
           <div>
-             <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-8 tracking-tighter">Explore Platform</h4>
-             <ul className="flex flex-col gap-5 text-zinc-600 dark:text-zinc-400 font-medium">
-               <li><Link href="/courses" className="hover:text-indigo-600 transition-colors">Course Catalog</Link></li>
-               <li><Link href="/instructors" className="hover:text-indigo-600 transition-colors">Featured Instructors</Link></li>
-               <li><Link href="/partners" className="hover:text-indigo-600 transition-colors">University Partners</Link></li>
-               <li><Link href="/live" className="hover:text-indigo-600 transition-colors">Upcoming Live Sessions</Link></li>
-               <li><Link href="/pricing" className="hover:text-indigo-600 transition-colors">Subscription Plans</Link></li>
-             </ul>
+            <h4 className="font-semibold text-white mb-4 text-sm">Courses</h4>
+            <ul className="space-y-3">
+              {["All Courses", "Entrance Exam Prep", "Technology", "Soft Skills", "Certifications"].map((item) => (
+                <li key={item}>
+                  <Link href="/courses" className="text-sm text-slate-400 hover:text-white transition-colors">{item}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
+          {/* Company */}
           <div>
-             <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-8 tracking-tighter">Company & Community</h4>
-             <ul className="flex flex-col gap-5 text-zinc-600 dark:text-zinc-400 font-medium">
-               <li><Link href="/about" className="hover:text-indigo-600 transition-colors">About Our Vision</Link></li>
-               <li><Link href="/blog" className="hover:text-indigo-600 transition-colors">Learning Blog</Link></li>
-               <li><Link href="/careers" className="hover:text-indigo-600 transition-colors">Careers at FatraEdu</Link></li>
-               <li><Link href="/terms" className="hover:text-indigo-600 transition-colors">Terms of Service</Link></li>
-               <li><Link href="/privacy" className="hover:text-indigo-600 transition-colors">Privacy Policy</Link></li>
-             </ul>
+            <h4 className="font-semibold text-white mb-4 text-sm">Company</h4>
+            <ul className="space-y-3">
+              {[
+                { label: "About Us", href: "/about" },
+                { label: "Teach on EduTech", href: "/register?role=instructor" },
+                { label: "Blog", href: "#" },
+                { label: "Careers", href: "#" },
+                { label: "Contact", href: "#" },
+              ].map((item) => (
+                <li key={item.label}>
+                  <Link href={item.href} className="text-sm text-slate-400 hover:text-white transition-colors">{item.label}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
+          {/* Newsletter */}
           <div>
-             <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-8 tracking-tighter">Stay Connected</h4>
-             <p className="text-zinc-600 dark:text-zinc-400 mb-8 font-medium">Get the latest education news and course updates delivered to your inbox.</p>
-             <div className="relative group overflow-hidden rounded-3xl">
-                <input 
-                  type="email" 
-                  placeholder="name@email.com" 
-                  className="w-full pl-6 pr-14 py-5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-3xl focus:ring-2 focus:ring-indigo-600/20 focus:border-indigo-600 transition-all outline-none text-zinc-900 dark:text-white font-medium" 
-                />
-                <button title="Subscribe" className="absolute right-3 top-3 w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-500/20 hover:scale-105 active:scale-95 transition-all">
-                  <ArrowRight size={20} />
-                </button>
-             </div>
+            <h4 className="font-semibold text-white mb-4 text-sm">Stay Updated</h4>
+            <p className="text-sm text-slate-400 mb-4">Get the latest updates on new courses and features.</p>
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="your@email.com"
+                className="w-full pl-4 pr-12 py-3 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              />
+              <button className="absolute right-2 top-2 w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white">
+                <ArrowRight size={14} />
+              </button>
+            </div>
+            <div className="mt-4 flex items-center gap-2 text-xs text-slate-500">
+              <Mail size={13} />
+              support@edutech.com
+            </div>
           </div>
         </div>
 
-        <div className="w-full pt-12 border-t border-zinc-100 dark:border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-8 text-zinc-500 dark:text-zinc-600 text-sm font-bold tracking-widest uppercase">
-          <p>© 2026 FATRAEDU. ALL RIGHTS RESERVED.</p>
-          <div className="flex items-center gap-8">
-            <span className="flex items-center gap-2 italic lowercase font-medium tracking-normal text-zinc-400"><Mail size={14}/> support@fatraedu.com</span>
-            <Link href="https://ziyadahmed.tech" className="hover:text-indigo-600">Built by Ziyad Ahmed</Link>
+        <div className="border-t border-slate-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <p>© 2026 EduTech. All rights reserved.</p>
+          <div className="flex gap-5">
+            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>

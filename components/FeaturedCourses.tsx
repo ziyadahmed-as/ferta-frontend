@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Star, Users, ArrowUpRight, Award, Zap } from "lucide-react";
+import { Star, Users, Clock, ArrowRight } from "lucide-react";
 import api from "@/lib/api";
 import { motion } from "framer-motion";
 
@@ -25,92 +25,92 @@ const FeaturedCourses = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await api.get("/courses/courses/popular/");
-        const data = Array.isArray(response.data) ? response.data : response.data.results;
-        if (Array.isArray(data)) {
-          // Take 4-8 (next batch of popular)
-          setCourses(data.slice(4, 9));
-        }
-      } catch (error) {
-        console.error("Error fetching featured courses:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCourses();
+    api.get("/courses/courses/popular/").then((response) => {
+      const data = Array.isArray(response.data) ? response.data : response.data.results;
+      if (Array.isArray(data)) setCourses(data.slice(0, 8));
+    }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   if (loading || courses.length === 0) return null;
 
   return (
-    <section className="py-24 bg-white dark:bg-black px-6">
+    <section className="py-20 bg-slate-50 dark:bg-slate-900 px-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col gap-4 mb-16">
-            <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 dark:bg-amber-900/10 text-amber-700 dark:text-amber-400 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border border-amber-100 dark:border-amber-800 self-start italic">
-               <Award size={12} className="fill-current" />
-               Featured Selection
-            </div>
-            <h2 className="text-2xl lg:text-3xl font-black text-zinc-900 dark:text-white tracking-tighter italic">
-              Next top popular <span className="text-indigo-600">featured courses</span>
-            </h2>
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <p className="text-blue-600 font-semibold text-sm mb-1">Popular Courses</p>
+            <h2 className="text-3xl font-bold text-slate-800 dark:text-white">Featured Courses</h2>
+          </div>
+          <Link href="/courses" className="hidden md:flex items-center gap-2 text-sm text-blue-600 font-semibold hover:text-blue-700 transition-colors">
+            View all courses <ArrowRight size={16} />
+          </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-           {courses.map((course, idx) => (
-             <motion.div
-               key={course.id}
-               initial={{ opacity: 0, x: idx % 2 === 0 ? -20 : 20 }}
-               whileInView={{ opacity: 1, x: 0 }}
-               viewport={{ once: true }}
-               className="group relative flex flex-col sm:flex-row bg-zinc-50 dark:bg-zinc-900/40 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800/50 p-6 gap-8 hover:bg-white dark:hover:bg-zinc-900 hover:border-indigo-500/20 hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500"
-             >
-                <div className="relative w-full sm:w-56 h-56 sm:h-auto rounded-[1.5rem] overflow-hidden shrink-0">
-                  <Image 
-                    src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {courses.map((course, idx) => (
+            <motion.div
+              key={course.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.05 }}
+            >
+              <Link
+                href={`/courses/${course.slug}`}
+                className="group flex flex-col bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all h-full"
+              >
+                {/* Thumbnail */}
+                <div className="relative h-44 bg-slate-100 dark:bg-slate-700 overflow-hidden">
+                  <Image
+                    src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80"}
                     alt={course.title}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute top-3 left-3 px-3 py-1 bg-indigo-600 text-white text-[9px] font-black uppercase tracking-widest rounded-lg shadow-lg">
-                    {course.category_name}
+                  {course.category_name && (
+                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-blue-600 text-white text-xs font-semibold rounded-lg">
+                      {course.category_name}
+                    </span>
+                  )}
+                  <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-bold ${
+                    course.price === 0 ? "bg-emerald-100 text-emerald-700" : "bg-white text-slate-800"
+                  }`}>
+                    {course.price === 0 ? "Free" : `$${course.price}`}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug group-hover:text-blue-600 transition-colors">
+                    {course.title}
+                  </h3>
+                  {course.instructor_name && (
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{course.instructor_name}</p>
+                  )}
+                  <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-slate-700">
+                    <div className="flex items-center gap-1 text-amber-500">
+                      <Star size={13} fill="currentColor" />
+                      <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">4.8</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-slate-400">
+                      <Users size={13} />
+                      <span className="text-xs">{course.enrollment_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-slate-400 ml-auto">
+                      <Clock size={13} />
+                      <span className="text-xs">8h</span>
+                    </div>
                   </div>
                 </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
 
-                <div className="flex flex-col justify-center flex-1">
-                   <div className="flex items-center gap-2 mb-3">
-                      <div className="flex items-center gap-1 text-emerald-500 font-black text-[10px] uppercase tracking-widest">
-                         <Zap size={12} fill="currentColor" /> Trending Now
-                      </div>
-                      <span className="w-1 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full" />
-                      <span className="text-xs font-bold text-zinc-500">{course.views_count} views</span>
-                   </div>
-
-                   <h3 className="text-lg font-black text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-[1.2] group-hover:text-indigo-600 transition-colors italic">
-                     {course.title}
-                   </h3>
-
-                   <div className="flex items-center gap-4 mb-6 text-zinc-500 font-semibold text-xs truncate">
-                      <div className="flex items-center gap-1.5">
-                        <Users size={14} /> <span>{course.enrollment_count || 0}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-amber-500 font-black">
-                         <Star size={14} fill="currentColor" /> <span>4.8</span>
-                      </div>
-                   </div>
-
-                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-100 dark:border-zinc-800/50">
-                      <span className="text-xl font-black text-zinc-900 dark:text-white italic">
-                        ${course.price || "Free"}
-                      </span>
-                      <Link href={`/courses/${course.slug}`} className="px-4 py-2 bg-zinc-950 dark:bg-white text-white dark:text-black rounded-xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2 group-hover:bg-indigo-600 group-hover:text-white transition-all shadow-lg active:scale-95">
-                         Access Artifact <ArrowUpRight size={14} />
-                      </Link>
-                   </div>
-                </div>
-             </motion.div>
-           ))}
+        <div className="mt-10 text-center md:hidden">
+          <Link href="/courses" className="inline-flex items-center gap-2 px-6 py-3 gradient-primary text-white rounded-xl font-semibold text-sm">
+            View All Courses <ArrowRight size={16} />
+          </Link>
         </div>
       </div>
     </section>
