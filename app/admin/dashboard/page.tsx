@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
-  CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3
+  CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
+  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -30,6 +31,28 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState("overview");
   const [actionLoading, setActionLoading] = useState<number | null>(null);
+  
+  /* User Management State */
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [userSearch, setUserSearch] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [userTab, setUserTab] = useState("all"); // "all" or "applications"
+  const [newUser, setNewUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    role: "STUDENT"
+  });
+
+  const fetchAllUsers = async () => {
+    try {
+      const res = await api.get("/users/manage/");
+      setAllUsers(res.data);
+    } catch (err) {
+      console.error("All users fetch error:", err);
+    }
+  };
 
   const fetchStats = async () => {
     try {
@@ -43,14 +66,14 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    if (user?.role === "ADMIN" || user?.is_superuser) {
+    if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN" || user?.is_superuser) {
       fetchStats();
+      fetchAllUsers();
     } else {
       setLoading(false);
     }
   }, [user]);
 
-  /* Icon Wrappers */
   const handleInstructorAction = async (userId: number, approve: boolean) => {
     setActionLoading(userId);
     try {
@@ -59,10 +82,45 @@ const AdminDashboard = () => {
         : `/users/manage/${userId}/reject_instructor/`;
       await api.post(endpoint);
       fetchStats();
+      fetchAllUsers();
     } catch (err) {
       console.error("Action error:", err);
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  const handleAddUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post("/users/manage/", newUser);
+      setShowAddModal(false);
+      setNewUser({ username: "", email: "", password: "", role: "STUDENT" });
+      fetchAllUsers();
+      fetchStats();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error adding user");
+    }
+  };
+
+  const handleDeleteUser = async (userId: number) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await api.delete(`/users/manage/${userId}/`);
+      fetchAllUsers();
+      fetchStats();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error deleting user");
+    }
+  };
+
+  const handleUpdateRole = async (userId: number, newRole: string) => {
+    try {
+      await api.patch(`/users/manage/${userId}/`, { role: newRole });
+      fetchAllUsers();
+      fetchStats();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error updating role");
     }
   };
 
@@ -79,7 +137,7 @@ const AdminDashboard = () => {
     }
   };
 
-  if (!user || (user.role !== "ADMIN" && !user.is_superuser)) {
+  if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN" && !user.is_superuser)) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6 text-slate-800 dark:text-slate-100">
         <ShieldCheck size={56} className="text-indigo-600 mb-5" />
@@ -354,60 +412,224 @@ const AdminDashboard = () => {
               )}
 
               {activeModule === "users" && (
-                <div className="space-y-5">
-                  <div className="welcome-banner p-5 rounded-2xl">
-                    <h2 className="text-xl font-bold text-slate-800 mb-1">Instructor Applications</h2>
-                    <p className="text-slate-600 text-sm">{stats?.pending_instructors?.length || 0} applications awaiting review</p>
+                <div className="space-y-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="welcome-banner p-6 rounded-2xl flex-1">
+                      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1 tracking-tight flex items-center gap-2">
+                        <Users className="text-indigo-600" size={24} />
+                        User Management
+                      </h2>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm">Control platform access and instructor nodes</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowAddModal(true)}
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Plus size={18} /> Add New User
+                    </button>
                   </div>
 
-                  {(stats?.pending_instructors || []).length === 0 ? (
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-12 text-center">
-                      <CheckCircle2 size={40} className="mx-auto text-emerald-400 mb-3" />
-                      <p className="text-slate-500 font-medium">All applications reviewed. No pending items.</p>
+                  {/* Tabs */}
+                  <div className="flex items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl w-fit border border-slate-200 dark:border-slate-700">
+                    <button 
+                      onClick={() => setUserTab("all")}
+                      className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${userTab === "all" ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
+                    >
+                      All Platform Users
+                    </button>
+                    <button 
+                      onClick={() => setUserTab("applications")}
+                      className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${userTab === "applications" ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
+                    >
+                      Node Applications
+                      {stats?.pending_instructors?.length > 0 && (
+                        <span className="bg-indigo-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+                          {stats.pending_instructors.length}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  {userTab === "all" ? (
+                    <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                      {/* Table Header / Filters */}
+                      <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <div className="relative w-full md:w-96">
+                          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                          <input 
+                            type="text" 
+                            placeholder="Search by name, email or role..."
+                            value={userSearch}
+                            onChange={(e) => setUserSearch(e.target.value)}
+                            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
+                          />
+                        </div>
+                        <div className="flex items-center gap-3 w-full md:w-auto">
+                          <Filter className="text-slate-400" size={18} />
+                          <select 
+                            value={roleFilter}
+                            aria-label="Filter by role"
+                            onChange={(e) => setRoleFilter(e.target.value)}
+                            className="flex-1 md:w-48 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl py-3 px-4 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
+                          >
+                            <option value="all">All Roles</option>
+                            <option value="STUDENT">Students</option>
+                            <option value="INSTRUCTOR">Instructors</option>
+                            <option value="ADMIN">Admins</option>
+                            <option value="SUPER_ADMIN">Super Admins</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                          <thead>
+                            <tr className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                              <th className="px-6 py-4">User Identity</th>
+                              <th className="px-6 py-4">Node Role</th>
+                              <th className="px-6 py-4">Participation</th>
+                              <th className="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                            {allUsers
+                              .filter(u => {
+                                const matchesSearch = u.username.toLowerCase().includes(userSearch.toLowerCase()) || 
+                                                     u.email.toLowerCase().includes(userSearch.toLowerCase());
+                                const matchesRole = roleFilter === "all" || u.role === roleFilter;
+                                return matchesSearch && matchesRole;
+                              })
+                              .map((u) => {
+                                const canManage = user?.role === 'SUPER_ADMIN' || (user?.role === 'ADMIN' && !['ADMIN', 'SUPER_ADMIN'].includes(u.role));
+                                return (
+                                  <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors group">
+                                    <td className="px-6 py-4">
+                                      <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white font-bold shadow-sm">
+                                          {u.username[0].toUpperCase()}
+                                        </div>
+                                        <div>
+                                          <div className="font-bold text-slate-800 dark:text-white mb-0.5">{u.username}</div>
+                                          <div className="text-xs text-slate-500">{u.email}</div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                      <select 
+                                        value={u.role}
+                                        aria-label="Change user role"
+                                        disabled={!canManage}
+                                        onChange={(e) => handleUpdateRole(u.id, e.target.value)}
+                                        className={`text-xs font-bold px-3 py-1.5 rounded-full border-none focus:ring-0 cursor-pointer transition-all ${
+                                          u.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30' :
+                                          u.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30' :
+                                          u.role === 'INSTRUCTOR' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30' :
+                                          'bg-slate-100 text-slate-600 dark:bg-slate-700'
+                                        } ${!canManage && 'opacity-70 cursor-not-allowed text-center'}`}
+                                      >
+                                        <option value="STUDENT">Student</option>
+                                        <option value="INSTRUCTOR">Instructor</option>
+                                        <option value="ADMIN">Admin</option>
+                                        <option value="SUPER_ADMIN">Super Admin</option>
+                                      </select>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                      <div className="flex items-center gap-2">
+                                        <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                          <div 
+                                            className="h-full bg-indigo-500" 
+                                            style={{ width: `${Math.min(100, (u.points || 0) / 10)}%` }}
+                                          />
+                                        </div>
+                                        <span className="text-xs font-semibold text-slate-500">{u.points || 0} pts</span>
+                                      </div>
+                                    </td>
+                                    <td className="px-6 py-4 text-right">
+                                      <div className="flex items-center justify-end gap-2">
+                                        <button 
+                                          onClick={() => handleDeleteUser(u.id)}
+                                          disabled={!canManage}
+                                          className={`p-2 rounded-xl transition-all ${
+                                            canManage 
+                                              ? 'text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20' 
+                                              : 'text-slate-300 cursor-not-allowed opacity-50'
+                                          }`}
+                                          title={canManage ? "Delete user" : "Insufficient permissions"}
+                                        >
+                                          <Trash2 size={18} />
+                                        </button>
+                                        {!canManage && (
+                                          <span title="Protected account">
+                                            <ShieldAlert size={14} className="text-slate-300" />
+                                          </span>
+                                        )}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   ) : (
-                    <div className="space-y-3">
-                      {stats.pending_instructors.map((app: any) => (
-                        <div key={app.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 flex flex-col md:flex-row items-start md:items-center gap-4">
-                          <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0">
-                            {app.username?.[0]?.toUpperCase()}
+                    <div className="space-y-4">
+                      {(stats?.pending_instructors || []).length === 0 ? (
+                        <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-16 text-center shadow-sm">
+                          <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle2 size={40} />
                           </div>
-                          <div className="flex-1">
-                            <div className="flex flex-wrap items-center gap-2 mb-1">
-                              <h4 className="font-semibold text-slate-800 dark:text-white">{app.username}</h4>
-                              <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">Applicant</span>
-                            </div>
-                            <div className="flex flex-wrap gap-3 text-xs text-slate-500">
-                              <span>{app.email}</span>
-                              <span>•</span>
-                              <span>{app.years_of_experience} years exp.</span>
-                              {app.expertise && (
-                                <>
-                                  <span>•</span>
-                                  <span className="text-blue-600 font-medium">{app.expertise}</span>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <button
-                              onClick={() => handleInstructorAction(app.id, true)}
-                              disabled={actionLoading === app.id}
-                              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
-                            >
-                              {actionLoading === app.id ? <Cpu size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => handleInstructorAction(app.id, false)}
-                              disabled={actionLoading === app.id}
-                              className="flex items-center gap-2 px-4 py-2 border border-red-200 dark:border-red-800 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
-                            >
-                              <XCircle size={14} /> Reject
-                            </button>
-                          </div>
+                          <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Protocol Fully Synced</h3>
+                          <p className="text-slate-500 max-w-sm mx-auto">All faculty node applications have been reviewed. No pending entities in the queue.</p>
                         </div>
-                      ))}
+                      ) : (
+                        <div className="grid grid-cols-1 gap-4">
+                          {stats.pending_instructors.map((app: any) => (
+                            <div key={app.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row items-start md:items-center gap-6 group hover:border-indigo-200 transition-all shadow-sm">
+                              <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-500/10">
+                                {app.username?.[0]?.toUpperCase()}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-2">
+                                  <h4 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">{app.username}</h4>
+                                  <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 bg-amber-50 text-amber-600 dark:bg-amber-900/20 rounded-md">Candidate</span>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-slate-500">
+                                  <div>
+                                    <p className="font-medium text-slate-400 mb-0.5 uppercase tracking-tighter">Academic Field</p>
+                                    <p className="text-indigo-600 dark:text-indigo-400 font-bold">{app.expertise || 'Generalist'}</p>
+                                  </div>
+                                  <div>
+                                    <p className="font-medium text-slate-400 mb-0.5 uppercase tracking-tighter">Experience</p>
+                                    <p className="text-slate-700 dark:text-slate-200 font-bold">{app.years_of_experience} Cycles</p>
+                                  </div>
+                                  <div className="col-span-2">
+                                    <p className="font-medium text-slate-400 mb-0.5 uppercase tracking-tighter">Contact Hub</p>
+                                    <p className="text-slate-700 dark:text-slate-200 font-bold">{app.email}</p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 w-full md:w-auto shrink-0 border-t md:border-l md:border-t-0 pt-4 md:pt-0 md:pl-6 border-slate-100 dark:border-slate-700">
+                                <button
+                                  onClick={() => handleInstructorAction(app.id, true)}
+                                  disabled={actionLoading === app.id}
+                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-all disabled:opacity-50 shadow-lg shadow-emerald-500/10"
+                                >
+                                  {actionLoading === app.id ? <Cpu size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
+                                  Authorize
+                                </button>
+                                <button
+                                  onClick={() => handleInstructorAction(app.id, false)}
+                                  disabled={actionLoading === app.id}
+                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 border border-red-200 dark:border-red-800 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
+                                >
+                                  <XCircle size={16} /> Terminate
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -507,6 +729,106 @@ const AdminDashboard = () => {
           </AnimatePresence>
         </div>
       </main>
+
+      {/* Add User Modal */}
+      <AnimatePresence>
+        {showAddModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <UserPlus className="text-indigo-600" size={20} />
+                  Provision New Identity
+                </h3>
+                <button 
+                  onClick={() => setShowAddModal(false)} 
+                  aria-label="Close modal"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleAddUser} className="p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Network Username</label>
+                  <input 
+                    required
+                    type="text" 
+                    placeholder="e.g. Satoshi_99"
+                    value={newUser.username}
+                    onChange={e => setNewUser({...newUser, username: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Communication Hub (Email)</label>
+                  <input 
+                    required
+                    type="email" 
+                    placeholder="satoshi@fatra.academy"
+                    value={newUser.email}
+                    onChange={e => setNewUser({...newUser, email: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Access Protocol (Password)</label>
+                  <input 
+                    required
+                    type="password" 
+                    placeholder="••••••••"
+                    value={newUser.password}
+                    onChange={e => setNewUser({...newUser, password: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Institutional Role</label>
+                  <select 
+                    value={newUser.role}
+                    aria-label="New user role"
+                    onChange={e => setNewUser({...newUser, role: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  >
+                    <option value="STUDENT">Student (Default Node)</option>
+                    <option value="INSTRUCTOR">Instructor (Faculty)</option>
+                    {user?.role === 'SUPER_ADMIN' && <option value="ADMIN">Admin (Protocol Moderator)</option>}
+                  </select>
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowAddModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Confirm Provision
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

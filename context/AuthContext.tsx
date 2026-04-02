@@ -8,7 +8,7 @@ interface User {
   id: number;
   username: string;
   email: string;
-  role: "STUDENT" | "INSTRUCTOR" | "ADMIN";
+  role: "STUDENT" | "INSTRUCTOR" | "ADMIN" | "SUPER_ADMIN";
   is_superuser?: boolean;
 }
 
