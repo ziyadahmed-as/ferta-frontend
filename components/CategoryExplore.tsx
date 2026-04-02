@@ -8,8 +8,8 @@ import api from "@/lib/api";
 
 const defaultCategories = [
   { id: 1, name: "Programing", slug: "programing", description: "Master the art of software engineering from Python to TypeScript", icon: Code2, color: "from-blue-500 to-indigo-600", bg: "bg-blue-50", course_count: 124 },
-  { id: 2, name: "AI", slug: "ai", description: "Deep dive into machine learning, neural networks and large language models", icon: Brain, color: "from-violet-500 to-purple-600", bg: "bg-purple-50", course_count: 56 },
-  { id: 3, name: "mathematics", slug: "mathematics", description: "Advanced calculus, algebra and discrete mathematics for scientists", icon: Shapes, color: "from-teal-500 to-emerald-600", bg: "bg-teal-50", course_count: 31 },
+  { id: 2, name: " AI and SoftSkills ", slug: "ai-and-softskills", description: "Deep dive into machine learning, neural networks and large language models", icon: Brain, color: "from-violet-500 to-purple-600", bg: "bg-purple-50", course_count: 56 },
+  { id: 3, name: "Mathematics", slug: "mathematics", description: "Advanced calculus, algebra and discrete mathematics for scientists", icon: Shapes, color: "from-teal-500 to-emerald-600", bg: "bg-teal-50", course_count: 31 },
   { id: 4, name: "Biology", slug: "biology", description: "Explore cellular biology, genetics and evolutionary mechanics", icon: Heart, color: "from-pink-500 to-rose-600", bg: "bg-rose-50", course_count: 42 },
   { id: 5, name: "physics", slug: "physics", description: "Quantum mechanics, thermodynamics and relativistic astrophysics", icon: Monitor, color: "from-orange-500 to-amber-600", bg: "bg-orange-50", course_count: 38 },
   { id: 6, name: "English", slug: "english", description: "Master linguistic nuance and advanced academic writing structures", icon: Globe, color: "from-cyan-500 to-indigo-600", bg: "bg-cyan-50", course_count: 27 },

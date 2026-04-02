@@ -12,11 +12,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "EduTech | Modern Learning Platform",
+  title: "Fatra Academy | Modern Learning Platform",
   description: "Choose from our comprehensive range of courses designed for every stage of your educational journey. Explore entrance exam prep, technology courses, and soft skills.",
   keywords: "online learning, courses, education, edtech, entrance exam, GAT preparation",
   openGraph: {
-    title: "EduTech | Modern Learning Platform",
+    title: "Fatra Academy | Modern Learning Platform",
     description: "Explore Learning Paths - courses for every stage of your educational journey",
     type: "website",
   },

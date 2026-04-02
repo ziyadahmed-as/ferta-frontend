@@ -36,7 +36,7 @@ const Navbar = () => {
             <BookOpen size={22} className="text-white" />
           </div>
           <span className="text-xl font-bold text-slate-800 dark:text-white">
-            Edu<span className="text-indigo-600">Tech</span>
+            Fatra<span className="text-indigo-600"> Academy</span>
           </span>
         </Link>
 

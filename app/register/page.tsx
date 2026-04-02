@@ -96,7 +96,7 @@ const RegisterContent = () => {
           <p className="text-slate-500 text-sm mb-6">
             {role === "INSTRUCTOR"
               ? "Your application has been submitted. Our team will review it shortly."
-              : "Welcome to EduTech! Redirecting you to sign in..."}
+              : "Welcome to Fatra Academy! Redirecting you to sign in..."}
           </p>
           <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 gradient-primary text-white rounded-xl font-semibold text-sm">
             Go to Login <ArrowRight size={16} />
@@ -121,9 +121,9 @@ const RegisterContent = () => {
               <div className="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                 <BookOpen size={28} className="text-white" />
               </div>
-              <span className="text-xl font-bold text-slate-800">Edu<span className="text-blue-600">Tech</span></span>
+              <span className="text-xl font-bold text-slate-800">Fatra<span className="text-blue-600"> Academy</span></span>
             </Link>
-            <h1 className="text-3xl font-bold text-slate-800 mt-5 mb-2">Join EduTech</h1>
+            <h1 className="text-3xl font-bold text-slate-800 mt-5 mb-2">Join Fatra Academy</h1>
             <p className="text-slate-500 text-base">Choose how you want to get started</p>
           </div>
 
@@ -207,7 +207,7 @@ const RegisterContent = () => {
             <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen size={20} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800">Edu<span className="text-blue-600">Tech</span></span>
+            <span className="text-lg font-bold text-slate-800">Fatra<span className="text-blue-600"> Academy</span></span>
           </Link>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
             {role === "INSTRUCTOR" ? "Instructor Registration" : "Student Registration"}

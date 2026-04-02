@@ -11,7 +11,7 @@ const Chatbot = () => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hi! I'm your EduTech Assistant. How can I help you with your learning journey today?", sender: "bot" },
+    { id: 1, text: "Hi! I'm your Fatra Academy Assistant. How can I help you with your learning journey today?", sender: "bot" },
   ]);
   const [inputText, setInputText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -81,7 +81,7 @@ const Chatbot = () => {
                   <Sparkles size={24} className="text-white fill-white/20" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg leading-tight">EduTech Assistant</h4>
+                  <h4 className="font-bold text-lg leading-tight">Fatra Academy Assistant</h4>
                   <div className="flex items-center gap-1.5 mt-1">
                     <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                     <p className="text-[10px] uppercase font-bold opacity-80 tracking-widest">Active & Ready</p>
@@ -168,7 +168,7 @@ const Chatbot = () => {
                   <Send size={18} />
                 </button>
               </form>
-              <p className="text-[10px] text-center text-slate-400 mt-3 font-medium">Powered by EduTech AI • Always learning</p>
+              <p className="text-[10px] text-center text-slate-400 mt-3 font-medium">Powered by Fatra Academy AI • Always learning</p>
             </div>
           </motion.div>
         )}

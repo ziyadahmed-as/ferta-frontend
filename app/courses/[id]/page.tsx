@@ -312,7 +312,7 @@ const CourseDetail = () => {
             {/* Platform Trust */}
             <div className="p-8 bg-slate-900 dark:bg-blue-950 rounded-3xl text-white shadow-xl">
               <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                <Shield size={20} className="text-blue-400" /> EduTech Guarantee
+                <Shield size={20} className="text-blue-400" /> Fatra Academy Guarantee
               </h3>
               <ul className="space-y-6">
                 <li className="flex items-start gap-4">

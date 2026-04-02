@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import api from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer
@@ -54,7 +55,7 @@ const StudentDashboard = () => {
 
   if (!user) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-white text-center px-6">
+      <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6 text-slate-800 dark:text-slate-100">
         <GraduationCap size={56} className="text-blue-600 mb-5" />
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Sign in Required</h1>
         <p className="text-slate-500 mb-6">Please sign in to access your student dashboard.</p>
@@ -65,7 +66,7 @@ const StudentDashboard = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-white">
+      <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium">Loading your dashboard...</p>
@@ -97,7 +98,7 @@ const StudentDashboard = () => {
             <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen size={18} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white">Edu<span className="text-blue-600">Tech</span></span>
+            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-blue-600"> Academy</span></span>
           </Link>
         </div>
 
@@ -146,9 +147,11 @@ const StudentDashboard = () => {
             <div className="w-8 h-8 gradient-primary rounded-xl flex items-center justify-center md:hidden">
               <BookOpen size={16} className="text-white" />
             </div>
-            <span className="font-bold text-slate-800 dark:text-white md:hidden">FetraTech</span>
+            <span className="font-bold text-slate-800 dark:text-white md:hidden">Fatra Academy</span>
           </div>
           <div className="flex items-center gap-3 ml-auto">
+            <ThemeToggle />
+            <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block" />
             <button title="Notifications" className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
               <Bell size={18} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
