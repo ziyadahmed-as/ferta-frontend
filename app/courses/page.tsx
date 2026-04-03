@@ -37,9 +37,19 @@ const CatalogContent = () => {
     fetchData();
   }, []);
 
+  // Sync state with URL parameters for robust filtering
+  useEffect(() => {
+    const urlCategory = searchParams.get("category");
+    if (urlCategory) {
+      setSelectedCategory(urlCategory);
+    } else {
+      setSelectedCategory(null);
+    }
+  }, [searchParams]);
+
   const filteredCourses = courses.filter(c => {
     const matchesSearch = c.title.toLowerCase().includes(search.toLowerCase());
-    const matchesCategory = !selectedCategory || c.category_name === selectedCategory;
+    const matchesCategory = !selectedCategory || c.category_slug === selectedCategory || c.category_name === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -93,9 +103,9 @@ const CatalogContent = () => {
             {categories.map(cat => (
               <button 
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.name)}
+                onClick={() => setSelectedCategory(cat.slug)}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                  selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
+                  selectedCategory === cat.slug || selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
                 }`}
               >
                 {cat.name}
