@@ -1012,6 +1012,142 @@ const AdminDashboard = () => {
             </motion.div>
           </div>
         )}
+
+        {showDetailModal && userDetail && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDetailModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+            >
+              {/* Header Banner */}
+              <div className="h-24 gradient-primary relative">
+                <button 
+                  onClick={() => setShowDetailModal(false)}
+                  title="Close Identity Detail"
+                  className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              {/* Identity Header */}
+              <div className="px-8 pb-8 -mt-12 relative">
+                <div className="flex flex-col md:flex-row items-end gap-6 mb-8">
+                  <div className="w-24 h-24 rounded-3xl bg-white dark:bg-slate-800 border-4 border-white dark:border-slate-900 flex items-center justify-center text-3xl font-black text-indigo-600 shadow-xl">
+                    {userDetail.username[0].toUpperCase()}
+                  </div>
+                  <div className="flex-1 pb-2">
+                    <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">{userDetail.username}</h3>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-lg">
+                        {userDetail.role}
+                      </span>
+                      {userDetail.is_approved_instructor && (
+                        <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-lg flex items-center gap-1">
+                           <ShieldCheck size={10} /> Verified Faculty
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Left Column - Core Data */}
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Institutional Metadata</h4>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                          <Mail size={16} className="text-slate-400" />
+                          <span className="text-sm font-medium">{userDetail.email}</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+                          <User size={16} className="text-slate-400" />
+                          <span className="text-sm font-medium">{userDetail.first_name} {userDetail.last_name || '(Full Identity Encrypted)'}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {userDetail.bio && (
+                      <div>
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Biological Summary</h4>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
+                          "{userDetail.bio}"
+                        </p>
+                      </div>
+                    )}
+
+                    {userDetail.role === 'INSTRUCTOR' && (
+                      <div>
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Faculty Specialization</h4>
+                        <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                          <p className="text-sm font-bold text-slate-800 dark:text-white mb-1">{userDetail.expertise || 'General Scholastics'}</p>
+                          <p className="text-xs text-slate-500">{userDetail.education_level} • {userDetail.years_of_experience} Cycles Experience</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Column - System Footprint */}
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Knowledge Footprint</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {userDetail.role === 'INSTRUCTOR' ? (
+                          (userDetail.taught_courses || []).length > 0 ? userDetail.taught_courses.map((c: string, i: number) => (
+                            <span key={i} className="px-3 py-2 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 shadow-sm">{c}</span>
+                          )) : <p className="text-xs text-slate-400">No authored nodes registered.</p>
+                        ) : (
+                          (userDetail.enrolled_courses || []).length > 0 ? userDetail.enrolled_courses.map((c: string, i: number) => (
+                            <span key={i} className="px-3 py-2 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-400 shadow-sm">{c}</span>
+                          )) : <p className="text-xs text-slate-400">Currently unsynced from main nodes.</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Network Metrics</h4>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                          <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Unified Points</p>
+                          <p className="text-lg font-black text-slate-800 dark:text-white">{userDetail.points || 0}</p>
+                        </div>
+                        <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                          <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Peer Ranking</p>
+                          <p className="text-lg font-black text-indigo-600">{userDetail.peer_ranking || 'TOP 1%'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-10 flex gap-4">
+                  <button 
+                    onClick={() => { setShowDetailModal(false); setEditUser(userDetail); setShowEditModal(true); }}
+                    className="flex-1 py-4 gradient-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                  >
+                    Modify User Node
+                  </button>
+                  <button 
+                    onClick={() => setShowDetailModal(false)}
+                    className="px-8 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                  >
+                    Close Forensic View
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </AnimatePresence>
     </div>
   );
