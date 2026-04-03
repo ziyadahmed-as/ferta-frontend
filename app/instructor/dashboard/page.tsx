@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   BookOpen, Users, DollarSign, Star, TrendingUp, Home, Plus,
-  Bell, LogOut, Settings, BarChart3
+  Bell, LogOut, Settings, BarChart3, Clock
 } from "lucide-react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
@@ -441,8 +441,6 @@ const InstructorDashboard = () => {
         </div>
       </main>
     </div>
-  );
-};>
   );
 };
 
