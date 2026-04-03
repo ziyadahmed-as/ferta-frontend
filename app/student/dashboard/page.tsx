@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   BookOpen, Clock, Award, TrendingUp, Home, Calendar, Trophy,
-  Bell, LogOut, PlayCircle, GraduationCap, ChevronRight, Star, X, FileText, Link2
+  Bell, LogOut, PlayCircle, GraduationCap, ChevronRight, Star, X, FileText, Link2, ArrowRight, ShieldAlert, Globe
 } from "lucide-react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
@@ -48,6 +48,10 @@ const StudentDashboard = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submittingRating, setSubmittingRating] = useState(false);
+
+  /* Secure Artifact Viewer State */
+  const [showArtifactViewer, setShowArtifactViewer] = useState(false);
+  const [activeArtifact, setActiveArtifact] = useState<any>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -593,21 +597,28 @@ const StudentDashboard = () => {
                       <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest px-1">Synchronous Artifacts</p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {session.content_blocks?.map((block: any) => (
-                          <a 
+                          <button 
                             key={block.id}
-                            href={block.file || block.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl hover:bg-white dark:hover:bg-slate-700 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600 shadow-sm group"
+                            onClick={() => {
+                              setActiveArtifact(block);
+                              setShowArtifactViewer(true);
+                            }}
+                            className="w-full flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl hover:bg-white dark:hover:bg-slate-700 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600 shadow-sm group text-left"
                           >
                             <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${block.type === 'pdf' ? 'bg-red-50 text-red-500' : 'bg-blue-50 text-blue-500'}`}>
                               {block.type === 'pdf' ? <FileText size={16} /> : <Link2 size={16} />}
                             </div>
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1">
                               <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate group-hover:text-blue-600 transition-colors">{block.title}</p>
-                              <p className="text-[9px] text-slate-400 uppercase font-bold">{block.type}</p>
+                              <div className="flex items-center gap-2">
+                                <p className="text-[9px] text-slate-400 uppercase font-bold">{block.type}</p>
+                                <span className="text-[9px] text-indigo-500 font-bold uppercase tracking-widest">• Read Only</span>
+                              </div>
                             </div>
-                          </a>
+                            <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 opacity-0 group-hover:opacity-100 transition-all">
+                              <ArrowRight size={12} />
+                            </div>
+                          </button>
                         ))}
                         {(!session.content_blocks || session.content_blocks.length === 0) && (
                           <div className="col-span-2 py-4 px-2 border border-dashed border-slate-100 dark:border-slate-700 rounded-2xl flex flex-col items-center justify-center">
@@ -635,6 +646,86 @@ const StudentDashboard = () => {
                 >
                   Return to Dashboard
                 </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Synchronous Artifact Viewer - Secure Read Only */}
+      <AnimatePresence>
+        {showArtifactViewer && activeArtifact && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowArtifactViewer(false)}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 30 }}
+              className="relative w-full max-w-5xl h-[90vh] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden border border-white/10"
+            >
+              <div className="p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg ${activeArtifact.type === 'pdf' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}>
+                    {activeArtifact.type === 'pdf' ? <FileText size={20} /> : <Link2 size={20} />}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-black text-slate-800 dark:text-white leading-tight uppercase tracking-tight">
+                      {activeArtifact.title}
+                    </h3>
+                    <div className="flex items-center gap-2">
+                       <span className="text-[10px] text-slate-500 flex items-center gap-1">
+                         <ShieldAlert size={10} /> Secure Identity Viewer
+                       </span>
+                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-black uppercase tracking-widest">Read Only Protocol</span>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowArtifactViewer(false)}
+                  title="Return to Hub"
+                  className="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition-all transform hover:rotate-90"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="flex-1 relative bg-slate-50 dark:bg-slate-950 overflow-hidden">
+                {/* Security Overlay - Prevents Right Click and Selection on top of Viewer */}
+                <div 
+                  className="absolute inset-0 z-10 select-none pointer-events-auto"
+                  onContextMenu={(e) => e.preventDefault()}
+                />
+                
+                {activeArtifact.type === 'pdf' ? (
+                  <iframe
+                    src={`${activeArtifact.file || activeArtifact.url}#toolbar=0&navpanes=0&scrollbar=1`}
+                    className="w-full h-full border-none"
+                    title={activeArtifact.title}
+                  />
+                ) : (
+                  <div className="w-full h-full flex flex-col items-center justify-center text-center p-12">
+                    <Globe size={64} className="text-slate-200 dark:text-slate-800 mb-6" />
+                    <h4 className="text-xl font-bold text-slate-800 dark:text-white mb-4">External Synchronous Source</h4>
+                    <p className="text-slate-500 max-w-sm mb-8">This resource is hosted on an external platform. You may view the live content below.</p>
+                    <div className="w-full h-full max-w-4xl bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xl">
+                       <iframe
+                         src={activeArtifact.url}
+                         className="w-full h-full border-none"
+                         title={activeArtifact.title}
+                       />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 bg-slate-50/50 dark:bg-slate-950/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center">
+                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest"> Intellectual Property Protected by Fatra Academy Governance</p>
               </div>
             </motion.div>
           </div>
