@@ -45,6 +45,12 @@ const AdminDashboard = () => {
     role: "STUDENT"
   });
 
+  const [liveStreams, setLiveStreams] = useState<any[]>([]);
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const [selectedStream, setSelectedStream] = useState<any>(null);
+  const [duplicateInstructorId, setDuplicateInstructorId] = useState("");
+
+
   const fetchAllUsers = async () => {
     try {
       const res = await api.get("/users/manage/");
@@ -65,10 +71,20 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchLiveStreams = async () => {
+    try {
+      const res = await api.get("/courses/live-streams/");
+      setLiveStreams(Array.isArray(res.data) ? res.data : res.data.results || []);
+    } catch (err) {
+      console.error("Live streams fetch error:", err);
+    }
+  };
+
   useEffect(() => {
     if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN" || user?.is_superuser) {
       fetchStats();
       fetchAllUsers();
+      fetchLiveStreams();
     } else {
       setLoading(false);
     }
@@ -137,6 +153,22 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDuplicateStream = async () => {
+    if (!selectedStream || !duplicateInstructorId) return;
+    try {
+      await api.post(`/courses/live-streams/${selectedStream.id}/duplicate/`, {
+        instructor_id: duplicateInstructorId
+      });
+      setShowDuplicateModal(false);
+      setDuplicateInstructorId("");
+      fetchLiveStreams();
+      alert("Stream duplicated successfully!");
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error duplicating stream");
+    }
+  };
+
+
   if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN" && !user.is_superuser)) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6 text-slate-800 dark:text-slate-100">
@@ -163,6 +195,7 @@ const AdminDashboard = () => {
     { id: "overview", label: "Overview", icon: Home },
     { id: "users", label: "Users", icon: Users },
     { id: "courses", label: "Courses", icon: BookOpen },
+    { id: "live", label: "Live Streams", icon: Cpu },
     { id: "revenue", label: "Revenue", icon: DollarSign },
   ];
 
@@ -406,12 +439,98 @@ const AdminDashboard = () => {
                           <p className="text-xs text-slate-400 text-center py-2">No pending courses</p>
                         )}
                       </div>
+                                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl text-sm font-bold hover:bg-emerald-600 transition-all"
+                                >
+                                  <Check size={16} /> Approve
+                                </button>
+                                <button
+                                  onClick={() => handleInstructorAction(app.id, false)}
+                                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-bold hover:bg-red-100 transition-all"
+                                >
+                                  <X size={16} /> Reject
+                                </button>
+                              </div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {activeModule === "users" && (
+              {activeModule === "live" && (
+                <div className="space-y-6">
+                  <div className="welcome-banner p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Live Stream Moderation</h2>
+                      <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate synchronous learning cohorts and instructor capacity</p>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
+                        <p className="text-[10px] uppercase font-bold text-slate-500">Active Streams</p>
+                        <p className="text-xl font-black text-indigo-600">{liveStreams.length}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    {liveStreams.length === 0 ? (
+                      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-12 text-center">
+                        <Cpu size={40} className="mx-auto text-slate-300 mb-2" />
+                        <p className="text-slate-500">No active live streams in the network.</p>
+                      </div>
+                    ) : (
+                      liveStreams.map((stream: any) => (
+                        <div key={stream.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col lg:flex-row items-center gap-6 group hover:border-indigo-200 shadow-sm transition-all">
+                          <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl shrink-0">
+                            {stream.title[0]}
+                          </div>
+                          <div className="flex-1 text-center lg:text-left">
+                            <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{stream.title}</h4>
+                            <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-xs text-slate-500">
+                              <span className="flex items-center gap-1.5"><Users size={14} /> {stream.instructor_name}</span>
+                              <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-indigo-500" /> {stream.group_type}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center gap-8 px-6 border-l border-r border-slate-100 dark:border-slate-700 hidden lg:flex">
+                            <div className="text-center">
+                              <p className="text-[10px] uppercase font-bold text-slate-400 mb-1">Capacity</p>
+                              <div className="flex items-center gap-2">
+                                <span className={`text-sm font-bold ${stream.enrollment_count >= stream.max_students ? 'text-red-500' : 'text-emerald-500'}`}>
+                                  {stream.enrollment_count}/{stream.max_students}
+                                </span>
+                                <div className="w-20 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                  <div 
+                                    className={`h-full ${stream.enrollment_count >= stream.max_students ? 'bg-red-500' : 'bg-emerald-500'}`}
+                                    style={{ width: `${Math.min(100, (stream.enrollment_count / stream.max_students) * 100)}%` }}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2">
+                            {stream.enrollment_count >= stream.max_students && (
+                              <button 
+                                onClick={() => {
+                                  setSelectedStream(stream);
+                                  setShowDuplicateModal(true);
+                                }}
+                                className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                              >
+                                <Plus size={16} /> Duplicate (Full)
+                              </button>
+                            )}
+                            <button className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                              <MoreVertical size={20} />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {activeModule === "revenue" && (
                 <div className="space-y-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="welcome-banner p-6 rounded-2xl flex-1">
@@ -825,6 +944,58 @@ const AdminDashboard = () => {
                   </button>
                 </div>
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Duplicate Stream Modal */}
+      <AnimatePresence>
+        {showDuplicateModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowDuplicateModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-6 border border-slate-200 dark:border-slate-700"
+            >
+              <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 tracking-tight">Scale Cohort Node</h3>
+              <p className="text-sm text-slate-500 mb-6">Create a duplicate stream for <b>{selectedStream?.title}</b> to handle excess demand.</p>
+              
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase">Assigned Faculty ID</label>
+                  <input 
+                    type="number"
+                    placeholder="Enter Instructor User ID"
+                    value={duplicateInstructorId}
+                    onChange={(e) => setDuplicateInstructorId(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                
+                <div className="flex gap-3 pt-2">
+                  <button 
+                    onClick={() => setShowDuplicateModal(false)}
+                    className="flex-1 px-4 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl text-sm font-bold"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleDuplicateStream}
+                    className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20"
+                  >
+                    Launch Stream
+                  </button>
+                </div>
+              </div>
             </motion.div>
           </div>
         )}
