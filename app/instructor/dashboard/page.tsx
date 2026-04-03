@@ -95,7 +95,14 @@ const InstructorDashboard = () => {
       setArtifactData({ title: "", type: "pdf", url: "", file: null });
       // Refresh stream data to show new artifacts
       const res = await api.get("/courses/live-streams/?mine=true");
-      setLiveStreams(Array.isArray(res.data) ? res.data : res.data.results || []);
+      const streams = Array.isArray(res.data) ? res.data : res.data.results || [];
+      setLiveStreams(streams);
+      
+      // Update selectedStream to reflect changes in current modal
+      if (selectedStream) {
+        const updated = streams.find((s: any) => s.id === selectedStream.id);
+        if (updated) setSelectedStream(updated);
+      }
     } catch (err: any) {
       alert(err.response?.data?.detail || "Error uploading artifact");
     } finally {
@@ -184,6 +191,8 @@ const InstructorDashboard = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
+                title={`Go to ${item.label}`}
+                aria-label={`Navigate to ${item.label}`}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700"
                 }`}
@@ -207,6 +216,8 @@ const InstructorDashboard = () => {
           </div>
           <button
             onClick={logout}
+            title="Sign Out"
+            aria-label="Sign out of instructor account"
             className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
             <LogOut size={16} /> Sign Out
@@ -222,7 +233,11 @@ const InstructorDashboard = () => {
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
-            <button title="Notifications" className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300">
+            <button 
+              title="Notifications" 
+              aria-label="View notifications"
+              className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300"
+            >
               <Bell size={18} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </button>
@@ -235,7 +250,12 @@ const InstructorDashboard = () => {
                 <p className="text-xs text-slate-500 capitalize">{user.instructor_type?.toLowerCase()?.replace('_', ' ') || 'Instructor'}</p>
               </div>
             </div>
-            <button onClick={logout} title="Sign Out" className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+            <button 
+              onClick={logout} 
+              title="Sign Out" 
+              aria-label="Sign out of account"
+              className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+            >
               <LogOut size={16} />
             </button>
           </div>
@@ -357,6 +377,8 @@ const InstructorDashboard = () => {
               <div className="flex items-center gap-6">
                 <button
                   onClick={() => setActiveTab("video")}
+                  title="View Video Content"
+                  aria-label="Switch to Video Content tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "video"
                       ? "text-blue-600 border-blue-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
@@ -366,6 +388,8 @@ const InstructorDashboard = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab("live")}
+                  title="View Live Stream Hub"
+                  aria-label="Switch to Live Stream Hub tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "live"
                       ? "text-blue-600 border-blue-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
@@ -417,7 +441,12 @@ const InstructorDashboard = () => {
                           <div className="flex items-center gap-1.5 text-xs text-slate-500">
                             <Users size={13} /> {course.enrollment_count || 0} Scholars
                           </div>
-                          <Link href={`/instructor/courses/${course.id}/edit`} title="Edit Course" className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                          <Link 
+                            href={`/instructor/courses/${course.id}/edit`} 
+                            title="Edit Course" 
+                            aria-label={`Edit course ${course.title}`}
+                            className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                          >
                             <Settings size={14} className="text-slate-500 hover:text-blue-600" />
                           </Link>
                         </div>
@@ -465,6 +494,8 @@ const InstructorDashboard = () => {
                           </div>
                           <button 
                             onClick={() => { setSelectedStream(stream); setShowManageModal(true); }}
+                            title="Manage Hub"
+                            aria-label={`Manage live hub for ${stream.title}`}
                             className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-all"
                           >
                             Manage Hub
@@ -505,7 +536,12 @@ const InstructorDashboard = () => {
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">{selectedStream?.title}</p>
                 </div>
-                <button onClick={() => setShowManageModal(false)} className="text-slate-400 hover:text-slate-600">
+                <button 
+                  onClick={() => setShowManageModal(false)} 
+                  title="Close Modal" 
+                  aria-label="Close live hub management modal"
+                  className="text-slate-400 hover:text-slate-600"
+                >
                   <X size={20} />
                 </button>
               </div>
@@ -518,6 +554,8 @@ const InstructorDashboard = () => {
                     <button
                       key={session.id}
                       onClick={() => setSelectedSessionId(session.id)}
+                      title={`Select session: ${session.title}`}
+                      aria-label={`Manage artifacts for session ${session.title}`}
                       className={`w-full text-left p-3 rounded-2xl transition-all ${
                         selectedSessionId === session.id 
                         ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 border border-blue-100 dark:border-blue-800" 
@@ -539,6 +577,8 @@ const InstructorDashboard = () => {
                         <div className="grid grid-cols-2 gap-4 mb-6">
                           <button 
                             onClick={() => setArtifactData({...artifactData, type: 'pdf'})}
+                            title="Select Research PDF"
+                            aria-label="Set artifact type to Research PDF"
                             className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'pdf' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-blue-200'}`}
                           >
                             <FileText size={20} className={artifactData.type === 'pdf' ? 'text-blue-600' : 'text-slate-400'} />
@@ -546,6 +586,8 @@ const InstructorDashboard = () => {
                           </button>
                           <button 
                             onClick={() => setArtifactData({...artifactData, type: 'link'})}
+                            title="Select External Link"
+                            aria-label="Set artifact type to External Link"
                             className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'link' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-blue-200'}`}
                           >
                             <Link2 size={20} className={artifactData.type === 'link' ? 'text-blue-600' : 'text-slate-400'} />
@@ -570,6 +612,8 @@ const InstructorDashboard = () => {
                               <input 
                                 type="file" 
                                 accept=".pdf"
+                                title="Upload PDF artifact"
+                                aria-label="Upload PDF artifact"
                                 onChange={(e) => setArtifactData({...artifactData, file: e.target.files?.[0] || null})}
                                 className="absolute inset-0 opacity-0 cursor-pointer"
                               />

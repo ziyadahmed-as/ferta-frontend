@@ -141,6 +141,8 @@ const StudentDashboard = () => {
               <button
                 key={item.id}
                 onClick={() => setActiveNav(item.id)}
+                title={`Go to ${item.label}`}
+                aria-label={`Navigate to ${item.label}`}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700"
                   }`}
               >
@@ -163,6 +165,8 @@ const StudentDashboard = () => {
           </div>
           <button
             onClick={logout}
+            title="Sign Out"
+            aria-label="Sign out of student account"
             className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           >
             <LogOut size={16} /> Sign Out
@@ -183,7 +187,11 @@ const StudentDashboard = () => {
           <div className="flex items-center gap-3 ml-auto">
             <ThemeToggle />
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1 hidden sm:block" />
-            <button title="Notifications" className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+            <button 
+              title="Notifications" 
+              aria-label="View recent notifications"
+              className="relative p-2 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
+            >
               <Bell size={18} />
               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </button>
@@ -196,7 +204,12 @@ const StudentDashboard = () => {
                 <p className="text-xs text-slate-500 capitalize">{user.role?.toLowerCase()}</p>
               </div>
             </div>
-            <Link href="/" className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+            <Link 
+              href="/" 
+              title="Sign Out"
+              aria-label="Exit to landing page"
+              className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+            >
               <LogOut size={16} />
             </Link>
           </div>
@@ -296,6 +309,8 @@ const StudentDashboard = () => {
               <div className="flex items-center gap-6">
                 <button
                   onClick={() => setActiveTab("video")}
+                  title="View Video Courses"
+                  aria-label="Switch to Video Courses tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "video"
                       ? "text-blue-600 border-blue-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
@@ -305,6 +320,8 @@ const StudentDashboard = () => {
                 </button>
                 <button
                   onClick={() => setActiveTab("live")}
+                  title="View Live Sessions"
+                  aria-label="Switch to Live Sessions tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "live"
                       ? "text-blue-600 border-blue-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
@@ -406,6 +423,8 @@ const StudentDashboard = () => {
                         <div className="flex items-center gap-2">
                           <button 
                             onClick={() => { setSelectedStreamForRating(stream); setShowRatingModal(true); }}
+                            title="Rate Stream"
+                            aria-label={`Submit rating for ${stream.title}`}
                             className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                           >
                             Rate
@@ -441,7 +460,12 @@ const StudentDashboard = () => {
             >
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white">Rate Instructor</h3>
-                <button onClick={() => setShowRatingModal(false)} className="text-slate-400 hover:text-slate-600">
+                <button 
+                  onClick={() => setShowRatingModal(false)} 
+                  title="Close Modal" 
+                  aria-label="Close Rating Modal"
+                  className="text-slate-400 hover:text-slate-600"
+                >
                   <X size={20} />
                 </button>
               </div>
@@ -454,6 +478,8 @@ const StudentDashboard = () => {
                       <button
                         key={star}
                         onClick={() => setRating(star)}
+                        title={`Rate ${star} stars`}
+                        aria-label={`Submit ${star} star rating`}
                         className={`p-1 transition-all ${star <= rating ? "text-amber-400 scale-110" : "text-slate-300"}`}
                       >
                         <Star size={32} fill={star <= rating ? "currentColor" : "none"} />
