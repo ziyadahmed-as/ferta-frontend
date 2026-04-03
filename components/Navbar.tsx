@@ -20,7 +20,7 @@ const Navbar = () => {
 
   const getDashboardLink = () => {
     if (!user) return "/login";
-    if (user.role === "ADMIN" || user.is_superuser) return "/admin/dashboard";
+    if (user.role === "ADMIN" || user.role === "SUPER_ADMIN" || user.is_superuser) return "/admin/dashboard";
     if (user.role === "INSTRUCTOR") return "/instructor/dashboard";
     return "/student/dashboard";
   };

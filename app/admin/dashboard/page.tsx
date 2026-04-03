@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
-  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X
+  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -44,6 +44,10 @@ const AdminDashboard = () => {
     password: "",
     role: "STUDENT"
   });
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editUser, setEditUser] = useState<any>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [userDetail, setUserDetail] = useState<any>(null);
 
   const [liveStreams, setLiveStreams] = useState<any[]>([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
@@ -137,6 +141,22 @@ const AdminDashboard = () => {
       fetchStats();
     } catch (err: any) {
       alert(err.response?.data?.detail || "Error updating role");
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editUser) return;
+    try {
+      const { password, ...updateData } = editUser;
+      // Only include password if it's being changed
+      const payload = password ? { ...updateData, password } : updateData;
+      await api.patch(`/users/manage/${editUser.id}/`, payload);
+      setShowEditModal(false);
+      fetchAllUsers();
+      fetchStats();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error updating user");
     }
   };
 
@@ -508,6 +528,7 @@ const AdminDashboard = () => {
                             <option value="STUDENT">Students</option>
                             <option value="INSTRUCTOR">Instructors</option>
                             <option value="ADMIN">Admins</option>
+                            <option value="SUPER_ADMIN">Super Admins</option>
                           </select>
                         </div>
                       </div>
@@ -516,9 +537,10 @@ const AdminDashboard = () => {
                         <table className="w-full text-left">
                           <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
                             <tr>
-                              <th className="px-6 py-4">User</th>
-                              <th className="px-6 py-4">Role</th>
-                              <th className="px-6 py-4">Points</th>
+                              <th className="px-6 py-4">User Identity</th>
+                              <th className="px-6 py-4">Institutional Role</th>
+                              <th className="px-6 py-4">Registry / Expertise</th>
+                              <th className="px-6 py-4">Knowledge Nodes</th>
                               <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                           </thead>
@@ -535,18 +557,75 @@ const AdminDashboard = () => {
                                   </div>
                                 </td>
                                 <td className="px-6 py-4">
-                                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${u.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600'}`}>{u.role}</span>
+                                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${
+                                    u.role === 'SUPER_ADMIN' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 
+                                    u.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400' : 
+                                    'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+                                  }`}>{u.role}</span>
                                 </td>
-                                <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">{u.points || 0}</td>
+                                <td className="px-6 py-4">
+                                  {u.role === 'INSTRUCTOR' ? (
+                                    <div className="flex flex-col">
+                                      <span className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate max-w-[150px]">
+                                        {u.expertise || 'General Instruction'}
+                                      </span>
+                                      <span className="text-[10px] text-slate-400">{u.education_level || 'Faculty'}</span>
+                                    </div>
+                                  ) : u.role === 'STUDENT' ? (
+                                    <div className="flex flex-col">
+                                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                                        {u.points || 0} Unified Points
+                                      </span>
+                                      <span className="text-[10px] text-slate-400">Active Scholar</span>
+                                    </div>
+                                  ) : (
+                                    <span className="text-xs text-slate-400">System Admin</span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex flex-wrap gap-1 max-w-[200px]">
+                                    {u.role === 'INSTRUCTOR' && (u.taught_courses || []).length > 0 ? (
+                                      u.taught_courses.map((c: string, idx: number) => (
+                                        <span key={idx} className="text-[9px] bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-800">
+                                          {c}
+                                        </span>
+                                      ))
+                                    ) : u.role === 'STUDENT' && (u.enrolled_courses || []).length > 0 ? (
+                                      u.enrolled_courses.map((c: string, idx: number) => (
+                                        <span key={idx} className="text-[9px] bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 px-1.5 py-0.5 rounded border border-emerald-100 dark:border-emerald-800">
+                                          {c}
+                                        </span>
+                                      ))
+                                    ) : (
+                                      <span className="text-[10px] text-slate-400">No activity logs</span>
+                                    )}
+                                  </div>
+                                </td>
                                 <td className="px-6 py-4 text-right">
-                                  <button 
-                                    onClick={() => handleDeleteUser(u.id)} 
-                                    title="Delete User"
-                                    aria-label="Delete User"
-                                    className="p-2 text-slate-400 hover:text-red-500"
-                                  >
-                                    <Trash2 size={16} />
-                                  </button>
+                                  <div className="flex items-center justify-end gap-1">
+                                    <button 
+                                      onClick={() => { setUserDetail(u); setShowDetailModal(true); }}
+                                      title="System Identity Detail"
+                                      className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
+                                    >
+                                      <Eye size={16} />
+                                    </button>
+                                    <button 
+                                      onClick={() => { setEditUser(u); setShowEditModal(true); }}
+                                      title="Edit User"
+                                      className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"
+                                    >
+                                      <Edit size={16} />
+                                    </button>
+                                    <button 
+                                      onClick={() => handleDeleteUser(u.id)} 
+                                      title="Delete User"
+                                      aria-label="Delete User"
+                                      className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                                    >
+                                      <Trash2 size={16} />
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))}
@@ -759,7 +838,8 @@ const AdminDashboard = () => {
                   >
                     <option value="STUDENT">Student (Default Node)</option>
                     <option value="INSTRUCTOR">Instructor (Faculty)</option>
-                    {user?.role === 'SUPER_ADMIN' && <option value="ADMIN">Admin (Protocol Moderator)</option>}
+                    <option value="ADMIN">Admin (Protocol Moderator)</option>
+                    <option value="SUPER_ADMIN">Super Admin (System Architect)</option>
                   </select>
                 </div>
 
@@ -831,6 +911,104 @@ const AdminDashboard = () => {
                   </button>
                 </div>
               </div>
+            </motion.div>
+          </div>
+        )}
+        {showEditModal && editUser && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowEditModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Edit className="text-indigo-600" size={20} />
+                  Modify Network Identity
+                </h3>
+                <button 
+                  onClick={() => setShowEditModal(false)} 
+                  aria-label="Close edit modal"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleEditSubmit} className="p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Network Username</label>
+                  <input 
+                    required
+                    type="text" 
+                    title="User Network Alias"
+                    placeholder="Username"
+                    value={editUser.username}
+                    onChange={e => setEditUser({...editUser, username: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Communication Hub (Email)</label>
+                  <input 
+                    required
+                    type="email" 
+                    title="User Communication Hub"
+                    placeholder="Email Address"
+                    value={editUser.email}
+                    onChange={e => setEditUser({...editUser, email: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Access Protocol (Password - Leave blank to keep current)</label>
+                  <input 
+                    type="password" 
+                    placeholder="••••••••"
+                    value={editUser.password || ""}
+                    onChange={e => setEditUser({...editUser, password: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Institutional Role</label>
+                  <select 
+                    value={editUser.role}
+                    aria-label="Edit user role"
+                    onChange={e => setEditUser({...editUser, role: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  >
+                    <option value="STUDENT">Student (Default Node)</option>
+                    <option value="INSTRUCTOR">Instructor (Faculty)</option>
+                    <option value="ADMIN">Admin (Protocol Moderator)</option>
+                    <option value="SUPER_ADMIN">Super Admin (System Architect)</option>
+                  </select>
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowEditModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Update Identity
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
