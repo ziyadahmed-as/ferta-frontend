@@ -5,7 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
-  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical
+  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -439,98 +439,12 @@ const AdminDashboard = () => {
                           <p className="text-xs text-slate-400 text-center py-2">No pending courses</p>
                         )}
                       </div>
-                                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl text-sm font-bold hover:bg-emerald-600 transition-all"
-                                >
-                                  <Check size={16} /> Approve
-                                </button>
-                                <button
-                                  onClick={() => handleInstructorAction(app.id, false)}
-                                  className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-xl text-sm font-bold hover:bg-red-100 transition-all"
-                                >
-                                  <X size={16} /> Reject
-                                </button>
-                              </div>
                     </div>
                   </div>
                 </div>
               )}
 
-              {activeModule === "live" && (
-                <div className="space-y-6">
-                  <div className="welcome-banner p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Live Stream Moderation</h2>
-                      <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate synchronous learning cohorts and instructor capacity</p>
-                    </div>
-                    <div className="flex gap-3">
-                      <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
-                        <p className="text-[10px] uppercase font-bold text-slate-500">Active Streams</p>
-                        <p className="text-xl font-black text-indigo-600">{liveStreams.length}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-4">
-                    {liveStreams.length === 0 ? (
-                      <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-12 text-center">
-                        <Cpu size={40} className="mx-auto text-slate-300 mb-2" />
-                        <p className="text-slate-500">No active live streams in the network.</p>
-                      </div>
-                    ) : (
-                      liveStreams.map((stream: any) => (
-                        <div key={stream.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col lg:flex-row items-center gap-6 group hover:border-indigo-200 shadow-sm transition-all">
-                          <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl shrink-0">
-                            {stream.title[0]}
-                          </div>
-                          <div className="flex-1 text-center lg:text-left">
-                            <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{stream.title}</h4>
-                            <div className="flex flex-wrap justify-center lg:justify-start gap-4 text-xs text-slate-500">
-                              <span className="flex items-center gap-1.5"><Users size={14} /> {stream.instructor_name}</span>
-                              <span className="flex items-center gap-1.5"><ShieldCheck size={14} className="text-indigo-500" /> {stream.group_type}</span>
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center gap-8 px-6 border-l border-r border-slate-100 dark:border-slate-700 hidden lg:flex">
-                            <div className="text-center">
-                              <p className="text-[10px] uppercase font-bold text-slate-400 mb-1">Capacity</p>
-                              <div className="flex items-center gap-2">
-                                <span className={`text-sm font-bold ${stream.enrollment_count >= stream.max_students ? 'text-red-500' : 'text-emerald-500'}`}>
-                                  {stream.enrollment_count}/{stream.max_students}
-                                </span>
-                                <div className="w-20 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                                  <div 
-                                    className={`h-full ${stream.enrollment_count >= stream.max_students ? 'bg-red-500' : 'bg-emerald-500'}`}
-                                    style={{ width: `${Math.min(100, (stream.enrollment_count / stream.max_students) * 100)}%` }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex gap-2">
-                            {stream.enrollment_count >= stream.max_students && (
-                              <button 
-                                onClick={() => {
-                                  setSelectedStream(stream);
-                                  setShowDuplicateModal(true);
-                                }}
-                                className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                              >
-                                <Plus size={16} /> Duplicate (Full)
-                              </button>
-                            )}
-                            <button className="p-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-                              <MoreVertical size={20} />
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {activeModule === "revenue" && (
+              {activeModule === "users" && (
                 <div className="space-y-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="welcome-banner p-6 rounded-2xl flex-1">
@@ -548,7 +462,6 @@ const AdminDashboard = () => {
                     </button>
                   </div>
 
-                  {/* Tabs */}
                   <div className="flex items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl w-fit border border-slate-200 dark:border-slate-700">
                     <button 
                       onClick={() => setUserTab("all")}
@@ -571,234 +484,79 @@ const AdminDashboard = () => {
 
                   {userTab === "all" ? (
                     <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-                      {/* Table Header / Filters */}
                       <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row gap-4 items-center justify-between">
                         <div className="relative w-full md:w-96">
                           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                           <input 
                             type="text" 
-                            placeholder="Search by name, email or role..."
+                            placeholder="Search users..."
                             value={userSearch}
                             onChange={(e) => setUserSearch(e.target.value)}
-                            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
+                            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
                           />
                         </div>
-                        <div className="flex items-center gap-3 w-full md:w-auto">
-                          <Filter className="text-slate-400" size={18} />
+                        <div className="flex items-center gap-3">
+                          <Filter size={18} className="text-slate-400" />
                           <select 
                             value={roleFilter}
-                            aria-label="Filter by role"
                             onChange={(e) => setRoleFilter(e.target.value)}
-                            className="flex-1 md:w-48 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl py-3 px-4 text-sm focus:ring-2 focus:ring-indigo-500 transition-all outline-none"
+                            className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl py-2 px-4 text-sm focus:ring-2 focus:ring-indigo-500"
                           >
                             <option value="all">All Roles</option>
                             <option value="STUDENT">Students</option>
                             <option value="INSTRUCTOR">Instructors</option>
                             <option value="ADMIN">Admins</option>
-                            <option value="SUPER_ADMIN">Super Admins</option>
                           </select>
                         </div>
                       </div>
 
                       <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                          <thead>
-                            <tr className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
-                              <th className="px-6 py-4">User Identity</th>
-                              <th className="px-6 py-4">Node Role</th>
-                              <th className="px-6 py-4">Participation</th>
+                          <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                            <tr>
+                              <th className="px-6 py-4">User</th>
+                              <th className="px-6 py-4">Role</th>
+                              <th className="px-6 py-4">Points</th>
                               <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                            {allUsers
-                              .filter(u => {
-                                const matchesSearch = u.username.toLowerCase().includes(userSearch.toLowerCase()) || 
-                                                     u.email.toLowerCase().includes(userSearch.toLowerCase());
-                                const matchesRole = roleFilter === "all" || u.role === roleFilter;
-                                return matchesSearch && matchesRole;
-                              })
-                              .map((u) => {
-                                const canManage = user?.role === 'SUPER_ADMIN' || (user?.role === 'ADMIN' && !['ADMIN', 'SUPER_ADMIN'].includes(u.role));
-                                return (
-                                  <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors group">
-                                    <td className="px-6 py-4">
-                                      <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white font-bold shadow-sm">
-                                          {u.username[0].toUpperCase()}
-                                        </div>
-                                        <div>
-                                          <div className="font-bold text-slate-800 dark:text-white mb-0.5">{u.username}</div>
-                                          <div className="text-xs text-slate-500">{u.email}</div>
-                                        </div>
-                                      </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                      <select 
-                                        value={u.role}
-                                        aria-label="Change user role"
-                                        disabled={!canManage}
-                                        onChange={(e) => handleUpdateRole(u.id, e.target.value)}
-                                        className={`text-xs font-bold px-3 py-1.5 rounded-full border-none focus:ring-0 cursor-pointer transition-all ${
-                                          u.role === 'SUPER_ADMIN' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30' :
-                                          u.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30' :
-                                          u.role === 'INSTRUCTOR' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30' :
-                                          'bg-slate-100 text-slate-600 dark:bg-slate-700'
-                                        } ${!canManage && 'opacity-70 cursor-not-allowed text-center'}`}
-                                      >
-                                        <option value="STUDENT">Student</option>
-                                        <option value="INSTRUCTOR">Instructor</option>
-                                        <option value="ADMIN">Admin</option>
-                                        <option value="SUPER_ADMIN">Super Admin</option>
-                                      </select>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                      <div className="flex items-center gap-2">
-                                        <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                                          <div 
-                                            className="h-full bg-indigo-500" 
-                                            style={{ width: `${Math.min(100, (u.points || 0) / 10)}%` }}
-                                          />
-                                        </div>
-                                        <span className="text-xs font-semibold text-slate-500">{u.points || 0} pts</span>
-                                      </div>
-                                    </td>
-                                    <td className="px-6 py-4 text-right">
-                                      <div className="flex items-center justify-end gap-2">
-                                        <button 
-                                          onClick={() => handleDeleteUser(u.id)}
-                                          disabled={!canManage}
-                                          className={`p-2 rounded-xl transition-all ${
-                                            canManage 
-                                              ? 'text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20' 
-                                              : 'text-slate-300 cursor-not-allowed opacity-50'
-                                          }`}
-                                          title={canManage ? "Delete user" : "Insufficient permissions"}
-                                        >
-                                          <Trash2 size={18} />
-                                        </button>
-                                        {!canManage && (
-                                          <span title="Protected account">
-                                            <ShieldAlert size={14} className="text-slate-300" />
-                                          </span>
-                                        )}
-                                      </div>
-                                    </td>
-                                  </tr>
-                                );
-                              })}
+                            {allUsers.filter(u => u.username.toLowerCase().includes(userSearch.toLowerCase()) && (roleFilter === "all" || u.role === roleFilter)).map((u) => (
+                              <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30">
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-xs font-bold">{u.username[0].toUpperCase()}</div>
+                                    <div>
+                                      <p className="text-sm font-bold text-slate-800 dark:text-white">{u.username}</p>
+                                      <p className="text-[10px] text-slate-500">{u.email}</p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${u.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700' : 'bg-slate-100 text-slate-600'}`}>{u.role}</span>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">{u.points || 0}</td>
+                                <td className="px-6 py-4 text-right">
+                                  <button onClick={() => handleDeleteUser(u.id)} className="p-2 text-slate-400 hover:text-red-500"><Trash2 size={16} /></button>
+                                </td>
+                              </tr>
+                            ))}
                           </tbody>
                         </table>
                       </div>
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {(stats?.pending_instructors || []).length === 0 ? (
-                        <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-16 text-center shadow-sm">
-                          <div className="w-20 h-20 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <CheckCircle2 size={40} />
-                          </div>
-                          <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2">Protocol Fully Synced</h3>
-                          <p className="text-slate-500 max-w-sm mx-auto">All faculty node applications have been reviewed. No pending entities in the queue.</p>
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-1 gap-4">
-                          {stats.pending_instructors.map((app: any) => (
-                            <div key={app.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row items-start md:items-center gap-6 group hover:border-indigo-200 transition-all shadow-sm">
-                              <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-500/10">
-                                {app.username?.[0]?.toUpperCase()}
-                              </div>
-                              <div className="flex-1">
-                                <div className="flex items-center gap-2 mb-2">
-                                  <h4 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">{app.username}</h4>
-                                  <span className="text-[10px] uppercase tracking-widest font-bold px-2 py-0.5 bg-amber-50 text-amber-600 dark:bg-amber-900/20 rounded-md">Candidate</span>
-                                </div>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-slate-500">
-                                  <div>
-                                    <p className="font-medium text-slate-400 mb-0.5 uppercase tracking-tighter">Academic Field</p>
-                                    <p className="text-indigo-600 dark:text-indigo-400 font-bold">{app.expertise || 'Generalist'}</p>
-                                  </div>
-                                  <div>
-                                    <p className="font-medium text-slate-400 mb-0.5 uppercase tracking-tighter">Experience</p>
-                                    <p className="text-slate-700 dark:text-slate-200 font-bold">{app.years_of_experience} Cycles</p>
-                                  </div>
-                                  <div className="col-span-2">
-                                    <p className="font-medium text-slate-400 mb-0.5 uppercase tracking-tighter">Contact Hub</p>
-                                    <p className="text-slate-700 dark:text-slate-200 font-bold">{app.email}</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="flex items-center gap-3 w-full md:w-auto shrink-0 border-t md:border-l md:border-t-0 pt-4 md:pt-0 md:pl-6 border-slate-100 dark:border-slate-700">
-                                <button
-                                  onClick={() => handleInstructorAction(app.id, true)}
-                                  disabled={actionLoading === app.id}
-                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-all disabled:opacity-50 shadow-lg shadow-emerald-500/10"
-                                >
-                                  {actionLoading === app.id ? <Cpu size={16} className="animate-spin" /> : <CheckCircle2 size={16} />}
-                                  Authorize
-                                </button>
-                                <button
-                                  onClick={() => handleInstructorAction(app.id, false)}
-                                  disabled={actionLoading === app.id}
-                                  className="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 border border-red-200 dark:border-red-800 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl text-sm font-bold transition-all disabled:opacity-50"
-                                >
-                                  <XCircle size={16} /> Terminate
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {activeModule === "courses" && (
-                <div className="space-y-5">
-                  <div className="welcome-banner p-5 rounded-2xl">
-                    <h2 className="text-xl font-bold text-slate-800 mb-1">Course Moderation</h2>
-                    <p className="text-slate-600 text-sm">{stats?.courses?.pending_approval || 0} courses awaiting approval</p>
-                  </div>
-
-                  {(stats?.courses?.pending_list || []).length === 0 ? (
-                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-12 text-center">
-                      <CheckCircle2 size={40} className="mx-auto text-emerald-400 mb-3" />
-                      <p className="text-slate-500 font-medium">No courses awaiting moderation.</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {stats.courses.pending_list.map((c: any) => (
-                        <div key={c.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 flex flex-col md:flex-row items-start md:items-center gap-4">
-                          <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-700 font-bold text-lg shrink-0">
-                            {c.title?.[0]?.toUpperCase()}
-                          </div>
+                      {(stats?.pending_instructors || []).map((app: any) => (
+                        <div key={app.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row items-center gap-6">
+                          <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">{app.username[0].toUpperCase()}</div>
                           <div className="flex-1">
-                            <h4 className="font-semibold text-slate-800 dark:text-white mb-1">{c.title}</h4>
-                            <div className="flex flex-wrap gap-3 text-xs text-slate-500">
-                              <span>By {c.instructor}</span>
-                              <span>•</span>
-                              <span>{c.category}</span>
-                              <span>•</span>
-                              <span className="text-blue-600 font-medium">${c.price}</span>
-                            </div>
+                            <h4 className="font-bold text-slate-800 dark:text-white">{app.username}</h4>
+                            <p className="text-xs text-slate-500">{app.email}</p>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            <button
-                              onClick={() => handleCourseAction(c.id, true)}
-                              disabled={actionLoading === c.id}
-                              className="flex items-center gap-2 px-4 py-2 gradient-primary text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
-                            >
-                              {actionLoading === c.id ? <Cpu size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
-                              Approve
-                            </button>
-                            <button
-                              onClick={() => handleCourseAction(c.id, false)}
-                              disabled={actionLoading === c.id}
-                              className="flex items-center gap-2 px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 rounded-xl text-sm font-semibold transition-all disabled:opacity-50"
-                            >
-                              <XCircle size={14} /> Reject
-                            </button>
+                          <div className="flex gap-2">
+                            <button onClick={() => handleInstructorAction(app.id, true)} className="p-2 bg-emerald-500 text-white rounded-lg"><Check size={16} /></button>
+                            <button onClick={() => handleInstructorAction(app.id, false)} className="p-2 bg-red-500 text-white rounded-lg"><X size={16} /></button>
                           </div>
                         </div>
                       ))}
@@ -807,39 +565,79 @@ const AdminDashboard = () => {
                 </div>
               )}
 
-              {activeModule === "revenue" && (
+              {activeModule === "courses" && (
                 <div className="space-y-5">
-                  <div className="welcome-banner p-5 rounded-2xl">
-                    <h2 className="text-xl font-bold text-slate-800 mb-1">Revenue Analytics</h2>
-                    <p className="text-slate-600 text-sm">Platform financial overview</p>
+                  <div className="welcome-banner p-6 rounded-2xl">
+                    <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Course Moderation</h2>
+                    <p className="text-slate-600 dark:text-slate-300 text-sm">{stats?.courses?.pending_approval || 0} courses awaiting approval</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {[
-                      { label: "Total Revenue", value: stats?.revenue?.total ? `$${Math.round(stats.revenue.total).toLocaleString()}` : "$168,000", iconClass: "icon-purple" },
-                      { label: "This Month", value: "$23,400", iconClass: "icon-blue" },
-                      { label: "Growth Rate", value: "+23%", iconClass: "icon-green" },
-                    ].map((item) => (
-                      <div key={item.label} className="stat-card">
-                        <div className={`w-10 h-10 ${item.iconClass} rounded-xl flex items-center justify-center mb-3`}>
-                          <DollarSign size={18} className="text-white" />
+                  {(stats?.courses?.pending_list || []).map((c: any) => (
+                    <div key={c.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4">
+                      <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-700 font-bold">{c.title[0]}</div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold dark:text-white">{c.title}</h4>
+                        <p className="text-xs text-slate-500">By {c.instructor}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button onClick={() => handleCourseAction(c.id, true)} className="p-2 bg-emerald-500 text-white rounded-lg"><CheckCircle2 size={16} /></button>
+                        <button onClick={() => handleCourseAction(c.id, false)} className="p-2 bg-red-500 text-white rounded-lg"><XCircle size={16} /></button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {activeModule === "live" && (
+                <div className="space-y-6">
+                  <div className="welcome-banner p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Live Stream Moderation</h2>
+                      <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate synchronous learning cohorts</p>
+                    </div>
+                    <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
+                      <p className="text-[10px] uppercase font-bold text-slate-500">Active Streams</p>
+                      <p className="text-xl font-black text-indigo-600">{liveStreams.length}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4">
+                    {liveStreams.map((stream: any) => (
+                      <div key={stream.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col lg:flex-row items-center gap-6">
+                        <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl">{stream.title[0]}</div>
+                        <div className="flex-1">
+                          <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{stream.title}</h4>
+                          <div className="flex gap-4 text-xs text-slate-500">
+                            <span className="flex items-center gap-1"><Users size={14} /> {stream.instructor_name}</span>
+                            <span className={`font-bold ${stream.enrollment_count >= stream.max_students ? 'text-red-500' : 'text-emerald-500'}`}>
+                              {stream.enrollment_count}/{stream.max_students} Students
+                            </span>
+                          </div>
                         </div>
-                        <p className="text-xs text-slate-500 mb-1">{item.label}</p>
-                        <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">{item.value}</p>
+                        {stream.enrollment_count >= stream.max_students && (
+                          <button 
+                            onClick={() => { setSelectedStream(stream); setShowDuplicateModal(true); }}
+                            className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold"
+                          >
+                            Duplicate (Full)
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
-                  <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
-                    <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Revenue & User Growth</h3>
-                    <div className="h-72">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={platformGrowthData}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                          <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
-                          <YAxis hide />
-                          <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "12px" }} />
-                          <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={3} dot={false} name="Revenue ($)" />
-                        </LineChart>
-                      </ResponsiveContainer>
+                </div>
+              )}
+
+              {activeModule === "revenue" && (
+                <div className="space-y-6">
+                  <div className="welcome-banner p-6 rounded-2xl">
+                    <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Revenue Analytics</h2>
+                    <p className="text-slate-600 dark:text-slate-300 text-sm">Finances and growth</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="stat-card">
+                      <div className="w-10 h-10 icon-purple rounded-xl flex items-center justify-center mb-3"><DollarSign size={18} className="text-white" /></div>
+                      <p className="text-xs text-slate-500 mb-1">Total Revenue</p>
+                      <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">${stats?.revenue?.total || "168,000"}</p>
                     </div>
                   </div>
                 </div>
