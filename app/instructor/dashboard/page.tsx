@@ -36,18 +36,23 @@ const InstructorDashboard = () => {
   const [stats, setStats] = useState<any>(null);
   const [analytics, setAnalytics] = useState<any[]>(revenueData);
   const [courses, setCourses] = useState<any[]>([]);
+  const [liveStreams, setLiveStreams] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState<"video" | "live">("video");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [statsRes, coursesRes] = await Promise.all([
+        const [statsRes, coursesRes, liveRes] = await Promise.all([
           api.get("/courses/courses/instructor_stats/"),
           api.get("/courses/courses/?mine=true"),
+          api.get("/courses/live-streams/?mine=true"),
         ]);
         setStats(statsRes.data);
         setCourses(Array.isArray(coursesRes.data) ? coursesRes.data : coursesRes.data.results || []);
+        setLiveStreams(Array.isArray(liveRes.data) ? liveRes.data : liveRes.data.results || []);
+        
         const analyticsRes = await api.get("/courses/courses/instructor_analytics/");
         if (analyticsRes.data?.monthly_data?.length > 0) {
           setAnalytics(analyticsRes.data.monthly_data);
@@ -86,37 +91,37 @@ const InstructorDashboard = () => {
 
   const navItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
-    { id: "courses", label: "My Courses", icon: BookOpen },
+    { id: "courses", label: "My Teaching", icon: BookOpen },
     { id: "students", label: "Students", icon: Users },
     { id: "revenue", label: "Revenue", icon: DollarSign },
   ];
 
   const statCards = [
     {
-      label: "Total Courses",
-      value: stats?.total_courses ?? courses.length,
+      label: "Total Content",
+      value: (courses.length + liveStreams.length),
       sub: "+2 this month",
       icon: BookOpen,
       iconClass: "icon-blue",
     },
     {
-      label: "Total Students",
-      value: stats?.total_enrollments?.toLocaleString() ?? "—",
-      sub: "+1,234 this month",
+      label: "Total Scholars",
+      value: stats?.total_enrollments?.toLocaleString() ?? "0",
+      sub: "+124 this month",
       icon: Users,
       iconClass: "icon-teal",
     },
     {
-      label: "Total Revenue",
+      label: "Wallet Balance",
       value: stats?.wallet_balance ? `$${Math.round(stats.wallet_balance).toLocaleString()}` : "—",
-      sub: "+$12,340 this month",
+      sub: "Available for payout",
       icon: DollarSign,
       iconClass: "icon-purple",
     },
     {
-      label: "Avg. Rating",
+      label: "Node Rating",
       value: "4.8",
-      sub: "+0.2 this month",
+      sub: "From live sessions",
       icon: Star,
       iconClass: "icon-green",
     },
@@ -161,7 +166,7 @@ const InstructorDashboard = () => {
             </div>
             <div>
               <p className="text-sm font-semibold text-slate-800 dark:text-white">{user.username}</p>
-              <p className="text-xs text-slate-500">Instructor</p>
+              <p className="text-xs text-slate-500 capitalize">{user.instructor_type?.toLowerCase()?.replace('_', ' ') || 'Instructor'}</p>
             </div>
           </div>
           <button
@@ -191,7 +196,7 @@ const InstructorDashboard = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-800 dark:text-white">{user.username}</p>
-                <p className="text-xs text-slate-500">Instructor</p>
+                <p className="text-xs text-slate-500 capitalize">{user.instructor_type?.toLowerCase()?.replace('_', ' ') || 'Instructor'}</p>
               </div>
             </div>
             <button onClick={logout} title="Sign Out" className="p-2 text-slate-400 hover:text-red-500 transition-colors">
@@ -209,17 +214,26 @@ const InstructorDashboard = () => {
           >
             <div>
               <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
-                Instructor Dashboard 🎓
+                Faculty Hub 🎓
               </h1>
-              <p className="text-slate-600 dark:text-slate-300 text-sm">Manage your courses and track your teaching success</p>
+              <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate your knowledge nodes and manage your teaching cycles</p>
             </div>
-            <Link
-              href="/instructor/courses/create"
-              className="hidden sm:flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-md shadow-blue-500/20"
-            >
-              <Plus size={18} />
-              Create New Course
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/instructor/live-streams/create"
+                className="hidden sm:flex items-center gap-2 px-5 py-3 bg-white text-blue-600 rounded-xl font-bold text-sm hover:bg-blue-50 transition-all border border-blue-100"
+              >
+                <Plus size={18} />
+                Live Hub
+              </Link>
+              <Link
+                href="/instructor/courses/create"
+                className="hidden sm:flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-md shadow-blue-500/20"
+              >
+                <Plus size={18} />
+                Video Course
+              </Link>
+            </div>
           </motion.div>
 
           {/* Stats Grid */}
@@ -273,7 +287,7 @@ const InstructorDashboard = () => {
 
             {/* Student Progress Donut */}
             <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
-              <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Student Progress</h3>
+              <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Node Engagement</h3>
               <div className="h-44 flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -294,72 +308,141 @@ const InstructorDashboard = () => {
                       item.name === 'In Progress' ? 'bg-blue-500' : 'bg-slate-200'
                     }`} />
                     <span className="text-slate-600 dark:text-slate-300">{item.name}</span>
-                    <span className="ml-auto font-semibold text-slate-700 dark:text-slate-200">{item.value}%</span>
+                    <span className="ml-auto font-semibold text-slate-700 dark:text-white">{item.value}%</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* My Courses */}
+          {/* Teaching Content Sections */}
           <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
-            <div className="flex items-center justify-between mb-5">
-              <h3 className="font-semibold text-slate-800 dark:text-white">My Courses</h3>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+              <div className="flex items-center gap-6">
+                <button
+                  onClick={() => setActiveTab("video")}
+                  className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "video"
+                      ? "text-blue-600 border-blue-600"
+                      : "text-slate-400 border-transparent hover:text-slate-600"
+                    }`}
+                >
+                  Video Content
+                </button>
+                <button
+                  onClick={() => setActiveTab("live")}
+                  className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "live"
+                      ? "text-blue-600 border-blue-600"
+                      : "text-slate-400 border-transparent hover:text-slate-600"
+                    }`}
+                >
+                  Live Stream Hub
+                </button>
+              </div>
               <Link href="/instructor/courses" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-                Manage All →
+                Manage All Hubs →
               </Link>
             </div>
 
-            {courses.length === 0 ? (
-              <div className="text-center py-10">
-                <BookOpen size={40} className="mx-auto text-slate-300 mb-3" />
-                <p className="text-slate-500 mb-4">No courses created yet.</p>
-                <Link href="/instructor/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
-                  Create First Course
-                </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {courses.map((course: any, idx: number) => (
-                  <motion.div
-                    key={course.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.07 }}
-                    className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md transition-all group"
-                  >
-                    <div className="relative h-36 bg-slate-100 dark:bg-slate-700">
-                      <Image
-                        src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80"}
-                        alt={course.title}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold ${
-                        course.is_approved ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
-                      }`}>
-                        {course.is_approved ? "Approved" : "Pending"}
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      <h4 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-1 mb-2">{course.title}</h4>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                          <Users size={13} /> {course.enrollment_count || 0} Students
+            {activeTab === "video" ? (
+              courses.length === 0 ? (
+                <div className="text-center py-10">
+                  <BookOpen size={40} className="mx-auto text-slate-300 mb-3" />
+                  <p className="text-slate-500 mb-4">No video courses created yet.</p>
+                  <Link href="/instructor/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
+                    Create First Course
+                  </Link>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {courses.map((course: any, idx: number) => (
+                    <motion.div
+                      key={course.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.07 }}
+                      className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md transition-all group"
+                    >
+                      <div className="relative h-36 bg-slate-100 dark:bg-slate-700">
+                        <Image
+                          src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80"}
+                          alt={course.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold ${
+                          course.is_approved ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"
+                        }`}>
+                          {course.is_approved ? "Approved" : "Pending"}
                         </div>
-                        <Link href={`/instructor/courses/${course.id}/edit`} title="Edit Course" className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
-                          <Settings size={14} className="text-slate-500 hover:text-blue-600" />
-                        </Link>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+                      <div className="p-4">
+                        <h4 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-1 mb-2">{course.title}</h4>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                            <Users size={13} /> {course.enrollment_count || 0} Scholars
+                          </div>
+                          <Link href={`/instructor/courses/${course.id}/edit`} title="Edit Course" className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+                            <Settings size={14} className="text-slate-500 hover:text-blue-600" />
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )
+            ) : (
+              liveStreams.length === 0 ? (
+                <div className="text-center py-10">
+                  <BarChart3 size={40} className="mx-auto text-slate-300 mb-3" />
+                  <p className="text-slate-500 mb-4">No live streams assigned yet.</p>
+                  <p className="text-xs text-slate-400">Admins will assign you to live teaching cohorts.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {liveStreams.map((stream: any, idx: number) => (
+                    <motion.div
+                      key={stream.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.07 }}
+                      className="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden hover:shadow-md transition-all group"
+                    >
+                      <div className="relative h-36 bg-slate-100 dark:bg-slate-700">
+                        <Image
+                          src={stream.thumbnail || "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400&q=80"}
+                          alt={stream.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 left-3 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full uppercase tracking-wider">
+                          {stream.group_type}
+                        </div>
+                        <div className="absolute top-3 right-3 px-2.5 py-1 bg-white/90 dark:bg-slate-800/90 rounded-full text-xs font-bold text-slate-800 dark:text-white">
+                          {Math.round((stream.enrollment_count / stream.max_students) * 100)}% Full
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <h4 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-1 mb-2">{stream.title}</h4>
+                        <div className="flex items-center justify-between mt-4">
+                          <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                            <Clock size={13} /> {stream.live_sessions?.length || 0} Sessions
+                          </div>
+                          <Link href={`/instructor/live-streams/${stream.id}/manage`} className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-all">
+                            Manage Live
+                          </Link>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )
             )}
           </div>
         </div>
       </main>
     </div>
+  );
+};>
   );
 };
 
