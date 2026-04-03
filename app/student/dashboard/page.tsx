@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   BookOpen, Clock, Award, TrendingUp, Home, Calendar, Trophy,
-  Bell, LogOut, PlayCircle, GraduationCap, ChevronRight
+  Bell, LogOut, PlayCircle, GraduationCap, ChevronRight, Star, X
 } from "lucide-react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
+import { AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -40,6 +41,11 @@ const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState("dashboard");
   const [activeTab, setActiveTab] = useState<"video" | "live">("video");
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [selectedStreamForRating, setSelectedStreamForRating] = useState<any>(null);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +64,25 @@ const StudentDashboard = () => {
     };
     if (user) fetchData();
   }, [user]);
+
+  const handleRateStream = async () => {
+    if (!selectedStreamForRating) return;
+    setSubmittingRating(true);
+    try {
+      await api.post(`/courses/live-streams/${selectedStreamForRating.id}/rate_instructor/`, {
+        rating,
+        comment
+      });
+      setShowRatingModal(false);
+      setRating(5);
+      setComment("");
+      alert("Thank you for your feedback!");
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error submitting rating");
+    } finally {
+      setSubmittingRating(false);
+    }
+  };
 
   if (!user) {
     return (
@@ -378,9 +403,14 @@ const StudentDashboard = () => {
                             </div>
                           ))}
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-medium text-slate-500">{stream.max_students - stream.enrollment_count} seats left</span>
-                          <Link href={`/live-streams/${stream.id}/learn`} className="px-4 py-1.5 gradient-primary text-white text-xs font-bold rounded-lg hover:opacity-90">Enter Session</Link>
+                        <div className="flex items-center gap-2">
+                          <button 
+                            onClick={() => { setSelectedStreamForRating(stream); setShowRatingModal(true); }}
+                            className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
+                          >
+                            Rate
+                          </button>
+                          <Link href={`/live-streams/${stream.id}/learn`} className="flex-1 text-center px-4 py-1.5 gradient-primary text-white text-xs font-bold rounded-lg hover:opacity-90">Enter Session</Link>
                         </div>
                       </div>
                     </motion.div>
@@ -391,6 +421,77 @@ const StudentDashboard = () => {
           </div>
         </div>
       </main>
+
+      {/* Rating Modal */}
+      <AnimatePresence>
+        {showRatingModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowRatingModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-6 border border-slate-200 dark:border-slate-700"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white">Rate Instructor</h3>
+                <button onClick={() => setShowRatingModal(false)} className="text-slate-400 hover:text-slate-600">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm text-slate-500 mb-3">How was your session with <b>{selectedStreamForRating?.instructor_name}</b>?</p>
+                  <div className="flex items-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => setRating(star)}
+                        className={`p-1 transition-all ${star <= rating ? "text-amber-400 scale-110" : "text-slate-300"}`}
+                      >
+                        <Star size={32} fill={star <= rating ? "currentColor" : "none"} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-400 uppercase">Share your experience</label>
+                  <textarea
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="What did you learn today? Any feedback for the professor?"
+                    className="w-full h-32 px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none transition-all"
+                  />
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowRatingModal(false)}
+                    className="flex-1 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-bold text-sm"
+                  >
+                    Maybe Later
+                  </button>
+                  <button
+                    onClick={handleRateStream}
+                    disabled={submittingRating}
+                    className="flex-1 py-3 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                  >
+                    {submittingRating ? "Submitting..." : "Submit Rating"}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

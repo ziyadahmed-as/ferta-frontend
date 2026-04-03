@@ -143,7 +143,7 @@ const AdminDashboard = () => {
   const handleCourseAction = async (courseId: number, approve: boolean) => {
     setActionLoading(courseId);
     try {
-      const endpoint = approve ? `/courses/${courseId}/approve/` : `/courses/${courseId}/reject/`;
+      const endpoint = approve ? `/courses/courses/${courseId}/approve/` : `/courses/courses/${courseId}/reject/`;
       await api.post(endpoint);
       fetchStats();
     } catch (err) {
@@ -499,6 +499,8 @@ const AdminDashboard = () => {
                           <Filter size={18} className="text-slate-400" />
                           <select 
                             value={roleFilter}
+                            title="Filter by role"
+                            aria-label="Filter by role"
                             onChange={(e) => setRoleFilter(e.target.value)}
                             className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl py-2 px-4 text-sm focus:ring-2 focus:ring-indigo-500"
                           >
@@ -537,7 +539,14 @@ const AdminDashboard = () => {
                                 </td>
                                 <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300 font-medium">{u.points || 0}</td>
                                 <td className="px-6 py-4 text-right">
-                                  <button onClick={() => handleDeleteUser(u.id)} className="p-2 text-slate-400 hover:text-red-500"><Trash2 size={16} /></button>
+                                  <button 
+                                    onClick={() => handleDeleteUser(u.id)} 
+                                    title="Delete User"
+                                    aria-label="Delete User"
+                                    className="p-2 text-slate-400 hover:text-red-500"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
                                 </td>
                               </tr>
                             ))}
@@ -555,8 +564,22 @@ const AdminDashboard = () => {
                             <p className="text-xs text-slate-500">{app.email}</p>
                           </div>
                           <div className="flex gap-2">
-                            <button onClick={() => handleInstructorAction(app.id, true)} className="p-2 bg-emerald-500 text-white rounded-lg"><Check size={16} /></button>
-                            <button onClick={() => handleInstructorAction(app.id, false)} className="p-2 bg-red-500 text-white rounded-lg"><X size={16} /></button>
+                            <button 
+                              onClick={() => handleInstructorAction(app.id, true)} 
+                              title="Approve Instructor"
+                              aria-label="Approve Instructor"
+                              className="p-2 bg-emerald-500 text-white rounded-lg"
+                            >
+                              <Check size={16} />
+                            </button>
+                            <button 
+                              onClick={() => handleInstructorAction(app.id, false)} 
+                              title="Reject Instructor"
+                              aria-label="Reject Instructor"
+                              className="p-2 bg-red-500 text-white rounded-lg"
+                            >
+                              <X size={16} />
+                            </button>
                           </div>
                         </div>
                       ))}
@@ -579,8 +602,22 @@ const AdminDashboard = () => {
                         <p className="text-xs text-slate-500">By {c.instructor}</p>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => handleCourseAction(c.id, true)} className="p-2 bg-emerald-500 text-white rounded-lg"><CheckCircle2 size={16} /></button>
-                        <button onClick={() => handleCourseAction(c.id, false)} className="p-2 bg-red-500 text-white rounded-lg"><XCircle size={16} /></button>
+                        <button 
+                          onClick={() => handleCourseAction(c.id, true)} 
+                          title="Approve Course"
+                          aria-label="Approve Course"
+                          className="p-2 bg-emerald-500 text-white rounded-lg"
+                        >
+                          <CheckCircle2 size={16} />
+                        </button>
+                        <button 
+                          onClick={() => handleCourseAction(c.id, false)} 
+                          title="Reject Course"
+                          aria-label="Reject Course"
+                          className="p-2 bg-red-500 text-white rounded-lg"
+                        >
+                          <XCircle size={16} />
+                        </button>
                       </div>
                     </div>
                   ))}

@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   BookOpen, Users, DollarSign, Star, TrendingUp, Home, Plus,
-  Bell, LogOut, Settings, BarChart3, Clock
+  Bell, LogOut, Settings, BarChart3, Clock, FileText, Link2, UploadCloud, CheckCircle, X
 } from "lucide-react";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
+import { AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -40,6 +41,11 @@ const InstructorDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeNav, setActiveNav] = useState("dashboard");
   const [activeTab, setActiveTab] = useState<"video" | "live">("video");
+  const [showManageModal, setShowManageModal] = useState(false);
+  const [selectedStream, setSelectedStream] = useState<any>(null);
+  const [selectedSessionId, setSelectedSessionId] = useState<string>("");
+  const [artifactData, setArtifactData] = useState({ title: "", type: "pdf", url: "", file: null as File | null });
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,6 +72,36 @@ const InstructorDashboard = () => {
     if (user?.role === "INSTRUCTOR" || user?.role === "ADMIN" || user?.is_superuser) fetchData();
     else setLoading(false);
   }, [user]);
+
+  const handleUploadArtifact = async () => {
+    if (!selectedSessionId || !artifactData.title) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("live_session", selectedSessionId);
+      formData.append("title", artifactData.title);
+      formData.append("type", artifactData.type);
+      if (artifactData.type === "pdf" && artifactData.file) {
+        formData.append("file", artifactData.file);
+      } else if (artifactData.type === "link") {
+        formData.append("url", artifactData.url);
+      }
+
+      await api.post("/courses/content-blocks/", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      
+      alert("Artifact uploaded successfully!");
+      setArtifactData({ title: "", type: "pdf", url: "", file: null });
+      // Refresh stream data to show new artifacts
+      const res = await api.get("/courses/live-streams/?mine=true");
+      setLiveStreams(Array.isArray(res.data) ? res.data : res.data.results || []);
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error uploading artifact");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (!user || (user.role !== "INSTRUCTOR" && !user.is_superuser && user.role !== "ADMIN")) {
     return (
@@ -427,9 +463,12 @@ const InstructorDashboard = () => {
                           <div className="flex items-center gap-1.5 text-xs text-slate-500">
                             <Clock size={13} /> {stream.live_sessions?.length || 0} Sessions
                           </div>
-                          <Link href={`/instructor/live-streams/${stream.id}/manage`} className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-all">
-                            Manage Live
-                          </Link>
+                          <button 
+                            onClick={() => { setSelectedStream(stream); setShowManageModal(true); }}
+                            className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-all"
+                          >
+                            Manage Hub
+                          </button>
                         </div>
                       </div>
                     </motion.div>
@@ -440,6 +479,156 @@ const InstructorDashboard = () => {
           </div>
         </div>
       </main>
+
+      {/* Management Modal */}
+      <AnimatePresence>
+        {showManageModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowManageModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <BarChart3 className="text-blue-600" size={20} />
+                    Live Hub Management
+                  </h3>
+                  <p className="text-xs text-slate-500 mt-0.5">{selectedStream?.title}</p>
+                </div>
+                <button onClick={() => setShowManageModal(false)} className="text-slate-400 hover:text-slate-600">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="flex h-[500px]">
+                {/* Session Sidebar */}
+                <div className="w-1/3 border-r border-slate-100 dark:border-slate-700 overflow-y-auto p-4 space-y-2">
+                  <p className="text-[10px] font-black uppercase text-slate-400 mb-3 px-2">Scheduled Sessions</p>
+                  {selectedStream?.live_sessions?.map((session: any) => (
+                    <button
+                      key={session.id}
+                      onClick={() => setSelectedSessionId(session.id)}
+                      className={`w-full text-left p-3 rounded-2xl transition-all ${
+                        selectedSessionId === session.id 
+                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 border border-blue-100 dark:border-blue-800" 
+                        : "hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-600 dark:text-slate-400"
+                      }`}
+                    >
+                      <p className="text-xs font-bold truncate">{session.title}</p>
+                      <p className="text-[10px] opacity-70">{new Date(session.scheduled_at).toLocaleDateString()}</p>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Artifact View */}
+                <div className="flex-1 overflow-y-auto p-6">
+                  {selectedSessionId ? (
+                    <div className="space-y-6">
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-800 dark:text-white mb-4">Host Knowledge Artifacts</h4>
+                        <div className="grid grid-cols-2 gap-4 mb-6">
+                          <button 
+                            onClick={() => setArtifactData({...artifactData, type: 'pdf'})}
+                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'pdf' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-blue-200'}`}
+                          >
+                            <FileText size={20} className={artifactData.type === 'pdf' ? 'text-blue-600' : 'text-slate-400'} />
+                            <span className="text-[10px] font-bold">Research PDF</span>
+                          </button>
+                          <button 
+                            onClick={() => setArtifactData({...artifactData, type: 'link'})}
+                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'link' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-blue-200'}`}
+                          >
+                            <Link2 size={20} className={artifactData.type === 'link' ? 'text-blue-600' : 'text-slate-400'} />
+                            <span className="text-[10px] font-bold">External Link</span>
+                          </button>
+                        </div>
+
+                        <div className="space-y-4">
+                          <div className="space-y-1.5">
+                            <label className="text-[10px] font-bold text-slate-400 uppercase px-1">Artifact Label</label>
+                            <input 
+                              type="text"
+                              placeholder="e.g. Week 1 Supporting Docs"
+                              value={artifactData.title}
+                              onChange={(e) => setArtifactData({...artifactData, title: e.target.value})}
+                              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                            />
+                          </div>
+
+                          {artifactData.type === 'pdf' ? (
+                            <div className="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 hover:border-blue-400 transition-all group">
+                              <input 
+                                type="file" 
+                                accept=".pdf"
+                                onChange={(e) => setArtifactData({...artifactData, file: e.target.files?.[0] || null})}
+                                className="absolute inset-0 opacity-0 cursor-pointer"
+                              />
+                              <UploadCloud size={32} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                              <p className="text-xs text-slate-500 font-medium">{artifactData.file ? artifactData.file.name : "Drop PDF here or click to browse"}</p>
+                            </div>
+                          ) : (
+                            <div className="space-y-1.5">
+                              <label className="text-[10px] font-bold text-slate-400 uppercase px-1">Knowledge Signal (URL)</label>
+                              <input 
+                                type="url"
+                                placeholder="https://..."
+                                value={artifactData.url}
+                                onChange={(e) => setArtifactData({...artifactData, url: e.target.value})}
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                              />
+                            </div>
+                          )}
+
+                          <button 
+                            onClick={handleUploadArtifact}
+                            disabled={uploading || !artifactData.title}
+                            className="w-full py-4 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-blue-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
+                          >
+                            {uploading ? "Provisioning..." : <><CheckCircle size={18} /> Deploy Artifact</>}
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="pt-6 border-t border-slate-100 dark:border-slate-700">
+                        <h5 className="text-[10px] font-black uppercase text-slate-400 mb-4 px-1">Active Artifacts</h5>
+                        <div className="space-y-2">
+                          {selectedStream?.live_sessions?.find((s: any) => s.id === selectedSessionId)?.content_blocks?.map((block: any) => (
+                            <div key={block.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
+                              <div className="flex items-center gap-3">
+                                {block.type === 'pdf' ? <FileText size={14} className="text-red-500" /> : <Link2 size={14} className="text-blue-500" />}
+                                <span className="text-xs font-medium text-slate-700 dark:text-slate-200">{block.title}</span>
+                              </div>
+                              <span className="text-[10px] text-slate-400 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded-full uppercase">{block.type}</span>
+                            </div>
+                          ))}
+                          {!selectedStream?.live_sessions?.find((s: any) => s.id === selectedSessionId)?.content_blocks?.length && (
+                            <p className="text-xs text-slate-400 italic text-center py-4">No artifacts deployed for this session</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center text-center p-10">
+                      <BarChart3 size={48} className="text-slate-200 mb-4" />
+                      <h4 className="text-slate-400 font-medium">Select a session hub to manage knowledge artifacts</h4>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
