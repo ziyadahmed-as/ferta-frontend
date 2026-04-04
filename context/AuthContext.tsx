@@ -42,7 +42,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (credentials: any) => {
     try {
-      const response = await api.post("/users/login/", credentials);
+      // Trim credentials to prevent whitespace errors
+      const sanitizedCredentials = {
+        ...credentials,
+        username: credentials.username?.trim(),
+      };
+      const response = await api.post("/users/login/", sanitizedCredentials);
       const { access, user: userData } = response.data;
       setToken(access);
       setUser(userData);
@@ -57,10 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const register = async (data: any) => {
     try {
-      const isFormData = data instanceof FormData;
-      await api.post("/users/register/", data, {
-        headers: isFormData ? { "Content-Type": "multipart/form-data" } : {},
-      });
+      await api.post("/users/register/", data);
     } catch (error) {
       console.error("Registration failed:", error);
       throw error;

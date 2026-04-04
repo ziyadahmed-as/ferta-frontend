@@ -5,7 +5,8 @@ import { useAuth } from "@/context/AuthContext";
 import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
-  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book
+  Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book,
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -48,6 +49,10 @@ const AdminDashboard = () => {
   const [editUser, setEditUser] = useState<any>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [userDetail, setUserDetail] = useState<any>(null);
+
+  /* Pagination State */
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
 
   const [liveStreams, setLiveStreams] = useState<any[]>([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
@@ -93,6 +98,20 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   }, [user]);
+
+  // Reset to first page whenever search or filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [userSearch, roleFilter]);
+
+  const filteredUsers = allUsers.filter(u => 
+    u.username.toLowerCase().includes(userSearch.toLowerCase()) && 
+    (roleFilter === "all" || u.role === roleFilter)
+  );
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
   const handleInstructorAction = async (userId: number, approve: boolean) => {
     setActionLoading(userId);
@@ -545,7 +564,7 @@ const AdminDashboard = () => {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                            {allUsers.filter(u => u.username.toLowerCase().includes(userSearch.toLowerCase()) && (roleFilter === "all" || u.role === roleFilter)).map((u) => (
+                            {currentUsers.map((u) => (
                               <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30">
                                 <td className="px-6 py-4">
                                   <div className="flex items-center gap-3">
@@ -632,6 +651,74 @@ const AdminDashboard = () => {
                           </tbody>
                         </table>
                       </div>
+
+                      {/* Pagination Controls */}
+                      {totalPages > 1 && (
+                        <div className="px-6 py-4 bg-slate-50/30 dark:bg-slate-900/30 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                          <p className="text-xs text-slate-500 font-medium">
+                            Showing <span className="text-slate-800 dark:text-slate-200">{startIndex + 1}</span> to <span className="text-slate-800 dark:text-slate-200">{Math.min(startIndex + itemsPerPage, filteredUsers.length)}</span> of <span className="text-slate-800 dark:text-slate-200">{filteredUsers.length}</span> nodes
+                          </p>
+                          <div className="flex items-center gap-1">
+                            <button 
+                              onClick={() => setCurrentPage(1)}
+                              disabled={currentPage === 1}
+                              title="First Page"
+                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                            >
+                              <ChevronsLeft size={16} />
+                            </button>
+                            <button 
+                              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                              disabled={currentPage === 1}
+                              title="Previous Page"
+                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                            >
+                              <ChevronLeft size={16} />
+                            </button>
+                            
+                            <div className="flex items-center gap-1 px-2">
+                              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                let pageNum;
+                                if (totalPages <= 5) pageNum = i + 1;
+                                else if (currentPage <= 3) pageNum = i + 1;
+                                else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                                else pageNum = currentPage - 2 + i;
+                                
+                                return (
+                                  <button
+                                    key={pageNum}
+                                    onClick={() => setCurrentPage(pageNum)}
+                                    className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
+                                      currentPage === pageNum 
+                                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" 
+                                        : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+                                    }`}
+                                  >
+                                    {pageNum}
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            <button 
+                              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                              disabled={currentPage === totalPages}
+                              title="Next Page"
+                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                            >
+                              <ChevronRight size={16} />
+                            </button>
+                            <button 
+                              onClick={() => setCurrentPage(totalPages)}
+                              disabled={currentPage === totalPages}
+                              title="Last Page"
+                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                            >
+                              <ChevronsRight size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ) : (
                     <div className="space-y-4">

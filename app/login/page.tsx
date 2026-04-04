@@ -43,7 +43,7 @@ const LoginContent = () => {
         <div className="w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center shadow-lg">
           <BookOpen size={24} className="text-white" />
         </div>
-        <span className="text-slate-800 text-xl font-bold">Edu<span className="text-indigo-600">Tech</span></span>
+        <span className="text-slate-800 text-xl font-bold">Fatra<span className="text-indigo-600"> Academy</span></span>
       </div>
 
       {/* Login Card */}
@@ -77,14 +77,14 @@ const LoginContent = () => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email / Username */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Email Address</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1.5">Username or Email</label>
             <div className="relative">
               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
               <input
                 type="text"
                 required
                 title="Username or Email"
-                placeholder="your.email@example.com"
+                placeholder="yourname or your@email.com"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-300 focus:bg-white transition-all text-sm"

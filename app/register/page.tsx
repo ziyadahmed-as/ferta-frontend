@@ -65,7 +65,11 @@ const RegisterContent = () => {
     const submissionData = new FormData();
     submissionData.append("role", role);
     Object.entries(formData).forEach(([key, value]) => {
-      submissionData.append(key, value.toString());
+      let finalValue = value;
+      if ((key === "username" || key === "email") && typeof value === "string") {
+        finalValue = value.trim();
+      }
+      submissionData.append(key, finalValue.toString());
     });
     if (cvFile && role === "INSTRUCTOR") {
       submissionData.append("cv_file", cvFile);
