@@ -59,6 +59,28 @@ const AdminDashboard = () => {
   const [selectedStream, setSelectedStream] = useState<any>(null);
   const [duplicateInstructorId, setDuplicateInstructorId] = useState("");
 
+  /* Live Stream Creation State */
+  const [showAddStreamModal, setShowAddStreamModal] = useState(false);
+  const [newStream, setNewStream] = useState({
+    title: "",
+    description: "",
+    instructor: "",
+    scheduled_at: "",
+    meeting_link: "",
+    price: "5000.00",
+    group_type: "VIP1"
+  });
+
+  /* Live Session Creation State */
+  const [showAddSessionModal, setShowAddSessionModal] = useState(false);
+  const [selectedStreamForSession, setSelectedStreamForSession] = useState<any>(null);
+  const [newSession, setNewSession] = useState({
+    title: "",
+    description: "",
+    scheduled_at: "",
+    meeting_link: ""
+  });
+
 
   const fetchAllUsers = async () => {
     try {
@@ -204,6 +226,48 @@ const AdminDashboard = () => {
       alert("Stream duplicated successfully!");
     } catch (err: any) {
       alert(err.response?.data?.detail || "Error duplicating stream");
+    }
+  };
+
+  const handleCreateStream = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newStream.instructor) {
+      alert("Please select an instructor");
+      return;
+    }
+    try {
+      const payload = {
+        ...newStream,
+        instructor: parseInt(newStream.instructor),
+        price: parseFloat(newStream.price)
+      };
+      await api.post("/courses/live-streams/", payload);
+      setShowAddStreamModal(false);
+      setNewStream({ title: "", description: "", instructor: "", scheduled_at: "", meeting_link: "", price: "5000.00", group_type: "VIP1" });
+      fetchLiveStreams();
+      alert("Live Stream Created successfully!");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || "Error creating stream");
+    }
+  };
+
+  const handleCreateSession = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedStreamForSession) return;
+    try {
+      await api.post("/courses/live-sessions/", {
+        ...newSession,
+        live_stream: selectedStreamForSession.id
+      });
+      setShowAddSessionModal(false);
+      setNewSession({ title: "", description: "", scheduled_at: "", meeting_link: "" });
+      setSelectedStreamForSession(null);
+      fetchLiveStreams();
+      alert("Live Session / Schedule created successfully!");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || "Error creating schedule");
     }
   };
 
@@ -792,15 +856,23 @@ const AdminDashboard = () => {
 
               {activeModule === "live" && (
                 <div className="space-y-6">
-                  <div className="welcome-banner p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Live Stream Moderation</h2>
-                      <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate synchronous learning cohorts</p>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="welcome-banner p-6 rounded-2xl flex-1 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div>
+                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Live Stream Moderation</h2>
+                        <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate synchronous learning cohorts</p>
+                      </div>
+                      <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
+                        <p className="text-[10px] uppercase font-bold text-slate-500">Active Streams</p>
+                        <p className="text-xl font-black text-indigo-600">{liveStreams.length}</p>
+                      </div>
                     </div>
-                    <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
-                      <p className="text-[10px] uppercase font-bold text-slate-500">Active Streams</p>
-                      <p className="text-xl font-black text-indigo-600">{liveStreams.length}</p>
-                    </div>
+                    <button 
+                      onClick={() => setShowAddStreamModal(true)}
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Plus size={18} /> Add Live Course
+                    </button>
                   </div>
 
                   <div className="grid grid-cols-1 gap-4">
@@ -809,21 +881,47 @@ const AdminDashboard = () => {
                         <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl">{stream.title[0]}</div>
                         <div className="flex-1">
                           <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{stream.title}</h4>
-                          <div className="flex gap-4 text-xs text-slate-500">
+                          <div className="flex gap-4 text-xs text-slate-500 mb-3">
                             <span className="flex items-center gap-1"><Users size={14} /> {stream.instructor_name}</span>
                             <span className={`font-bold ${stream.enrollment_count >= stream.max_students ? 'text-red-500' : 'text-emerald-500'}`}>
                               {stream.enrollment_count}/{stream.max_students} Students
                             </span>
                           </div>
+                          {stream.live_sessions && stream.live_sessions.length > 0 && (
+                            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-2">
+                              <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Upcoming Schedules</p>
+                              {stream.live_sessions.map((session: any) => (
+                                <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 dark:bg-slate-900 p-3 rounded-xl gap-2">
+                                  <div>
+                                    <h5 className="text-sm font-bold text-slate-800 dark:text-white">{session.title}</h5>
+                                    <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                                      <Calendar size={12} /> {new Date(session.scheduled_at).toLocaleString()}
+                                    </p>
+                                  </div>
+                                  {session.meeting_link && (
+                                    <a href={session.meeting_link} target="_blank" rel="noreferrer" className="text-xs text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-lg font-semibold hover:bg-indigo-100 transition-colors w-fit mt-2 sm:mt-0">Meet Link</a>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        {stream.enrollment_count >= stream.max_students && (
+                        <div className="flex flex-col gap-2 shrink-0">
                           <button 
-                            onClick={() => { setSelectedStream(stream); setShowDuplicateModal(true); }}
-                            className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-bold"
+                            onClick={() => { setSelectedStreamForSession(stream); setShowAddSessionModal(true); }}
+                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-colors w-full"
                           >
-                            Duplicate (Full)
+                            Add Schedule
                           </button>
-                        )}
+                          {stream.enrollment_count >= stream.max_students && (
+                            <button 
+                              onClick={() => { setSelectedStream(stream); setShowDuplicateModal(true); }}
+                              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-colors w-full"
+                            >
+                              Duplicate (Full)
+                            </button>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1001,6 +1099,238 @@ const AdminDashboard = () => {
             </motion.div>
           </div>
         )}
+      </AnimatePresence>
+
+      {/* Add Stream Modal */}
+      <AnimatePresence>
+        {showAddStreamModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddStreamModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Plus className="text-indigo-600" size={20} />
+                  Create Live Course
+                </h3>
+                <button 
+                  onClick={() => setShowAddStreamModal(false)} 
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleCreateStream} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto w-[calc(100%+8px)] sm:w-auto -mr-2 pr-2 sm:mr-0 sm:pr-6">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Course Title</label>
+                  <input 
+                    required
+                    type="text" 
+                    placeholder="e.g. Advanced Crypto Strategies"
+                    value={newStream.title}
+                    onChange={e => setNewStream({...newStream, title: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
+                  <textarea 
+                    placeholder="What will students learn?"
+                    value={newStream.description}
+                    onChange={e => setNewStream({...newStream, description: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Instructor</label>
+                  <select 
+                    required
+                    value={newStream.instructor}
+                    onChange={e => setNewStream({...newStream, instructor: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  >
+                    <option value="">Select Instructor...</option>
+                    {allUsers.filter(u => u.role === 'INSTRUCTOR').map(u => (
+                      <option key={u.id} value={u.id}>{u.username} ({u.email})</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Initial Schedule</label>
+                    <input 
+                      required
+                      type="datetime-local" 
+                      value={newStream.scheduled_at}
+                      onChange={e => setNewStream({...newStream, scheduled_at: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Price (USD)</label>
+                    <input 
+                      required
+                      type="number" 
+                      step="0.01"
+                      value={newStream.price}
+                      onChange={e => setNewStream({...newStream, price: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Meeting Link</label>
+                  <input 
+                    type="url" 
+                    placeholder="https://zoom.us/j/..."
+                    value={newStream.meeting_link}
+                    onChange={e => setNewStream({...newStream, meeting_link: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Group Type</label>
+                  <select 
+                    value={newStream.group_type}
+                    onChange={e => setNewStream({...newStream, group_type: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  >
+                    <option value="VVIP">VVIP (1 Student)</option>
+                    <option value="VIP1">VIP1 (5 Students)</option>
+                    <option value="VIP2">VIP2 (10 Students)</option>
+                    <option value="NORMAL">Normal (100 Students)</option>
+                  </select>
+                </div>
+
+                <div className="pt-4 flex gap-3 pb-2">
+                  <button 
+                    type="button"
+                    onClick={() => setShowAddStreamModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Create Course
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Add Session Modal */}
+      <AnimatePresence>
+        {showAddSessionModal && selectedStreamForSession && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddSessionModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Calendar className="text-emerald-500" size={20} />
+                  Add Schedule / Session
+                </h3>
+                <button 
+                  onClick={() => setShowAddSessionModal(false)} 
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <div className="px-6 py-3 bg-slate-50/50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700">
+                <p className="text-xs text-slate-500">Scheduling for course:</p>
+                <p className="text-sm font-semibold text-slate-800 dark:text-white">{selectedStreamForSession.title}</p>
+              </div>
+
+              <form onSubmit={handleCreateSession} className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Session Title</label>
+                  <input 
+                    required
+                    type="text" 
+                    placeholder="e.g. Session 1: Fundamentals"
+                    value={newSession.title}
+                    onChange={e => setNewSession({...newSession, title: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
+                  <textarea 
+                    placeholder="Topics to cover..."
+                    value={newSession.description}
+                    onChange={e => setNewSession({...newSession, description: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Time & Date</label>
+                  <input 
+                    required
+                    type="datetime-local" 
+                    value={newSession.scheduled_at}
+                    onChange={e => setNewSession({...newSession, scheduled_at: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Meeting Link</label>
+                  <input 
+                    type="url" 
+                    placeholder="https://zoom.us/j/..."
+                    value={newSession.meeting_link}
+                    onChange={e => setNewSession({...newSession, meeting_link: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowAddSessionModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-semibold shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Save Schedule
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      <AnimatePresence>
         {showEditModal && editUser && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div 
