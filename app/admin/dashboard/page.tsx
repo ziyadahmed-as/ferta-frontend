@@ -6,7 +6,7 @@ import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
   Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book,
-  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Tag
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -81,6 +81,12 @@ const AdminDashboard = () => {
     meeting_link: ""
   });
 
+  /* Categories State */
+  const [categories, setCategories] = useState<any[]>([]);
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [newCategory, setNewCategory] = useState({ name: "", slug: "", description: "" });
+  const [editCategory, setEditCategory] = useState<any>(null);
+  const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
 
   const fetchAllUsers = async () => {
     try {
@@ -111,11 +117,21 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const res = await api.get("/courses/categories/");
+      setCategories(Array.isArray(res.data) ? res.data : res.data.results || []);
+    } catch (err) {
+      console.error("Categories fetch error:", err);
+    }
+  };
+
   useEffect(() => {
     if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN" || user?.is_superuser) {
       fetchStats();
       fetchAllUsers();
       fetchLiveStreams();
+      fetchCategories();
     } else {
       setLoading(false);
     }
@@ -271,6 +287,46 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleCreateCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.post("/courses/categories/", newCategory);
+      setShowAddCategoryModal(false);
+      setNewCategory({ name: "", slug: "", description: "" });
+      fetchCategories();
+      alert("Category Created successfully!");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || "Error creating category");
+    }
+  };
+
+  const handleUpdateCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editCategory) return;
+    try {
+      await api.patch(`/courses/categories/${editCategory.id}/`, editCategory);
+      setShowEditCategoryModal(false);
+      setEditCategory(null);
+      fetchCategories();
+      alert("Category Updated successfully!");
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || "Error updating category");
+    }
+  };
+
+  const handleDeleteCategory = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this category?")) return;
+    try {
+      await api.delete(`/courses/categories/${id}/`);
+      fetchCategories();
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || "Error deleting category");
+    }
+  };
+
 
   if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN" && !user.is_superuser)) {
     return (
@@ -298,6 +354,7 @@ const AdminDashboard = () => {
     { id: "overview", label: "Overview", icon: Home },
     { id: "users", label: "Users", icon: Users },
     { id: "courses", label: "Courses", icon: BookOpen },
+    { id: "categories", label: "Categories", icon: Tag },
     { id: "live", label: "Live Streams", icon: Cpu },
     { id: "revenue", label: "Revenue", icon: DollarSign },
   ];
@@ -854,6 +911,71 @@ const AdminDashboard = () => {
                 </div>
               )}
 
+              {activeModule === "categories" && (
+                <div className="space-y-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="welcome-banner p-6 rounded-2xl flex-1 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div>
+                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Categories</h2>
+                        <p className="text-slate-600 dark:text-slate-300 text-sm">Manage course topics and taxonomy</p>
+                      </div>
+                      <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
+                        <p className="text-[10px] uppercase font-bold text-slate-500">Categories</p>
+                        <p className="text-xl font-black text-indigo-600">{categories.length}</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => setShowAddCategoryModal(true)}
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Plus size={18} /> Add Category
+                    </button>
+                  </div>
+
+                  <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left">
+                        <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
+                          <tr>
+                            <th className="px-6 py-4">Name</th>
+                            <th className="px-6 py-4">Slug</th>
+                            <th className="px-6 py-4">Nodes</th>
+                            <th className="px-6 py-4 text-right">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                          {categories.map((cat: any) => (
+                            <tr key={cat.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                              <td className="px-6 py-4">
+                                <span className="text-sm font-bold text-slate-800 dark:text-white">{cat.name}</span>
+                                {cat.description && <p className="text-[10px] text-slate-500 max-w-[200px] truncate">{cat.description}</p>}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{cat.slug}</td>
+                              <td className="px-6 py-4 text-sm font-semibold text-indigo-600">{cat.node_count || 0}</td>
+                              <td className="px-6 py-4 text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <button onClick={() => { setEditCategory(cat); setShowEditCategoryModal(true); }} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors" title="Edit">
+                                    <Edit size={16} />
+                                  </button>
+                                  <button onClick={() => handleDeleteCategory(cat.id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Delete">
+                                    <Trash2 size={16} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                          {categories.length === 0 && (
+                            <tr>
+                              <td colSpan={4} className="px-6 py-8 text-center text-slate-500 text-sm">No categories found.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {activeModule === "live" && (
                 <div className="space-y-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -1330,6 +1452,8 @@ const AdminDashboard = () => {
             </motion.div>
           </div>
         )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {showEditModal && editUser && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -1562,6 +1686,171 @@ const AdminDashboard = () => {
                   </button>
                 </div>
               </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Add Category Modal */}
+      <AnimatePresence>
+        {showAddCategoryModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddCategoryModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Tag className="text-indigo-600" size={20} />
+                  Add Category
+                </h3>
+                <button 
+                  onClick={() => setShowAddCategoryModal(false)} 
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleCreateCategory} className="p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Name</label>
+                  <input 
+                    required
+                    type="text" 
+                    placeholder="e.g. Programming"
+                    value={newCategory.name}
+                    onChange={e => setNewCategory({...newCategory, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-')})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Slug</label>
+                  <input 
+                    required
+                    type="text" 
+                    placeholder="programming"
+                    value={newCategory.slug}
+                    onChange={e => setNewCategory({...newCategory, slug: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
+                  <textarea 
+                    placeholder="Category description..."
+                    value={newCategory.description}
+                    onChange={e => setNewCategory({...newCategory, description: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                  />
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowAddCategoryModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Edit Category Modal */}
+      <AnimatePresence>
+        {showEditCategoryModal && editCategory && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowEditCategoryModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Edit className="text-indigo-600" size={20} />
+                  Edit Category
+                </h3>
+                <button 
+                  onClick={() => setShowEditCategoryModal(false)} 
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleUpdateCategory} className="p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Name</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={editCategory.name}
+                    onChange={e => setEditCategory({...editCategory, name: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Slug</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={editCategory.slug}
+                    onChange={e => setEditCategory({...editCategory, slug: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
+                  <textarea 
+                    value={editCategory.description || ""}
+                    onChange={e => setEditCategory({...editCategory, description: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                  />
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowEditCategoryModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Update
+                  </button>
+                </div>
+              </form>
             </motion.div>
           </div>
         )}
