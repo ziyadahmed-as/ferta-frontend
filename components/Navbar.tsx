@@ -61,7 +61,15 @@ const Navbar = () => {
           <ThemeToggle />
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
+              <Link 
+                href={getDashboardLink()}
+                className="hidden md:flex px-4 py-2 text-xs font-bold uppercase tracking-wider text-white gradient-primary rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue-500/20 items-center gap-2"
+              >
+                <BookOpen size={14} />
+                Dashboard
+              </Link>
+              <div className="flex items-center gap-3">
               <button title="Notifications" className="relative w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                 <Bell size={18} />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
@@ -108,6 +116,7 @@ const Navbar = () => {
                 )}
               </div>
             </div>
+          </div>
           ) : (
             <div className="flex items-center gap-3">
               <Link

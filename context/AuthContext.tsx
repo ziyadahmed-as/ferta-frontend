@@ -53,7 +53,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(userData);
       localStorage.setItem("token", access);
       localStorage.setItem("user", JSON.stringify(userData));
-      router.push("/");
+      
+      // Redirect based on role
+      if (userData.role === "ADMIN" || userData.role === "SUPER_ADMIN" || userData.is_superuser) {
+        router.push("/admin/dashboard");
+      } else if (userData.role === "INSTRUCTOR") {
+        router.push("/instructor/dashboard");
+      } else {
+        router.push("/student/dashboard");
+      }
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
