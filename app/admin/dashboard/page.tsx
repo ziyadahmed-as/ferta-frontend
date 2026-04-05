@@ -6,7 +6,7 @@ import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
   Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book,
-  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Tag
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Tag, PlusCircle, LayoutDashboard
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -58,9 +58,28 @@ const AdminDashboard = () => {
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [selectedStream, setSelectedStream] = useState<any>(null);
   const [duplicateInstructorId, setDuplicateInstructorId] = useState("");
+  
+  /* Course Management State */
+  const [allCourses, setAllCourses] = useState<any[]>([]);
+  const [courseSearch, setCourseSearch] = useState("");
+  const [courseTab, setCourseTab] = useState("all"); // "all" or "pending"
+  const [showCourseModal, setShowCourseModal] = useState(false);
+  const [editCourseData, setEditCourseData] = useState<any>(null);
+  const [newCourse, setNewCourse] = useState({
+    title: "",
+    slug: "",
+    description: "",
+    price: "0.00",
+    category: "",
+    instructor: "",
+    course_type: "VIDEO_BASED",
+    is_published: false
+  });
 
   /* Live Stream Creation State */
   const [showAddStreamModal, setShowAddStreamModal] = useState(false);
+  const [showEditStreamModal, setShowEditStreamModal] = useState(false);
+  const [editStreamData, setEditStreamData] = useState<any>(null);
   const [newStream, setNewStream] = useState({
     title: "",
     description: "",
@@ -91,7 +110,7 @@ const AdminDashboard = () => {
   const fetchAllUsers = async () => {
     try {
       const res = await api.get("/users/manage/");
-      setAllUsers(res.data);
+      setAllUsers(Array.isArray(res.data) ? res.data : res.data.results || []);
     } catch (err) {
       console.error("All users fetch error:", err);
     }
@@ -126,12 +145,22 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchCourses = async () => {
+    try {
+      const res = await api.get("/courses/courses/");
+      setAllCourses(Array.isArray(res.data) ? res.data : res.data.results || []);
+    } catch (err) {
+      console.error("Courses fetch error:", err);
+    }
+  };
+
   useEffect(() => {
     if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN" || user?.is_superuser) {
       fetchStats();
       fetchAllUsers();
       fetchLiveStreams();
       fetchCategories();
+      fetchCourses();
     } else {
       setLoading(false);
     }
@@ -223,10 +252,57 @@ const AdminDashboard = () => {
       const endpoint = approve ? `/courses/courses/${courseId}/approve/` : `/courses/courses/${courseId}/reject/`;
       await api.post(endpoint);
       fetchStats();
+      fetchCourses();
     } catch (err) {
       console.error("Course action error:", err);
     } finally {
       setActionLoading(null);
+    }
+  };
+
+  const handleCourseSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (editCourseData) {
+        await api.patch(`/courses/courses/${editCourseData.id}/`, editCourseData);
+        alert("Course updated successfully!");
+      } else {
+        await api.post("/courses/courses/", {
+          ...newCourse,
+          category: newCourse.category ? parseInt(newCourse.category) : null,
+          instructor: newCourse.instructor ? parseInt(newCourse.instructor) : null,
+          price: parseFloat(newCourse.price)
+        });
+        alert("Course created successfully!");
+      }
+      setShowCourseModal(false);
+      setEditCourseData(null);
+      setNewCourse({
+        title: "",
+        slug: "",
+        description: "",
+        price: "0.00",
+        category: "",
+        instructor: "",
+        course_type: "VIDEO_BASED",
+        is_published: false
+      });
+      fetchCourses();
+      fetchStats();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error saving course");
+    }
+  };
+
+  const handleDeleteCourse = async (courseId: number) => {
+    if (!confirm("Are you sure you want to delete this course and all its contents?")) return;
+    try {
+      await api.delete(`/courses/courses/${courseId}/`);
+      fetchCourses();
+      fetchStats();
+      alert("Course deleted successfully!");
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error deleting course");
     }
   };
 
@@ -265,6 +341,32 @@ const AdminDashboard = () => {
     } catch (err: any) {
       console.error(err);
       alert(err.response?.data?.detail || "Error creating stream");
+    }
+  };
+
+  const handleEditStreamSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.patch(`/courses/live-streams/${editStreamData.id}/`, editStreamData);
+      setShowEditStreamModal(false);
+      setEditStreamData(null);
+      fetchLiveStreams();
+      fetchStats();
+      alert("Live Stream updated successfully!");
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error updating stream");
+    }
+  };
+
+  const handleDeleteStream = async (id: number) => {
+    if (!confirm("Are you sure? This will delete the cohort and all its sessions.")) return;
+    try {
+      await api.delete(`/courses/live-streams/${id}/`);
+      fetchLiveStreams();
+      fetchStats();
+      alert("Live Stream deleted successfully!");
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error deleting stream");
     }
   };
 
@@ -689,7 +791,7 @@ const AdminDashboard = () => {
                               <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30">
                                 <td className="px-6 py-4">
                                   <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-xs font-bold">{u.username[0].toUpperCase()}</div>
+                                    <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-xs font-bold">{u.username?.[0]?.toUpperCase() || "U"}</div>
                                     <div>
                                       <p className="text-sm font-bold text-slate-800 dark:text-white">{u.username}</p>
                                       <p className="text-[10px] text-slate-500">{u.email}</p>
@@ -842,72 +944,271 @@ const AdminDashboard = () => {
                       )}
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {(stats?.pending_instructors || []).map((app: any) => (
-                        <div key={app.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col md:flex-row items-center gap-6">
-                          <div className="w-12 h-12 gradient-primary rounded-xl flex items-center justify-center text-white font-bold text-xl">{app.username[0].toUpperCase()}</div>
-                          <div className="flex-1">
-                            <h4 className="font-bold text-slate-800 dark:text-white">{app.username}</h4>
-                            <p className="text-xs text-slate-500">{app.email}</p>
-                          </div>
-                          <div className="flex gap-2">
-                            <button 
-                              onClick={() => handleInstructorAction(app.id, true)} 
-                              title="Approve Instructor"
-                              aria-label="Approve Instructor"
-                              className="p-2 bg-emerald-500 text-white rounded-lg"
-                            >
-                              <Check size={16} />
-                            </button>
-                            <button 
-                              onClick={() => handleInstructorAction(app.id, false)} 
-                              title="Reject Instructor"
-                              aria-label="Reject Instructor"
-                              className="p-2 bg-red-500 text-white rounded-lg"
-                            >
-                              <X size={16} />
-                            </button>
+                        <div key={app.id} className="group relative bg-white dark:bg-slate-800 rounded-[32px] border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-indigo-500/10">
+                          <div className="flex items-start gap-6">
+                            <div className="w-20 h-20 gradient-primary rounded-3xl flex items-center justify-center text-white font-black text-2xl shadow-lg relative shrink-0">
+                               {app.username?.[0]?.toUpperCase() || "C"}
+                               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-amber-500 rounded-lg flex items-center justify-center border-4 border-white dark:border-slate-800">
+                                  <ShieldAlert size={12} className="text-white" />
+                               </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                               <div className="flex items-center justify-between gap-2 mb-1">
+                                  <h4 className="font-black text-xl text-slate-800 dark:text-white truncate tracking-tight">{app.username}</h4>
+                                  <span className="text-[9px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 dark:bg-amber-900/20 px-2 py-1 rounded-md">Pending Validation</span>
+                               </div>
+                               <p className="text-xs font-bold text-slate-400 mb-4">{app.email}</p>
+                               
+                               <div className="flex items-center gap-3 mb-6">
+                                  <div className="px-3 py-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">Specialization: TBD</div>
+                                  <div className="px-3 py-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">Clearance: L1</div>
+                               </div>
+
+                               <div className="flex gap-3">
+                                  <button 
+                                    onClick={() => handleInstructorAction(app.id, true)} 
+                                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
+                                  >
+                                    <Check size={14} /> 
+                                    <span className="hidden sm:inline">Grant Node Access</span>
+                                  </button>
+                                  <button 
+                                    onClick={() => handleInstructorAction(app.id, false)} 
+                                    className="px-6 py-3 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 transition-all"
+                                  >
+                                    <X size={14} /> 
+                                  </button>
+                               </div>
+                            </div>
                           </div>
                         </div>
                       ))}
+                      {(!stats?.pending_instructors || stats.pending_instructors.length === 0) && (
+                        <div className="col-span-full py-20 bg-slate-50 dark:bg-slate-900/50 rounded-[40px] border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center text-center">
+                           <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-sm mb-4">
+                              <CheckCircle2 size={32} className="text-emerald-500" />
+                           </div>
+                           <h4 className="text-lg font-black text-slate-800 dark:text-white">Protocol Clear</h4>
+                           <p className="text-sm text-slate-500">No pending instructor applications found in the registry.</p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
               )}
 
               {activeModule === "courses" && (
-                <div className="space-y-5">
-                  <div className="welcome-banner p-6 rounded-2xl">
-                    <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Course Moderation</h2>
-                    <p className="text-slate-600 dark:text-slate-300 text-sm">{stats?.courses?.pending_approval || 0} courses awaiting approval</p>
+                <div className="space-y-8">
+                  <div className="gradient-primary-soft p-12 rounded-[48px] relative overflow-hidden group border border-indigo-100/50 dark:border-indigo-900/20">
+                     <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-40 -mt-40 group-hover:scale-125 transition-all duration-1000" />
+                     <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+                        <div>
+                          <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-3 tracking-tighter flex items-center gap-5">
+                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-indigo-600">
+                               <BookOpen size={36} />
+                            </div>
+                            Knowledge Lab
+                          </h2>
+                          <p className="text-slate-600 dark:text-slate-300 text-xl font-medium opacity-80 max-w-xl leading-relaxed">Systematic orchestration, validation, and curation of the Fatra Academy intellectual property registry.</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row items-center gap-6">
+                           <div className="flex items-center gap-4">
+                             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-indigo-500/10 text-center">
+                                <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Artifact Content</p>
+                                <p className="text-5xl font-black text-indigo-600 tracking-tighter">{allCourses.length}</p>
+                             </div>
+                             <div className="bg-amber-500 px-8 py-5 rounded-[32px] shadow-2xl shadow-amber-500/30 text-white text-center">
+                                <p className="text-[10px] uppercase font-black text-amber-100 tracking-[3px] mb-1">Queue Size</p>
+                                <p className="text-5xl font-black tracking-tighter">{allCourses.filter(c => !c.is_approved && c.is_submitted).length}</p>
+                             </div>
+                           </div>
+                           <button 
+                             onClick={() => { setEditCourseData(null); setShowCourseModal(true); }}
+                             className="w-full sm:w-auto h-20 px-10 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[32px] font-black text-xs uppercase tracking-[3px] shadow-2xl hover:scale-[1.05] active:scale-[0.95] transition-all flex items-center justify-center gap-4"
+                           >
+                             <PlusCircle size={24} /> New Node
+                           </button>
+                        </div>
+                     </div>
                   </div>
-                  {(stats?.courses?.pending_list || []).map((c: any) => (
-                    <div key={c.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5 flex items-center gap-4">
-                      <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-700 font-bold">{c.title[0]}</div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold dark:text-white">{c.title}</h4>
-                        <p className="text-xs text-slate-500">By {c.instructor}</p>
+
+                  <div className="flex items-center gap-4 p-2 bg-slate-100 dark:bg-slate-800/80 rounded-[28px] w-fit border border-slate-200 dark:border-slate-700/50">
+                    <button 
+                      onClick={() => setCourseTab("all")}
+                      className={`px-10 py-4 rounded-[22px] text-xs font-black uppercase tracking-[2px] transition-all ${courseTab === "all" ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-2xl" : "text-slate-500 hover:text-slate-700"}`}
+                    >
+                      Institutional Registry
+                    </button>
+                    <button 
+                      onClick={() => setCourseTab("moderation")}
+                      className={`px-10 py-4 rounded-[22px] text-xs font-black uppercase tracking-[2px] transition-all flex items-center gap-4 ${courseTab === "moderation" ? "bg-white dark:bg-slate-700 text-rose-500 shadow-2xl" : "text-slate-500 hover:text-slate-700"}`}
+                    >
+                      Validation Queue
+                      {allCourses.filter(c => !c.is_approved && c.is_submitted).length > 0 && (
+                        <span className="bg-rose-500 text-white text-[10px] w-6 h-6 flex items-center justify-center rounded-xl shadow-lg animate-bounce">
+                          {allCourses.filter(c => !c.is_approved && c.is_submitted).length}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  {courseTab === "all" ? (
+                    <div className="bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                      <div className="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col md:flex-row gap-6 items-center justify-between">
+                        <div className="relative w-full md:w-[450px] shadow-2xl shadow-indigo-500/5">
+                          <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                          <input 
+                            type="text" 
+                            placeholder="Search Knowledge Artifacts..."
+                            value={courseSearch}
+                            onChange={(e) => setCourseSearch(e.target.value)}
+                            className="w-full pl-14 pr-6 py-5 bg-white dark:bg-slate-900 border-none rounded-[28px] text-sm font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all"
+                          />
+                        </div>
+                        <div className="flex items-center gap-4">
+                           <button title="Global Filter" className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 text-slate-400"><Filter size={20}/></button>
+                           <button title="Density Toggle" className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 text-slate-400"><LayoutDashboard size={20}/></button>
+                        </div>
                       </div>
-                      <div className="flex gap-2">
-                        <button 
-                          onClick={() => handleCourseAction(c.id, true)} 
-                          title="Approve Course"
-                          aria-label="Approve Course"
-                          className="p-2 bg-emerald-500 text-white rounded-lg"
-                        >
-                          <CheckCircle2 size={16} />
-                        </button>
-                        <button 
-                          onClick={() => handleCourseAction(c.id, false)} 
-                          title="Reject Course"
-                          aria-label="Reject Course"
-                          className="p-2 bg-red-500 text-white rounded-lg"
-                        >
-                          <XCircle size={16} />
-                        </button>
+
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                          <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-400 text-[10px] font-black uppercase tracking-[3px] border-b border-slate-100 dark:border-slate-800">
+                            <tr>
+                              <th className="px-10 py-6">Knowledge Artifact</th>
+                              <th className="px-10 py-6">Assigned Faculty</th>
+                              <th className="px-10 py-6 text-center">Status Protocol</th>
+                              <th className="px-10 py-6 text-right">Registry Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                            {allCourses
+                              .filter(c => courseSearch === "" || c.title.toLowerCase().includes(courseSearch.toLowerCase()))
+                              .map((c: any) => (
+                                <tr key={c.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-900/50 group transition-all">
+                                  <td className="px-10 py-8">
+                                    <div className="flex items-center gap-6">
+                                      <div className="w-20 h-16 rounded-[22px] overflow-hidden bg-slate-100 border-4 border-white dark:border-slate-800 shadow-lg group-hover:scale-110 transition-transform">
+                                        <img src={c.thumbnail || "/api/placeholder/120/80"} alt={c.title} className="w-full h-full object-cover" />
+                                      </div>
+                                      <div>
+                                        <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-md uppercase tracking-widest mb-1.5 inline-block">{c.category_name || "General"}</span>
+                                        <p className="text-base font-black text-slate-800 dark:text-white tracking-tight leading-tight">{c.title}</p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-10 py-8">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-10 h-10 rounded-2xl gradient-primary flex items-center justify-center text-white text-[10px] font-black uppercase shadow-xl">
+                                         {c.instructor_username?.charAt(0)}
+                                      </div>
+                                      <div className="flex flex-col">
+                                        <span className="text-sm font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">@{c.instructor_username}</span>
+                                        <span className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Validated Faculty</span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-10 py-8">
+                                    <div className="flex justify-center">
+                                      {c.is_approved ? (
+                                        <span className="flex items-center gap-2 px-4 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black uppercase tracking-[2px] rounded-[14px] border border-emerald-100/50 dark:border-emerald-800/30">
+                                          <CheckCircle2 size={14} /> Authenticated
+                                        </span>
+                                      ) : c.is_submitted ? (
+                                        <span className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 text-[10px] font-black uppercase tracking-[2px] rounded-[14px] border border-amber-100/50 dark:border-amber-800/30">
+                                          <ShieldAlert size={14} /> Validation Req.
+                                        </span>
+                                      ) : (
+                                        <span className="flex items-center gap-2 px-4 py-1.5 bg-slate-100 dark:bg-slate-700/50 text-slate-400 text-[10px] font-black uppercase tracking-[2px] rounded-[14px]">
+                                          Draft Artifact
+                                        </span>
+                                      )}
+                                    </div>
+                                  </td>
+                                  <td className="px-10 py-8 text-right">
+                                    <div className="flex items-center justify-end gap-2">
+                                      <button 
+                                        onClick={() => { setEditCourseData(c); setShowCourseModal(true); }}
+                                        className="p-4 bg-slate-50 dark:bg-slate-900/50 text-slate-400 hover:text-indigo-600 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
+                                        title="Modify Artifact"
+                                      >
+                                        <Edit size={18} />
+                                      </button>
+                                      <button 
+                                        onClick={() => handleDeleteCourse(c.id)}
+                                        className="p-4 bg-slate-50 dark:bg-slate-900/50 text-slate-400 hover:text-rose-500 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
+                                        title="De-provision Artifact"
+                                      >
+                                        <Trash2 size={18} />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
-                  ))}
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                       {allCourses.filter(c => !c.is_approved && c.is_submitted).map((c: any) => (
+                         <div key={c.id} className="bg-white dark:bg-slate-800 rounded-[48px] border-b-8 border-amber-500 p-10 shadow-2xl shadow-indigo-500/5 flex flex-col gap-8 transition-transform hover:-translate-y-2 duration-500">
+                            <div className="flex gap-8">
+                               <div className="w-40 h-28 rounded-3xl overflow-hidden shadow-2xl shrink-0 border-4 border-white dark:border-slate-900">
+                                  <img src={c.thumbnail || "/api/placeholder/160/120"} alt="ModView" className="w-full h-full object-cover" />
+                               </div>
+                               <div className="flex-1 space-y-3">
+                                  <div className="flex items-center gap-3">
+                                     <span className="px-2 py-0.5 bg-amber-500 text-white text-[9px] font-black uppercase tracking-widest rounded-md shadow-lg">L2 Queue</span>
+                                     <h4 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter leading-tight line-clamp-2">{c.title}</h4>
+                                  </div>
+                                  <div className="flex items-center gap-3">
+                                     <div className="w-8 h-8 rounded-xl gradient-primary flex items-center justify-center text-white text-[8px] font-black overflow-hidden">
+                                        {c.instructor_username?.charAt(0)}
+                                     </div>
+                                     <p className="text-xs font-black text-slate-400 uppercase tracking-widest">By Faculty: <span className="text-slate-700 dark:text-slate-200">@{c.instructor_username}</span></p>
+                                  </div>
+                               </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                               <div className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Catalog ID</p>
+                                  <p className="text-lg font-black text-slate-800 dark:text-white leading-none">MOD-{c.id}</p>
+                               </div>
+                               <div className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800">
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Asset Valuation</p>
+                                  <p className="text-lg font-black text-slate-800 dark:text-white leading-none">${c.price}</p>
+                               </div>
+                            </div>
+                            <div className="flex gap-4">
+                               <button 
+                                 onClick={() => handleCourseAction(c.id, true)}
+                                 className="flex-1 py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[28px] text-xs font-black uppercase tracking-[3px] shadow-2xl shadow-emerald-500/30 transition-all flex items-center justify-center gap-4"
+                               >
+                                 <CheckCircle2 size={24} /> Authenticate
+                               </button>
+                               <button 
+                                 onClick={() => handleCourseAction(c.id, false)}
+                                 className="px-10 py-5 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-[28px] text-xs font-black uppercase tracking-[3px] hover:bg-rose-50 hover:text-rose-600 transition-all border border-slate-100 dark:border-slate-800"
+                               >
+                                 <XCircle size={24} />
+                               </button>
+                            </div>
+                         </div>
+                       ))}
+                       {allCourses.filter(c => !c.is_approved && c.is_submitted).length === 0 && (
+                         <div className="col-span-full py-40 text-center bg-slate-50 dark:bg-slate-900/30 rounded-[64px] border-4 border-dashed border-slate-200 dark:border-slate-800">
+                            <div className="w-32 h-32 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-10">
+                               <Book size={64} className="text-slate-300" />
+                            </div>
+                            <h4 className="text-4xl font-black text-slate-700 dark:text-slate-200 tracking-tighter">Queue Integrity Level 100%</h4>
+                            <p className="text-slate-500 max-w-lg mx-auto mt-6 text-xl font-medium">No pending knowledge artifacts require administrative validation at this cycle point.</p>
+                         </div>
+                       )}
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -976,91 +1277,158 @@ const AdminDashboard = () => {
                 </div>
               )}
 
+
               {activeModule === "live" && (
-                <div className="space-y-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="welcome-banner p-6 rounded-2xl flex-1 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div>
-                        <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Live Stream Moderation</h2>
-                        <p className="text-slate-600 dark:text-slate-300 text-sm">Orchestrate synchronous learning cohorts</p>
-                      </div>
-                      <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
-                        <p className="text-[10px] uppercase font-bold text-slate-500">Active Streams</p>
-                        <p className="text-xl font-black text-indigo-600">{liveStreams.length}</p>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={() => setShowAddStreamModal(true)}
-                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                    >
-                      <Plus size={18} /> Add Live Course
-                    </button>
+                <div className="space-y-8">
+                  <div className="gradient-primary-soft p-12 rounded-[48px] relative overflow-hidden group border border-indigo-100/50 dark:border-indigo-900/20">
+                     <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-40 -mt-40 group-hover:scale-125 transition-all duration-1000" />
+                     <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+                        <div>
+                          <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-3 tracking-tighter flex items-center gap-5">
+                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-indigo-600">
+                               <TrendingUp size={36} />
+                            </div>
+                            Cohort Moderation
+                          </h2>
+                          <p className="text-slate-600 dark:text-slate-300 text-xl font-medium opacity-80 max-w-xl leading-relaxed">Orchestrate and moderate synchronous learning experiences and faculty presence.</p>
+                        </div>
+                        <div className="flex flex-col sm:flex-row items-center gap-6">
+                           <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-indigo-500/10 text-center">
+                              <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Active Cohorts</p>
+                              <p className="text-5xl font-black text-indigo-600 tracking-tighter">{liveStreams.length}</p>
+                           </div>
+                           <button 
+                             onClick={() => setShowAddStreamModal(true)}
+                             className="w-full sm:w-auto h-20 px-10 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[32px] font-black text-xs uppercase tracking-[3px] shadow-2xl hover:scale-[1.05] active:scale-[0.95] transition-all flex items-center justify-center gap-4"
+                           >
+                             <PlusCircle size={24} /> Add Cohort
+                           </button>
+                        </div>
+                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 gap-4">
+                  <div className="grid grid-cols-1 gap-8">
                     {liveStreams.map((stream: any) => (
-                      <div key={stream.id} className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 flex flex-col lg:flex-row items-center gap-6">
-                        <div className="w-16 h-16 gradient-primary rounded-2xl flex items-center justify-center text-white font-bold text-2xl">{stream.title[0]}</div>
-                        <div className="flex-1">
-                          <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{stream.title}</h4>
-                          <div className="flex gap-4 text-xs text-slate-500 mb-3">
-                            <span className="flex items-center gap-1"><Users size={14} /> {stream.instructor_name}</span>
-                            <span className={`font-bold ${stream.enrollment_count >= stream.max_students ? 'text-red-500' : 'text-emerald-500'}`}>
-                              {stream.enrollment_count}/{stream.max_students} Students
-                            </span>
-                          </div>
-                          {stream.live_sessions && stream.live_sessions.length > 0 && (
-                            <div className="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-2">
-                              <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-2">Upcoming Schedules</p>
-                              {stream.live_sessions.map((session: any) => (
-                                <div key={session.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-slate-50 dark:bg-slate-900 p-3 rounded-xl gap-2">
-                                  <div>
-                                    <h5 className="text-sm font-bold text-slate-800 dark:text-white">{session.title}</h5>
-                                    <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                      <Calendar size={12} /> {new Date(session.scheduled_at).toLocaleString()}
-                                    </p>
-                                  </div>
-                                  {session.meeting_link && (
-                                    <a href={session.meeting_link} target="_blank" rel="noreferrer" className="text-xs text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1.5 rounded-lg font-semibold hover:bg-indigo-100 transition-colors w-fit mt-2 sm:mt-0">Meet Link</a>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-2 shrink-0">
-                          <button 
-                            onClick={() => { setSelectedStreamForSession(stream); setShowAddSessionModal(true); }}
-                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold transition-colors w-full"
-                          >
-                            Add Schedule
-                          </button>
-                          {stream.enrollment_count >= stream.max_students && (
-                            <button 
-                              onClick={() => { setSelectedStream(stream); setShowDuplicateModal(true); }}
-                              className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-bold transition-colors w-full"
-                            >
-                              Duplicate (Full)
-                            </button>
-                          )}
+                      <div key={stream.id} className="group bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700/50 p-10 shadow-sm transition-all hover:shadow-2xl hover:shadow-indigo-500/10 border-l-8 border-l-indigo-600">
+                        <div className="flex flex-col lg:flex-row gap-10">
+                           <div className="lg:w-1/3 space-y-6">
+                              <div className="flex items-center gap-4">
+                                 <div className="w-20 h-20 gradient-primary rounded-[28px] flex items-center justify-center text-white font-black text-3xl shadow-xl">
+                                    {stream.title?.[0] || "L"}
+                                 </div>
+                                 <div className="flex-1">
+                                    <h4 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter leading-tight">{stream.title}</h4>
+                                    <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400">@{stream.instructor_name}</p>
+                                 </div>
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                 <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Utilization</p>
+                                    <div className="flex items-end gap-1">
+                                       <p className={`text-xl font-black ${stream.enrollment_count >= stream.max_students ? 'text-rose-500' : 'text-emerald-500'}`}>{stream.enrollment_count}</p>
+                                       <p className="text-xs font-bold text-slate-400 pb-1">/ {stream.max_students}</p>
+                                    </div>
+                                 </div>
+                                 <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+                                    <div className="flex items-center gap-2">
+                                       <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                                       <p className="text-sm font-black text-slate-700 dark:text-slate-200 uppercase">Live</p>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div className="flex flex-col gap-3">
+                                 <button 
+                                   onClick={() => { setSelectedStreamForSession(stream); setShowAddSessionModal(true); }}
+                                   className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[24px] text-xs font-black uppercase tracking-[2px] shadow-xl shadow-indigo-500/20 transition-all flex items-center justify-center gap-3"
+                                 >
+                                   <Calendar size={18} /> Add Schedule Slot
+                                 </button>
+                                 <div className="flex gap-3">
+                                    <button 
+                                      onClick={() => { setEditStreamData(stream); setShowEditStreamModal(true); }}
+                                      className="flex-1 py-4 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-[22px] text-xs font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
+                                    >
+                                      Modify
+                                    </button>
+                                    <button 
+                                      onClick={() => handleDeleteStream(stream.id)}
+                                      className="px-6 py-4 bg-rose-50 dark:bg-rose-900/30 text-rose-600 rounded-[22px] hover:bg-rose-100 transition-all"
+                                    >
+                                      <Trash2 size={18} />
+                                    </button>
+                                 </div>
+                                 {stream.enrollment_count >= stream.max_students && (
+                                   <button 
+                                     onClick={() => { setSelectedStream(stream); setShowDuplicateModal(true); }}
+                                     className="w-full py-4 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 rounded-[24px] text-[10px] font-black uppercase tracking-widest border border-emerald-100 dark:border-emerald-800 shadow-sm"
+                                   >
+                                     Scale Cohort (Full)
+                                   </button>
+                                 )}
+                              </div>
+                           </div>
+
+                           <div className="flex-1 border-l border-slate-100 dark:border-slate-700 lg:pl-10 space-y-6">
+                              <h5 className="text-[11px] font-black text-slate-400 uppercase tracking-[3px] flex items-center gap-3">
+                                 <TrendingUp size={14} /> Knowledge Delivery Timeline
+                              </h5>
+                              <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                 {stream.live_sessions && stream.live_sessions.length > 0 ? stream.live_sessions.map((session: any) => (
+                                   <div key={session.id} className="relative group/session bg-slate-50 dark:bg-slate-900/50 p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 hover:border-indigo-500/30 transition-all">
+                                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                         <div>
+                                            <h6 className="text-base font-black text-slate-800 dark:text-white mb-2 leading-none">{session.title}</h6>
+                                            <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                               <span className="flex items-center gap-1.5"><Calendar size={12} className="text-indigo-500" /> {new Date(session.scheduled_at).toLocaleDateString()}</span>
+                                               <span className="flex items-center gap-1.5"><TrendingUp size={12} className="text-indigo-500" /> {new Date(session.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                         </div>
+                                         {session.meeting_link && (
+                                           <a 
+                                             href={session.meeting_link} 
+                                             target="_blank" 
+                                             rel="noreferrer" 
+                                             className="px-6 py-2.5 bg-white dark:bg-slate-800 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
+                                           >
+                                             Meet Link <PlusCircle size={12} />
+                                           </a>
+                                         )}
+                                      </div>
+                                   </div>
+                                 )) : (
+                                   <div className="py-20 text-center bg-slate-50 dark:bg-slate-900/20 rounded-[40px] border-2 border-dashed border-slate-200 dark:border-slate-800">
+                                      <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">No active sessions mapped.</p>
+                                   </div>
+                                 )}
+                              </div>
+                           </div>
                         </div>
                       </div>
                     ))}
+                    {liveStreams.length === 0 && (
+                      <div className="py-32 text-center bg-slate-50 dark:bg-slate-900/30 rounded-[64px] border-4 border-dashed border-slate-200 dark:border-slate-800">
+                         <div className="w-24 h-24 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-xl mx-auto mb-8">
+                            <TrendingUp size={48} className="text-slate-300" />
+                         </div>
+                         <h4 className="text-3xl font-black text-slate-700 dark:text-slate-300 tracking-tighter">Synchronous Learning Inactive</h4>
+                         <p className="text-slate-500 max-w-sm mx-auto mt-4 text-lg">No synchronous cohorts are currently registered in the administrative registry.</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
-
               {activeModule === "revenue" && (
-                <div className="space-y-6">
-                  <div className="welcome-banner p-6 rounded-2xl">
-                    <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1">Revenue Analytics</h2>
-                    <p className="text-slate-600 dark:text-slate-300 text-sm">Finances and growth</p>
+                <div className="space-y-10">
+                  <div className="gradient-primary-soft p-12 rounded-[48px] border border-indigo-100/50 dark:border-indigo-900/20 shadow-xl">
+                    <h2 className="text-4xl font-black text-slate-800 dark:text-white mb-2 tracking-tighter">Financial Intelligence</h2>
+                    <p className="text-slate-600 dark:text-slate-400 text-lg font-medium opacity-80">Real-time revenue architecture and fiscal growth analytics.</p>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="stat-card">
-                      <div className="w-10 h-10 icon-purple rounded-xl flex items-center justify-center mb-3"><DollarSign size={18} className="text-white" /></div>
-                      <p className="text-xs text-slate-500 mb-1">Total Revenue</p>
-                      <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">${stats?.revenue?.total || "168,000"}</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="bg-white dark:bg-slate-800 p-8 rounded-[36px] border border-slate-100 dark:border-slate-700 shadow-sm transition-all hover:shadow-xl hover:shadow-indigo-500/5">
+                      <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/20"><DollarSign size={28} className="text-white" /></div>
+                      <p className="text-[11px] font-black text-slate-400 uppercase tracking-[3px] mb-2 leading-none">Gross Revenue</p>
+                      <p className="text-4xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">${stats?.revenue?.total || "0"}</p>
                     </div>
                   </div>
                 </div>
@@ -1196,6 +1564,7 @@ const AdminDashboard = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase">Assigned Faculty ID</label>
                   <input 
                     type="number"
+                    title="Instructor User ID"
                     placeholder="Enter Instructor User ID"
                     value={duplicateInstructorId}
                     onChange={(e) => setDuplicateInstructorId(e.target.value)}
@@ -1247,6 +1616,8 @@ const AdminDashboard = () => {
                 </h3>
                 <button 
                   onClick={() => setShowAddStreamModal(false)} 
+                  title="Close Modal"
+                  aria-label="Close"
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
                 >
                   <XCircle size={20} />
@@ -1259,6 +1630,7 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="text" 
+                    title="Course Title"
                     placeholder="e.g. Advanced Crypto Strategies"
                     value={newStream.title}
                     onChange={e => setNewStream({...newStream, title: e.target.value})}
@@ -1268,6 +1640,7 @@ const AdminDashboard = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
                   <textarea 
+                    title="Stream Description"
                     placeholder="What will students learn?"
                     value={newStream.description}
                     onChange={e => setNewStream({...newStream, description: e.target.value})}
@@ -1278,6 +1651,7 @@ const AdminDashboard = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Instructor</label>
                   <select 
                     required
+                    title="Select Instructor"
                     value={newStream.instructor}
                     onChange={e => setNewStream({...newStream, instructor: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1324,6 +1698,7 @@ const AdminDashboard = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Group Type</label>
                   <select 
+                    title="Group Type"
                     value={newStream.group_type}
                     onChange={e => setNewStream({...newStream, group_type: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1380,6 +1755,8 @@ const AdminDashboard = () => {
                 </h3>
                 <button 
                   onClick={() => setShowAddSessionModal(false)} 
+                  title="Close"
+                  aria-label="Close"
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
                 >
                   <XCircle size={20} />
@@ -1397,7 +1774,8 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="text" 
-                    placeholder="e.g. Session 1: Fundamentals"
+                    title="Session Title"
+                    placeholder="e.g. Genesis Block Node"
                     value={newSession.title}
                     onChange={e => setNewSession({...newSession, title: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1406,7 +1784,8 @@ const AdminDashboard = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
                   <textarea 
-                    placeholder="Topics to cover..."
+                    title="Session Description"
+                    placeholder="Technical nodes and discovery..."
                     value={newSession.description}
                     onChange={e => setNewSession({...newSession, description: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
@@ -1417,6 +1796,7 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="datetime-local" 
+                    title="Time & Date"
                     value={newSession.scheduled_at}
                     onChange={e => setNewSession({...newSession, scheduled_at: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1426,6 +1806,7 @@ const AdminDashboard = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Meeting Link</label>
                   <input 
                     type="url" 
+                    title="Meeting Link"
                     placeholder="https://zoom.us/j/..."
                     value={newSession.meeting_link}
                     onChange={e => setNewSession({...newSession, meeting_link: e.target.value})}
@@ -1446,6 +1827,193 @@ const AdminDashboard = () => {
                     className="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-semibold shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Save Schedule
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Course Modal (Add/Edit) */}
+      <AnimatePresence>
+        {showCourseModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => { setShowCourseModal(false); setEditCourseData(null); }}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-2xl bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <BookOpen className="text-indigo-600" size={20} />
+                  {editCourseData ? "Modify Academic Node" : "Provision New Node"}
+                </h3>
+                <button 
+                  onClick={() => { setShowCourseModal(false); setEditCourseData(null); }} 
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleCourseSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Course Title</label>
+                    <input 
+                      required
+                      type="text" 
+                      title="Course Title"
+                      placeholder="e.g. Full-Stack Dev Level 1"
+                      value={editCourseData ? editCourseData.title : newCourse.title}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, title: e.target.value})
+                        : setNewCourse({...newCourse, title: e.target.value})
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">URL Slug</label>
+                    <input 
+                      required
+                      type="text" 
+                      title="URL Slug"
+                      placeholder="full-stack-dev-1"
+                      value={editCourseData ? editCourseData.slug : newCourse.slug}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, slug: e.target.value})
+                        : setNewCourse({...newCourse, slug: e.target.value})
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Academic Abstract (Description)</label>
+                  <textarea 
+                    title="Academic Abstract"
+                    placeholder="Provide a high-fidelity summary..."
+                    value={editCourseData ? editCourseData.description : newCourse.description}
+                    onChange={e => editCourseData 
+                      ? setEditCourseData({...editCourseData, description: e.target.value})
+                      : setNewCourse({...newCourse, description: e.target.value})
+                    }
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-24"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Course Type</label>
+                    <select 
+                      title="Course Type"
+                      value={editCourseData ? editCourseData.course_type : newCourse.course_type}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, course_type: e.target.value})
+                        : setNewCourse({...newCourse, course_type: e.target.value})
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    >
+                      <option value="VIDEO_BASED">Video-Based Course</option>
+                      <option value="LIVE_STREAM">Live Stream Cohort</option>
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Enrollment Price (USD)</label>
+                    <input 
+                      required
+                      type="number" 
+                      title="Price"
+                      step="0.01"
+                      value={editCourseData ? editCourseData.price : newCourse.price}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, price: e.target.value})
+                        : setNewCourse({...newCourse, price: e.target.value})
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Curator (Instructor)</label>
+                    <select 
+                      required
+                      title="Select Curator"
+                      value={editCourseData ? editCourseData.instructor : newCourse.instructor}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, instructor: e.target.value})
+                        : setNewCourse({...newCourse, instructor: e.target.value})
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    >
+                      <option value="">Select Faculty Node...</option>
+                      {allUsers.filter(u => u.role === 'INSTRUCTOR').map(u => (
+                        <option key={u.id} value={u.id}>{u.username} ({u.email})</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Taxonomy (Category)</label>
+                    <select 
+                      required
+                      title="Select Taxonomy"
+                      value={editCourseData ? editCourseData.category : newCourse.category}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, category: e.target.value})
+                        : setNewCourse({...newCourse, category: e.target.value})
+                      }
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    >
+                      <option value="">Select Domain...</option>
+                      {categories.map(c => (
+                        <option key={c.id} value={c.id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-6 py-2">
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <input 
+                      type="checkbox" 
+                      title="Publish Status"
+                      checked={editCourseData ? editCourseData.is_published : newCourse.is_published}
+                      onChange={e => editCourseData 
+                        ? setEditCourseData({...editCourseData, is_published: e.target.checked})
+                        : setNewCourse({...newCourse, is_published: e.target.checked})
+                      }
+                      className="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                    />
+                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 transition-colors">Publish to Platform Registry</span>
+                  </label>
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => { setShowCourseModal(false); setEditCourseData(null); }}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    {editCourseData ? "Sync Modifications" : "Launch Knowledge Node"}
                   </button>
                 </div>
               </form>
@@ -1513,6 +2081,7 @@ const AdminDashboard = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Access Protocol (Password - Leave blank to keep current)</label>
                   <input 
                     type="password" 
+                    title="Password"
                     placeholder="••••••••"
                     value={editUser.password || ""}
                     onChange={e => setEditUser({...editUser, password: e.target.value})}
@@ -1523,6 +2092,7 @@ const AdminDashboard = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Institutional Role</label>
                   <select 
                     value={editUser.role}
+                    title="Institutional Role"
                     aria-label="Edit user role"
                     onChange={e => setEditUser({...editUser, role: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1561,128 +2131,200 @@ const AdminDashboard = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowDetailModal(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
             />
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+              exit={{ opacity: 0, scale: 0.95, y: 30 }}
+              className="relative w-full max-w-4xl bg-white dark:bg-slate-900 rounded-[40px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
             >
-              {/* Header Banner */}
-              <div className="h-24 gradient-primary relative">
+              {/* Institutional Banner */}
+              <div className="h-40 gradient-primary relative">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                 <button 
                   onClick={() => setShowDetailModal(false)}
-                  title="Close Identity Detail"
-                  className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors"
+                  title="Close Institutional View"
+                  className="absolute top-6 right-6 p-2.5 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-xl transition-all hover:rotate-90"
                 >
                   <X size={20} />
                 </button>
               </div>
 
-              {/* Identity Header */}
-              <div className="px-8 pb-8 -mt-12 relative">
-                <div className="flex flex-col md:flex-row items-end gap-6 mb-8">
-                  <div className="w-24 h-24 rounded-3xl bg-white dark:bg-slate-800 border-4 border-white dark:border-slate-900 flex items-center justify-center text-3xl font-black text-indigo-600 shadow-xl">
-                    {userDetail.username[0].toUpperCase()}
+              {/* Core Identity Section */}
+              <div className="px-10 pb-10 -mt-16 relative">
+                <div className="flex flex-col md:flex-row items-end gap-8 mb-12">
+                  <div className="relative group">
+                    <div className="w-36 h-36 rounded-[36px] bg-white dark:bg-slate-800 border-8 border-white dark:border-slate-900 flex items-center justify-center text-5xl font-black text-indigo-600 shadow-2xl relative z-10 overflow-hidden">
+                      {userDetail.username?.charAt(0)?.toUpperCase() || "U"}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent" />
+                    </div>
+                    <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-2 rounded-2xl shadow-lg z-20 border-4 border-white dark:border-slate-900">
+                      <ShieldCheck size={24} />
+                    </div>
                   </div>
+                  
                   <div className="flex-1 pb-2">
-                    <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">{userDetail.username}</h3>
-                    <div className="flex flex-wrap gap-2 mt-1">
-                      <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-widest rounded-lg">
-                        {userDetail.role}
+                    <div className="flex items-center gap-3 mb-1">
+                      <h3 className="text-4xl font-black text-slate-800 dark:text-white tracking-tighter">
+                        {userDetail.username}
+                      </h3>
+                      {userDetail.role === 'SUPER_ADMIN' && (
+                        <span className="px-2 py-0.5 bg-rose-500 text-white text-[8px] font-black uppercase tracking-tighter rounded-md">Architect</span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-3 mt-2">
+                      <span className="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest rounded-xl border border-indigo-100/50 dark:border-indigo-800/30">
+                        Institutional Role: {userDetail.role}
                       </span>
                       {userDetail.is_approved_instructor && (
-                        <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-widest rounded-lg flex items-center gap-1">
-                           <ShieldCheck size={10} /> Verified Faculty
+                        <span className="px-4 py-1.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-xs font-bold rounded-xl flex items-center gap-2 border border-emerald-100/50 dark:border-emerald-800/30">
+                           <Award size={14} /> Verified Professional
                         </span>
                       )}
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Left Column - Core Data */}
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Institutional Metadata</h4>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                          <Mail size={16} className="text-slate-400" />
-                          <span className="text-sm font-medium">{userDetail.email}</span>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                  {/* Left Section: Core Bio & Meta */}
+                  <div className="lg:col-span-2 space-y-10">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-6">
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2.5px] pb-2 border-b border-slate-100 dark:border-slate-800">Communication Registry</h4>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4">
+                            <div className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                              <Mail size={18} className="text-indigo-500" />
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase">Primary Endpoint</p>
+                              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{userDetail.email}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-start gap-4">
+                            <div className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                              <User size={18} className="text-indigo-500" />
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold text-slate-400 uppercase">Legal Identity</p>
+                              <p className="text-sm font-bold text-slate-700 dark:text-slate-200">{userDetail.first_name} {userDetail.last_name || '(REDACTED)'}</p>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
-                          <User size={16} className="text-slate-400" />
-                          <span className="text-sm font-medium">{userDetail.first_name} {userDetail.last_name || '(Full Identity Encrypted)'}</span>
+                      </div>
+
+                      <div className="space-y-6">
+                        <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2.5px] pb-2 border-b border-slate-100 dark:border-slate-800">Platform Status</h4>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800/50">
+                            <span className="text-xs font-bold text-slate-500">Node Connectivity</span>
+                            <span className="flex items-center gap-2">
+                              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                              <span className="text-xs font-black text-slate-700 dark:text-slate-200">ACTIVE</span>
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800/50">
+                            <span className="text-xs font-bold text-slate-500">Security Clearance</span>
+                            <span className="text-xs font-black text-indigo-600 uppercase">Level 4</span>
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    {userDetail.bio && (
-                      <div>
-                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Biological Summary</h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed italic">
-                          "{userDetail.bio}"
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2.5px] pb-2 border-b border-slate-100 dark:border-slate-800">Biological Summary</h4>
+                      <div className="relative p-6 bg-indigo-50/30 dark:bg-indigo-900/10 rounded-[28px] border border-indigo-100/50 dark:border-indigo-800/30">
+                        <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium italic">
+                          "{userDetail.bio || "No biological summary provided to the registry."}"
                         </p>
-                      </div>
-                    )}
-
-                    {userDetail.role === 'INSTRUCTOR' && (
-                      <div>
-                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Faculty Specialization</h4>
-                        <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700/50">
-                          <p className="text-sm font-bold text-slate-800 dark:text-white mb-1">{userDetail.expertise || 'General Scholastics'}</p>
-                          <p className="text-xs text-slate-500">{userDetail.education_level} • {userDetail.years_of_experience} Cycles Experience</p>
+                        <div className="absolute -top-3 -left-3 bg-white dark:bg-slate-900 p-2 text-indigo-500">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L20.017 3C21.1216 3 22.017 3.89543 22.017 5V19C22.017 20.1046 21.1216 21 20.017 21H14.017ZM2.01697 21L2.01697 18C2.01697 16.8954 2.9124 16 4.01697 16H7.01697C7.56925 16 8.01697 15.5523 8.01697 15V9C8.01697 8.44772 7.56925 8 7.01697 8H4.01697C2.9124 8 2.01697 7.10457 2.01697 6V3L8.01697 3C9.12154 3 10.017 3.89543 10.017 5V19C10.017 20.1046 9.12154 21 8.01697 21H2.01697Z"/></svg>
                         </div>
                       </div>
-                    )}
+                    </div>
                   </div>
 
-                  {/* Right Column - System Footprint */}
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Knowledge Footprint</h4>
+                  {/* Right Section: Scorecard & Activity */}
+                  <div className="space-y-8">
+                    <div className="bg-slate-900 rounded-[32px] p-8 text-white shadow-xl shadow-indigo-500/20 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-all duration-1000" />
+                      <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-6">Performance Scorecard</h4>
+                      <div className="space-y-6 relative z-10">
+                        <div>
+                          <div className="flex justify-between items-end mb-2">
+                            <span className="text-xs font-bold text-slate-400">Unified Trust Score</span>
+                            <span className="text-3xl font-black tracking-tighter">{(userDetail.points || 0).toLocaleString()}</span>
+                          </div>
+                          <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                            <motion.div 
+                              initial={{ width: 0 }}
+                              animate={{ width: `${Math.min(100, (userDetail.points || 0) / 100)}%` }}
+                              className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400" 
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                            <p className="text-[8px] font-black text-slate-500 uppercase mb-1">Global Ranking</p>
+                            <p className="text-xl font-bold tracking-tighter">{userDetail.peer_ranking || "TOP 0.1%"}</p>
+                          </div>
+                          <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                            <p className="text-[8px] font-black text-slate-500 uppercase mb-1">Impact Radius</p>
+                            <p className="text-xl font-bold tracking-tighter">8.4x</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2.5px] pb-2 border-b border-slate-100 dark:border-slate-800">Knowledge Portfolio</h4>
                       <div className="flex flex-wrap gap-2">
                         {userDetail.role === 'INSTRUCTOR' ? (
                           (userDetail.taught_courses || []).length > 0 ? userDetail.taught_courses.map((c: string, i: number) => (
-                            <span key={i} className="px-3 py-2 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 shadow-sm">{c}</span>
-                          )) : <p className="text-xs text-slate-400">No authored nodes registered.</p>
+                            <span key={i} className="px-3 py-2 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-800/50 rounded-xl text-xs font-bold text-indigo-700 dark:text-indigo-300 shadow-sm transition-all hover:scale-105">{c}</span>
+                          )) : <p className="text-xs text-slate-400 italic">No authored nodes registered in repository.</p>
                         ) : (
                           (userDetail.enrolled_courses || []).length > 0 ? userDetail.enrolled_courses.map((c: string, i: number) => (
-                            <span key={i} className="px-3 py-2 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-400 shadow-sm">{c}</span>
-                          )) : <p className="text-xs text-slate-400">Currently unsynced from main nodes.</p>
+                            <span key={i} className="px-3 py-2 bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-800/50 rounded-xl text-xs font-bold text-emerald-700 dark:text-emerald-400 shadow-sm transition-all hover:scale-105">{c}</span>
+                          )) : <p className="text-xs text-slate-400 italic">Currently unsynced from primary Knowledge Nodes.</p>
                         )}
                       </div>
                     </div>
 
-                    <div>
-                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] mb-3">Network Metrics</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl">
-                          <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Unified Points</p>
-                          <p className="text-lg font-black text-slate-800 dark:text-white">{userDetail.points || 0}</p>
+                    {userDetail.role === 'INSTRUCTOR' && (
+                      <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-[32px] border border-slate-100 dark:border-slate-700/50">
+                        <h4 className="text-[10px] font-black text-slate-500 uppercase mb-3">Professional Specialization</h4>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center text-white">
+                            <TrendingUp size={20} />
+                          </div>
+                          <div>
+                            <p className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">{userDetail.expertise || 'General Scholastics'}</p>
+                            <p className="text-xs text-slate-500">{userDetail.education_level}</p>
+                          </div>
                         </div>
-                        <div className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl">
-                          <p className="text-[10px] text-slate-400 font-bold uppercase mb-1">Peer Ranking</p>
-                          <p className="text-lg font-black text-indigo-600">{userDetail.peer_ranking || 'TOP 1%'}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-1 bg-white dark:bg-slate-700 rounded-lg text-[10px] font-bold shadow-sm">{userDetail.years_of_experience || 0}+ Years</span>
+                          <span className="px-2 py-1 bg-white dark:bg-slate-700 rounded-lg text-[10px] font-bold shadow-sm">Verified Credentials</span>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
 
-                <div className="mt-10 flex gap-4">
+                <div className="mt-12 flex gap-4 pt-10 border-t border-slate-100 dark:border-slate-800">
                   <button 
                     onClick={() => { setShowDetailModal(false); setEditUser(userDetail); setShowEditModal(true); }}
-                    className="flex-1 py-4 gradient-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                    className="flex-1 py-5 gradient-primary text-white text-xs font-black uppercase tracking-[3px] rounded-[24px] shadow-2xl shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
-                    Modify User Node
+                    Modify Institutional Record
                   </button>
                   <button 
                     onClick={() => setShowDetailModal(false)}
-                    className="px-8 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                    className="px-10 py-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-black uppercase tracking-[3px] rounded-[24px] hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
                   >
-                    Close Forensic View
+                    Decommission View
                   </button>
                 </div>
               </div>
@@ -1727,6 +2369,7 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="text" 
+                    title="Category Name"
                     placeholder="e.g. Programming"
                     value={newCategory.name}
                     onChange={e => setNewCategory({...newCategory, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-')})}
@@ -1738,7 +2381,8 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="text" 
-                    placeholder="programming"
+                    title="Category Slug"
+                    placeholder="artificial-intelligence"
                     value={newCategory.slug}
                     onChange={e => setNewCategory({...newCategory, slug: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1747,7 +2391,8 @@ const AdminDashboard = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
                   <textarea 
-                    placeholder="Category description..."
+                    title="Category Description"
+                    placeholder="Topics covered in this node domain..."
                     value={newCategory.description}
                     onChange={e => setNewCategory({...newCategory, description: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
@@ -1811,6 +2456,7 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="text" 
+                    title="Category Name"
                     value={editCategory.name}
                     onChange={e => setEditCategory({...editCategory, name: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1821,6 +2467,7 @@ const AdminDashboard = () => {
                   <input 
                     required
                     type="text" 
+                    title="Category Slug"
                     value={editCategory.slug}
                     onChange={e => setEditCategory({...editCategory, slug: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1829,6 +2476,8 @@ const AdminDashboard = () => {
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
                   <textarea 
+                    title="Edit Category Description"
+                    placeholder="Description"
                     value={editCategory.description || ""}
                     onChange={e => setEditCategory({...editCategory, description: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
@@ -1848,6 +2497,151 @@ const AdminDashboard = () => {
                     className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Update
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Edit Stream Modal */}
+      <AnimatePresence>
+        {showEditStreamModal && editStreamData && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => { setShowEditStreamModal(false); setEditStreamData(null); }}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Plus className="text-indigo-600" size={20} />
+                  Modify Live Course
+                </h3>
+                <button 
+                  onClick={() => { setShowEditStreamModal(false); setEditStreamData(null); }} 
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleEditStreamSubmit} className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Course Title</label>
+                  <input 
+                    required
+                    type="text" 
+                    title="Update Course Title"
+                    placeholder="e.g. Advanced Crypto Strategies"
+                    value={editStreamData.title}
+                    onChange={e => setEditStreamData({...editStreamData, title: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description</label>
+                  <textarea 
+                    title="Update Stream Description"
+                    placeholder="Description"
+                    value={editStreamData.description}
+                    onChange={e => setEditStreamData({...editStreamData, description: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Instructor</label>
+                  <select 
+                    required
+                    title="Select Instructor"
+                    value={editStreamData.instructor}
+                    onChange={e => setEditStreamData({...editStreamData, instructor: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  >
+                    <option value="">Select Instructor...</option>
+                    {allUsers.filter(u => u.role === 'INSTRUCTOR').map(u => (
+                      <option key={u.id} value={u.id}>{u.username} ({u.email})</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Scheduled At</label>
+                    <input 
+                      required
+                      type="datetime-local" 
+                      title="Update Schedule"
+                      value={editStreamData.scheduled_at ? new Date(editStreamData.scheduled_at).toISOString().slice(0, 16) : ""}
+                      onChange={e => setEditStreamData({...editStreamData, scheduled_at: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Price (USD)</label>
+                    <input 
+                      required
+                      type="number" 
+                      step="0.01"
+                      value={editStreamData.price}
+                      onChange={e => setEditStreamData({...editStreamData, price: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Meeting Link</label>
+                  <input 
+                    type="url" 
+                    placeholder="https://zoom.us/j/..."
+                    value={editStreamData.meeting_link}
+                    onChange={e => setEditStreamData({...editStreamData, meeting_link: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Group Type</label>
+                  <select 
+                    value={editStreamData.group_type}
+                    onChange={e => setEditStreamData({...editStreamData, group_type: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  >
+                    <option value="VVIP">VVIP (1 Student)</option>
+                    <option value="VIP1">VIP1 (5 Students)</option>
+                    <option value="VIP2">VIP2 (10 Students)</option>
+                    <option value="NORMAL">Normal (100 Students)</option>
+                  </select>
+                </div>
+                <div className="flex items-center gap-2">
+                    <input 
+                        type="checkbox"
+                        checked={editStreamData.is_active}
+                        onChange={e => setEditStreamData({...editStreamData, is_active: e.target.checked})}
+                        className="w-4 h-4 text-indigo-600 border-slate-300 rounded"
+                    />
+                    <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Is Active</label>
+                </div>
+
+                <div className="pt-4 flex gap-3 pb-2">
+                  <button 
+                    type="button"
+                    onClick={() => { setShowEditStreamModal(false); setEditStreamData(null); }}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Update Stream
                   </button>
                 </div>
               </form>
