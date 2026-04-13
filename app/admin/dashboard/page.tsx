@@ -1039,11 +1039,12 @@ const AdminDashboard = () => {
                                     <span className="hidden sm:inline">Grant Node Access</span>
                                   </button>
                                   <button 
-                                    onClick={() => handleInstructorAction(app.id, false)} 
-                                    className="px-6 py-3 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 transition-all"
-                                  >
-                                    <X size={14} /> 
-                                  </button>
+                                     onClick={() => handleInstructorAction(app.id, false)} 
+                                     title="Decline Node Access Request"
+                                     className="px-6 py-3 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 transition-all"
+                                   >
+                                     <X size={14} /> 
+                                   </button>
                                </div>
                             </div>
                           </div>
@@ -1253,12 +1254,13 @@ const AdminDashboard = () => {
                                >
                                  <CheckCircle2 size={24} /> Authenticate
                                </button>
-                               <button 
-                                 onClick={() => handleCourseAction(c.id, false)}
-                                 className="px-10 py-5 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-[28px] text-xs font-black uppercase tracking-[3px] hover:bg-rose-50 hover:text-rose-600 transition-all border border-slate-100 dark:border-slate-800"
-                               >
-                                 <XCircle size={24} />
-                               </button>
+                                <button 
+                                  onClick={() => handleCourseAction(c.id, false)}
+                                  title="Reject Course Submission"
+                                  className="px-10 py-5 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-[28px] text-xs font-black uppercase tracking-[3px] hover:bg-rose-50 hover:text-rose-600 transition-all border border-slate-100 dark:border-slate-800"
+                                >
+                                  <XCircle size={24} />
+                                </button>
                             </div>
                          </div>
                        ))}
@@ -1417,6 +1419,7 @@ const AdminDashboard = () => {
                                     </button>
                                     <button 
                                       onClick={() => handleDeleteStream(stream.id)}
+                                      title="Delete Cohort"
                                       className="px-6 py-4 bg-rose-50 dark:bg-rose-900/30 text-rose-600 rounded-[22px] hover:bg-rose-100 transition-all"
                                     >
                                       <Trash2 size={18} />
@@ -1845,6 +1848,7 @@ const AdminDashboard = () => {
                     <input 
                       required
                       type="datetime-local" 
+                      title="Initial Schedule Date"
                       value={newStream.scheduled_at}
                       onChange={e => setNewStream({...newStream, scheduled_at: e.target.value})}
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -1856,6 +1860,8 @@ const AdminDashboard = () => {
                       required
                       type="number" 
                       step="0.01"
+                      title="Course Price"
+                      placeholder="0.00"
                       value={newStream.price}
                       onChange={e => setNewStream({...newStream, price: e.target.value})}
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -2036,6 +2042,7 @@ const AdminDashboard = () => {
                 </h3>
                 <button 
                   onClick={() => { setShowCourseModal(false); setEditCourseData(null); }} 
+                  title="Close Modal"
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
                 >
                   <XCircle size={20} />
@@ -2534,6 +2541,7 @@ const AdminDashboard = () => {
                 </h3>
                 <button 
                   onClick={() => setShowAddCategoryModal(false)} 
+                  title="Close Modal"
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
                 >
                   <XCircle size={20} />
@@ -2621,6 +2629,7 @@ const AdminDashboard = () => {
                 </h3>
                 <button 
                   onClick={() => setShowEditCategoryModal(false)} 
+                  title="Close Modal"
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
                 >
                   <XCircle size={20} />
@@ -2705,6 +2714,7 @@ const AdminDashboard = () => {
                 </h3>
                 <button 
                   onClick={() => { setShowEditStreamModal(false); setEditStreamData(null); }} 
+                  title="Close Modal"
                   className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
                 >
                   <XCircle size={20} />
@@ -2767,6 +2777,8 @@ const AdminDashboard = () => {
                       required
                       type="number" 
                       step="0.01"
+                      title="Course Price"
+                      placeholder="0.00"
                       value={editStreamData.price}
                       onChange={e => setEditStreamData({...editStreamData, price: e.target.value})}
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
@@ -2787,6 +2799,7 @@ const AdminDashboard = () => {
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Group Type</label>
                   <select 
                     value={editStreamData.group_type}
+                    title="Select Group Type"
                     onChange={e => setEditStreamData({...editStreamData, group_type: e.target.value})}
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
                   >
@@ -2799,6 +2812,7 @@ const AdminDashboard = () => {
                 <div className="flex items-center gap-2">
                     <input 
                         type="checkbox"
+                        title="Toggle Active Status"
                         checked={editStreamData.is_active}
                         onChange={e => setEditStreamData({...editStreamData, is_active: e.target.checked})}
                         className="w-4 h-4 text-indigo-600 border-slate-300 rounded"
@@ -2887,6 +2901,8 @@ const AdminDashboard = () => {
                       required
                       type="file" 
                       accept=".pdf,.txt,.md"
+                      title="Select Document File"
+                      placeholder="Select document file"
                       onChange={e => setUploadFile(e.target.files?.[0] || null)}
                       className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 cursor-pointer"
                     />
