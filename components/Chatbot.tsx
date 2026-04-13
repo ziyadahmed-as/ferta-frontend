@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "next/navigation";
 import { MessageCircle, X, Send, Bot, User, Loader2, Sparkles, Smile, Paperclip } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,6 +10,9 @@ import { useAuth } from "@/context/AuthContext";
 
 const Chatbot = () => {
   const { user } = useAuth();
+  const params = useParams();
+  const courseId = params?.id;
+
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, text: "Hi! I'm your Fatra Academy Assistant. How can I help you with your learning journey today?", sender: "bot" },
@@ -39,7 +43,11 @@ const Chatbot = () => {
 
     try {
       const endpoint = user ? "/ai/learning-assistant/" : "/ai/chat/";
-      const response = await api.post(endpoint, { query });
+      const payload: any = { query };
+      if (user && courseId) {
+        payload.course_id = courseId;
+      }
+      const response = await api.post(endpoint, payload);
       
       const botResponse = {
         id: Date.now() + 1,
