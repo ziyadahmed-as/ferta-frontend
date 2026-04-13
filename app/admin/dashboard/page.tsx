@@ -6,7 +6,8 @@ import {
   Users, BookOpen, DollarSign, TrendingUp, Home, UserPlus,
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
   Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book,
-  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Tag, PlusCircle, LayoutDashboard
+  ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Tag, PlusCircle, LayoutDashboard,
+  FileText, Upload, ToggleLeft, ToggleRight, FileUp
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -107,6 +108,14 @@ const AdminDashboard = () => {
   const [editCategory, setEditCategory] = useState<any>(null);
   const [showEditCategoryModal, setShowEditCategoryModal] = useState(false);
 
+  /* Knowledge Base State */
+  const [knowledgeDocs, setKnowledgeDocs] = useState<any[]>([]);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [uploadTitle, setUploadTitle] = useState("");
+  const [uploadDescription, setUploadDescription] = useState("");
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploadLoading, setUploadLoading] = useState(false);
+
   const fetchAllUsers = async () => {
     try {
       const res = await api.get("/users/manage/");
@@ -154,6 +163,59 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchDocuments = async () => {
+    try {
+      const res = await api.get("/ai/documents/");
+      setKnowledgeDocs(Array.isArray(res.data) ? res.data : res.data.results || []);
+    } catch (err) {
+      console.error("Knowledge docs fetch error:", err);
+    }
+  };
+
+  const handleUploadDocument = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!uploadFile) return;
+    setUploadLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("title", uploadTitle);
+      formData.append("description", uploadDescription);
+      formData.append("file", uploadFile);
+      await api.post("/ai/documents/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setShowUploadModal(false);
+      setUploadTitle("");
+      setUploadDescription("");
+      setUploadFile(null);
+      fetchDocuments();
+      alert("Document uploaded successfully! The AI chatbot will now use it.");
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error uploading document");
+    } finally {
+      setUploadLoading(false);
+    }
+  };
+
+  const handleToggleDocument = async (docId: number, currentActive: boolean) => {
+    try {
+      await api.patch(`/ai/documents/${docId}/`, { is_active: !currentActive });
+      fetchDocuments();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error toggling document");
+    }
+  };
+
+  const handleDeleteDocument = async (docId: number) => {
+    if (!confirm("Are you sure you want to delete this document? The AI chatbot will no longer have access to it.")) return;
+    try {
+      await api.delete(`/ai/documents/${docId}/`);
+      fetchDocuments();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || "Error deleting document");
+    }
+  };
+
   useEffect(() => {
     if (user?.role === "ADMIN" || user?.role === "SUPER_ADMIN" || user?.is_superuser) {
       fetchStats();
@@ -161,6 +223,7 @@ const AdminDashboard = () => {
       fetchLiveStreams();
       fetchCategories();
       fetchCourses();
+      fetchDocuments();
     } else {
       setLoading(false);
     }
@@ -458,6 +521,7 @@ const AdminDashboard = () => {
     { id: "courses", label: "Courses", icon: BookOpen },
     { id: "categories", label: "Categories", icon: Tag },
     { id: "live", label: "Live Streams", icon: Cpu },
+    { id: "knowledge", label: "Knowledge Base", icon: FileText },
     { id: "revenue", label: "Revenue", icon: DollarSign },
   ];
 
@@ -1430,6 +1494,119 @@ const AdminDashboard = () => {
                       <p className="text-[11px] font-black text-slate-400 uppercase tracking-[3px] mb-2 leading-none">Gross Revenue</p>
                       <p className="text-4xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">${stats?.revenue?.total || "0"}</p>
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {activeModule === "knowledge" && (
+                <div className="space-y-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="welcome-banner p-6 rounded-2xl flex-1">
+                      <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1 tracking-tight flex items-center gap-2">
+                        <FileText className="text-indigo-600" size={24} />
+                        AI Knowledge Base
+                      </h2>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm">Upload documents that the AI chatbot can access and answer questions from.</p>
+                    </div>
+                    <button 
+                      onClick={() => setShowUploadModal(true)}
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    >
+                      <Upload size={18} /> Upload Document
+                    </button>
+                  </div>
+
+                  {/* Info Banner */}
+                  <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/30 rounded-2xl p-5 flex items-start gap-3">
+                    <FileUp className="text-indigo-600 shrink-0 mt-0.5" size={20} />
+                    <div>
+                      <p className="text-sm font-semibold text-indigo-800 dark:text-indigo-200">How it works</p>
+                      <p className="text-xs text-indigo-600 dark:text-indigo-300 mt-1">Upload PDF, TXT, or MD files here. Active documents are automatically indexed into the AI platform chatbot's knowledge base. Users chatting with the bot will get answers from these documents.</p>
+                    </div>
+                  </div>
+
+                  {/* Documents Table */}
+                  <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                    <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                      <h3 className="font-semibold text-slate-800 dark:text-white">Uploaded Documents ({knowledgeDocs.length})</h3>
+                    </div>
+
+                    {knowledgeDocs.length === 0 ? (
+                      <div className="p-12 text-center">
+                        <FileText size={48} className="text-slate-300 dark:text-slate-600 mx-auto mb-4" />
+                        <p className="text-slate-500 dark:text-slate-400 font-medium">No documents uploaded yet</p>
+                        <p className="text-xs text-slate-400 mt-1">Upload your first document to enhance the AI chatbot</p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                          <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                            <tr>
+                              <th className="px-6 py-4">Document</th>
+                              <th className="px-6 py-4">Type</th>
+                              <th className="px-6 py-4">Uploaded By</th>
+                              <th className="px-6 py-4">Date</th>
+                              <th className="px-6 py-4">Status</th>
+                              <th className="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                            {knowledgeDocs.map((doc: any) => (
+                              <tr key={doc.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30">
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-3">
+                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                                      doc.file_extension === 'pdf' ? 'bg-red-100 dark:bg-red-900/30 text-red-600' :
+                                      doc.file_extension === 'md' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' :
+                                      'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
+                                    }`}>
+                                      <FileText size={18} />
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-bold text-slate-800 dark:text-white">{doc.title}</p>
+                                      <p className="text-[10px] text-slate-500">{doc.filename}</p>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full uppercase ${
+                                    doc.file_extension === 'pdf' ? 'bg-red-50 dark:bg-red-900/20 text-red-600' :
+                                    doc.file_extension === 'md' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' :
+                                    'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600'
+                                  }`}>
+                                    {doc.file_extension}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{doc.uploaded_by_username || 'Admin'}</td>
+                                <td className="px-6 py-4 text-sm text-slate-500">{new Date(doc.created_at).toLocaleDateString()}</td>
+                                <td className="px-6 py-4">
+                                  <button 
+                                    onClick={() => handleToggleDocument(doc.id, doc.is_active)}
+                                    className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
+                                      doc.is_active 
+                                        ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:bg-emerald-100'
+                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200'
+                                    }`}
+                                  >
+                                    {doc.is_active ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
+                                    {doc.is_active ? 'Active' : 'Inactive'}
+                                  </button>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                  <button 
+                                    onClick={() => handleDeleteDocument(doc.id)}
+                                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
+                                    title="Delete document"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -2642,6 +2819,103 @@ const AdminDashboard = () => {
                     className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Update Stream
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Upload Document Modal */}
+      <AnimatePresence>
+        {showUploadModal && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowUploadModal(false)}
+              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+            >
+              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                  <Upload className="text-indigo-600" size={20} />
+                  Upload Knowledge Document
+                </h3>
+                <button 
+                  onClick={() => setShowUploadModal(false)} 
+                  aria-label="Close modal"
+                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                >
+                  <XCircle size={20} />
+                </button>
+              </div>
+              
+              <form onSubmit={handleUploadDocument} className="p-6 space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Document Title</label>
+                  <input 
+                    required
+                    type="text" 
+                    placeholder="e.g. Platform FAQ, Student Handbook"
+                    value={uploadTitle}
+                    onChange={e => setUploadTitle(e.target.value)}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Description (Optional)</label>
+                  <textarea 
+                    placeholder="Brief description of the document content..."
+                    value={uploadDescription}
+                    onChange={e => setUploadDescription(e.target.value)}
+                    rows={2}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">File (PDF, TXT, or MD)</label>
+                  <div className="relative">
+                    <input 
+                      required
+                      type="file" 
+                      accept=".pdf,.txt,.md"
+                      onChange={e => setUploadFile(e.target.files?.[0] || null)}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 cursor-pointer"
+                    />
+                  </div>
+                  {uploadFile && (
+                    <p className="text-xs text-emerald-600 font-medium px-1 flex items-center gap-1">
+                      <Check size={12} /> {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                    </p>
+                  )}
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button"
+                    onClick={() => setShowUploadModal(false)}
+                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    disabled={uploadLoading || !uploadFile}
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+                  >
+                    {uploadLoading ? (
+                      <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Uploading...</>
+                    ) : (
+                      <><Upload size={16} /> Upload Document</>
+                    )}
                   </button>
                 </div>
               </form>
