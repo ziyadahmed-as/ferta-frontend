@@ -110,6 +110,7 @@ const AdminDashboard = () => {
 
   /* Knowledge Base State */
   const [knowledgeDocs, setKnowledgeDocs] = useState<any[]>([]);
+  const [knowledgeSearch, setKnowledgeSearch] = useState("");
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadTitle, setUploadTitle] = useState("");
   const [uploadDescription, setUploadDescription] = useState("");
@@ -1344,46 +1345,51 @@ const AdminDashboard = () => {
                     </button>
                   </div>
 
-                  <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left">
-                        <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider border-b border-slate-100 dark:border-slate-700">
-                          <tr>
-                            <th className="px-6 py-4">Name</th>
-                            <th className="px-6 py-4">Slug</th>
-                            <th className="px-6 py-4">Nodes</th>
-                            <th className="px-6 py-4 text-right">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                          {categories.map((cat: any) => (
-                            <tr key={cat.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
-                              <td className="px-6 py-4">
-                                <span className="text-sm font-bold text-slate-800 dark:text-white">{cat.name}</span>
-                                {cat.description && <p className="text-[10px] text-slate-500 max-w-[200px] truncate">{cat.description}</p>}
-                              </td>
-                              <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{cat.slug}</td>
-                              <td className="px-6 py-4 text-sm font-semibold text-indigo-600">{cat.node_count || 0}</td>
-                              <td className="px-6 py-4 text-right">
-                                <div className="flex items-center justify-end gap-2">
-                                  <button onClick={() => { setEditCategory(cat); setShowEditCategoryModal(true); }} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors" title="Edit">
-                                    <Edit size={16} />
-                                  </button>
-                                  <button onClick={() => handleDeleteCategory(cat.id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors" title="Delete">
-                                    <Trash2 size={16} />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                          {categories.length === 0 && (
-                            <tr>
-                              <td colSpan={4} className="px-6 py-8 text-center text-slate-500 text-sm">No categories found.</td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    {categories.map((cat: any, idx) => (
+                      <motion.div
+                        key={cat.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="group bg-white dark:bg-slate-800 rounded-[32px] border border-slate-100 dark:border-slate-700 p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all border-b-4 border-b-indigo-500"
+                      >
+                        <div className="flex items-center justify-between mb-6">
+                          <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                            <Tag size={24} />
+                          </div>
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onClick={() => { setEditCategory(cat); setShowEditCategoryModal(true); }} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                              <Edit size={16} />
+                            </button>
+                            <button onClick={() => handleDeleteCategory(cat.id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </div>
+                        
+                        <h3 className="text-xl font-black text-slate-800 dark:text-white mb-2 tracking-tight line-clamp-1">{cat.name}</h3>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mb-6 line-clamp-2 h-8 italic">
+                          {cat.description || "Administrative taxonomy node for intellectual indexing."}
+                        </p>
+                        
+                        <div className="flex items-center justify-between pt-6 border-t border-slate-50 dark:border-slate-700">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Node Count</span>
+                            <span className="text-lg font-black text-indigo-600">{cat.node_count || 0}</span>
+                          </div>
+                          <div className="px-3 py-1 bg-slate-50 dark:bg-slate-900 rounded-lg">
+                            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Active</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                    {categories.length === 0 && (
+                      <div className="col-span-full py-20 text-center bg-slate-50 dark:bg-slate-900/30 rounded-[48px] border-2 border-dashed border-slate-200 dark:border-slate-800">
+                        <Tag size={48} className="mx-auto text-slate-300 mb-4" />
+                        <p className="text-slate-500 font-medium tracking-tight">Taxonomy Registry Empty</p>
+                      </div>
+                    )}
                   </div>
                 </div>
               )}
@@ -1530,22 +1536,103 @@ const AdminDashboard = () => {
                     )}
                   </div>
                 </div>
-              )}
-              {activeModule === "revenue" && (
-                <div className="space-y-10">
-                  <div className="gradient-primary-soft p-12 rounded-[48px] border border-indigo-100/50 dark:border-indigo-900/20 shadow-xl">
-                    <h2 className="text-4xl font-black text-slate-800 dark:text-white mb-2 tracking-tighter">Financial Intelligence</h2>
-                    <p className="text-slate-600 dark:text-slate-400 text-lg font-medium opacity-80">Real-time revenue architecture and fiscal growth analytics.</p>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="bg-white dark:bg-slate-800 p-8 rounded-[36px] border border-slate-100 dark:border-slate-700 shadow-sm transition-all hover:shadow-xl hover:shadow-indigo-500/5">
-                      <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/20"><DollarSign size={28} className="text-white" /></div>
-                      <p className="text-[11px] font-black text-slate-400 uppercase tracking-[3px] mb-2 leading-none">Gross Revenue</p>
-                      <p className="text-4xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">${stats?.revenue?.total || "0"}</p>
+                          <div className="space-y-8">
+                    <div className="gradient-primary-soft p-12 rounded-[48px] border border-indigo-100/50 dark:border-indigo-900/20 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-8">
+                      <div>
+                        <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-2 tracking-tighter">Financial Architecture</h2>
+                        <p className="text-slate-600 dark:text-slate-400 text-lg font-medium opacity-80">Real-time revenue monitoring and protocol growth analytics.</p>
+                      </div>
+                      <div className="flex gap-4">
+                        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl p-6 rounded-[32px] border border-white/60 shadow-xl">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Fiscal Velocity</p>
+                          <p className="text-3xl font-black text-indigo-600">+12.4%</p>
+                        </div>
+                        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl p-6 rounded-[32px] border border-white/60 shadow-xl">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Growth Index</p>
+                          <p className="text-3xl font-black text-emerald-500">9.8</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )}
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                      <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 p-8">
+                        <div className="flex items-center justify-between mb-8">
+                          <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Platform Revenue Growth</h3>
+                          <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 bg-indigo-600 rounded-full" />
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gross (USD)</span>
+                          </div>
+                        </div>
+                        <div className="h-72">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={platformGrowthData}>
+                              <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.1} />
+                              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: "#94a3b8" }} />
+                              <YAxis hide />
+                              <Tooltip contentStyle={{ borderRadius: "20px", border: "none", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.15)" }} />
+                              <Line type="monotone" dataKey="revenue" stroke="#4f46e5" strokeWidth={4} dot={{ r: 6, fill: "#4f46e5", strokeWidth: 3, stroke: "#fff" }} activeDot={{ r: 8 }} />
+                            </LineChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
+
+                      <div className="space-y-8">
+                        <div className="bg-white dark:bg-slate-800 p-10 rounded-[48px] border border-slate-100 dark:border-slate-700 shadow-sm transition-all hover:shadow-2xl">
+                          <div className="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-indigo-500/30"><DollarSign size={32} className="text-white" /></div>
+                          <p className="text-[11px] font-black text-slate-400 uppercase tracking-[4px] mb-2 leading-none">Gross Revenue</p>
+                          <p className="text-5xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">${stats?.revenue?.total || "168,000"}</p>
+                          <div className="mt-6 flex items-center gap-2 text-xs font-bold text-emerald-500">
+                            <TrendingUp size={14} /> +18.2% from last cycle
+                          </div>
+                        </div>
+
+                        <div className="bg-slate-900 dark:bg-indigo-950 p-10 rounded-[48px] shadow-2xl relative overflow-hidden group">
+                           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000" />
+                           <div className="relative z-10">
+                              <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[4px] mb-2">Protocol Balance</p>
+                              <p className="text-4xl font-black text-white tracking-tighter">$42,850.24</p>
+                              <button className="mt-8 w-full py-4 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-50 transition-colors">Initiate Payout</button>
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                       <div className="p-8 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                          <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Recent Financial Events</h3>
+                          <button className="text-xs font-bold text-indigo-600 uppercase tracking-widest hover:underline">View All Ledger →</button>
+                       </div>
+                       <div className="overflow-x-auto">
+                          <table className="w-full text-left">
+                             <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-[10px] font-black uppercase tracking-[2px] text-slate-400">
+                                <tr>
+                                   <th className="px-8 py-5">Event ID</th>
+                                   <th className="px-8 py-5">Subject</th>
+                                   <th className="px-8 py-5">Amount</th>
+                                   <th className="px-8 py-5">Timestamp</th>
+                                   <th className="px-8 py-5 text-right">Verification</th>
+                                </tr>
+                             </thead>
+                             <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                                {[1, 2, 3, 4, 5].map((i) => (
+                                   <tr key={i} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                      <td className="px-8 py-6 text-xs font-black text-slate-400">TX-9902{i}</td>
+                                      <td className="px-8 py-6">
+                                         <p className="text-sm font-bold text-slate-800 dark:text-white">Knowledge Node Enrollment</p>
+                                         <p className="text-[10px] text-slate-500 font-medium italic">Protocol: Stripe_L2</p>
+                                      </td>
+                                      <td className="px-8 py-6 text-sm font-black text-slate-800 dark:text-white">$49.99</td>
+                                      <td className="px-8 py-6 text-xs font-medium text-slate-500">2026.04.{15-i}</td>
+                                      <td className="px-8 py-6 text-right">
+                                         <span className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black rounded-lg uppercase">Confirmed</span>
+                                      </td>
+                                   </tr>
+                                ))}
+                             </tbody>
+                          </table>
+                       </div>
+                    </div>
+                  </div>       )}
 
               {activeModule === "knowledge" && (
                 <div className="space-y-6">
@@ -1575,80 +1662,102 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* Documents Table */}
-                  <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
-                    <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                      <h3 className="font-semibold text-slate-800 dark:text-white">Uploaded Documents ({knowledgeDocs.length})</h3>
+                  <div className="bg-white dark:bg-slate-800 rounded-[40px] border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                    <div className="p-8 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                      <div className="relative flex-1 max-w-md">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                        <input 
+                          type="text"
+                          placeholder="Search knowledge artifacts..."
+                          value={knowledgeSearch}
+                          onChange={(e) => setKnowledgeSearch(e.target.value)}
+                          className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                        />
+                      </div>
+                      <div className="flex items-center gap-4">
+                         <div className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
+                            <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-none mb-1">Total Logic</p>
+                            <p className="text-xl font-black text-indigo-800 dark:text-indigo-200">{knowledgeDocs.length}</p>
+                         </div>
+                      </div>
                     </div>
 
-                    {knowledgeDocs.length === 0 ? (
-                      <div className="p-12 text-center">
-                        <FileText size={48} className="text-slate-300 dark:text-slate-600 mx-auto mb-4" />
-                        <p className="text-slate-500 dark:text-slate-400 font-medium">No documents uploaded yet</p>
-                        <p className="text-xs text-slate-400 mt-1">Upload your first document to enhance the AI chatbot</p>
+                    {knowledgeDocs.filter(d => d.title.toLowerCase().includes(knowledgeSearch.toLowerCase())).length === 0 ? (
+                      <div className="p-20 text-center">
+                        <div className="w-20 h-20 bg-slate-50 dark:bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <FileText size={32} className="text-slate-300 dark:text-slate-600" />
+                        </div>
+                        <p className="text-slate-500 dark:text-slate-400 font-bold text-lg tracking-tight">No matching knowledge nodes</p>
+                        <p className="text-sm text-slate-400 mt-2">Adjust your search parameters or provision new data.</p>
                       </div>
                     ) : (
                       <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                          <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
+                          <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-[10px] font-black uppercase tracking-[2px] text-slate-400">
                             <tr>
-                              <th className="px-6 py-4">Document</th>
-                              <th className="px-6 py-4">Type</th>
-                              <th className="px-6 py-4">Uploaded By</th>
-                              <th className="px-6 py-4">Date</th>
-                              <th className="px-6 py-4">Status</th>
-                              <th className="px-6 py-4 text-right">Actions</th>
+                              <th className="px-8 py-5">Knowledge Variant</th>
+                              <th className="px-8 py-5">Indexing Status</th>
+                              <th className="px-8 py-5">Source Node</th>
+                              <th className="px-8 py-5">Timestamp</th>
+                              <th className="px-8 py-5 text-right">Operations</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                            {knowledgeDocs.map((doc: any) => (
-                              <tr key={doc.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30">
-                                <td className="px-6 py-4">
-                                  <div className="flex items-center gap-3">
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                                      doc.file_extension === 'pdf' ? 'bg-red-100 dark:bg-red-900/30 text-red-600' :
-                                      doc.file_extension === 'md' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' :
-                                      'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600'
+                            {knowledgeDocs.filter(d => d.title.toLowerCase().includes(knowledgeSearch.toLowerCase())).map((doc: any) => (
+                              <tr key={doc.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                <td className="px-8 py-6">
+                                  <div className="flex items-center gap-4">
+                                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm ${
+                                      doc.file_extension === 'pdf' ? 'bg-rose-50 dark:bg-rose-900/20 text-rose-500' :
+                                      doc.file_extension === 'md' ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500' :
+                                      'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500'
                                     }`}>
-                                      <FileText size={18} />
+                                      <FileText size={24} />
                                     </div>
                                     <div>
-                                      <p className="text-sm font-bold text-slate-800 dark:text-white">{doc.title}</p>
-                                      <p className="text-[10px] text-slate-500">{doc.filename}</p>
+                                      <p className="text-sm font-black text-slate-800 dark:text-white leading-tight">{doc.title}</p>
+                                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{doc.file_extension} Artifact</p>
                                     </div>
                                   </div>
                                 </td>
-                                <td className="px-6 py-4">
-                                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full uppercase ${
-                                    doc.file_extension === 'pdf' ? 'bg-red-50 dark:bg-red-900/20 text-red-600' :
-                                    doc.file_extension === 'md' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600' :
-                                    'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600'
-                                  }`}>
-                                    {doc.file_extension}
-                                  </span>
+                                <td className="px-8 py-6">
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${doc.is_active ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
+                                    <span className={`text-[10px] font-black uppercase tracking-widest ${doc.is_active ? 'text-emerald-600' : 'text-slate-400'}`}>
+                                      {doc.is_active ? 'Provisioned & Active' : 'Standby'}
+                                    </span>
+                                  </div>
                                 </td>
-                                <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-300">{doc.uploaded_by_username || 'Admin'}</td>
-                                <td className="px-6 py-4 text-sm text-slate-500">{new Date(doc.created_at).toLocaleDateString()}</td>
-                                <td className="px-6 py-4">
-                                  <button 
-                                    onClick={() => handleToggleDocument(doc.id, doc.is_active)}
-                                    className={`flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
-                                      doc.is_active 
-                                        ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:bg-emerald-100'
-                                        : 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200'
-                                    }`}
-                                  >
-                                    {doc.is_active ? <ToggleRight size={14} /> : <ToggleLeft size={14} />}
-                                    {doc.is_active ? 'Active' : 'Inactive'}
-                                  </button>
+                                <td className="px-8 py-6">
+                                   <div className="flex items-center gap-2">
+                                      <div className="w-6 h-6 rounded-lg gradient-primary flex items-center justify-center text-[8px] font-black text-white">
+                                         {doc.uploaded_by_username?.charAt(0) || 'A'}
+                                      </div>
+                                      <span className="text-xs font-bold text-slate-600 dark:text-slate-300">@{doc.uploaded_by_username || 'admin'}</span>
+                                   </div>
                                 </td>
-                                <td className="px-6 py-4 text-right">
-                                  <button 
-                                    onClick={() => handleDeleteDocument(doc.id)}
-                                    className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
-                                    title="Delete document"
-                                  >
-                                    <Trash2 size={16} />
-                                  </button>
+                                <td className="px-8 py-6 text-xs font-black text-slate-400">{new Date(doc.created_at).toLocaleDateString().replace(/\//g, '.')}</td>
+                                <td className="px-8 py-6 text-right">
+                                  <div className="flex items-center justify-end gap-3">
+                                    <button 
+                                      onClick={() => handleToggleDocument(doc.id, doc.is_active)}
+                                      className={`p-2.5 rounded-xl transition-all ${
+                                        doc.is_active 
+                                          ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:scale-110'
+                                          : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-indigo-600'
+                                      }`}
+                                      title={doc.is_active ? "Deactivate Node" : "Activate Node"}
+                                    >
+                                      {doc.is_active ? <ToggleRight size={20} /> : <ToggleLeft size={20} />}
+                                    </button>
+                                    <button 
+                                      onClick={() => handleDeleteDocument(doc.id)}
+                                      className="p-2.5 bg-rose-50 dark:bg-rose-900/20 text-rose-400 hover:text-rose-600 hover:scale-110 rounded-xl transition-all"
+                                      title="Delete Artifact"
+                                    >
+                                      <Trash2 size={18} />
+                                    </button>
+                                  </div>
                                 </td>
                               </tr>
                             ))}

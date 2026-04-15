@@ -14,7 +14,7 @@ import { AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer, PieChart, Pie, Cell
 } from "recharts";
 
 const learningProgressData = [
@@ -32,6 +32,12 @@ const coursePerformanceData = [
   { course: "Science", score: 92 },
   { course: "English", score: 75 },
   { course: "Tech", score: 95 },
+];
+
+const masteryData = [
+  { name: "Completed", value: 35, color: "#4f46e5" },
+  { name: "In Progress", value: 45, color: "#818cf8" },
+  { name: "Remaining", value: 20, color: "#e2e8f0" },
 ];
 
 const StudentDashboard = () => {
@@ -222,48 +228,77 @@ const StudentDashboard = () => {
         </header>
 
         <div className="p-6 space-y-6">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="welcome-banner p-8 flex flex-col md:flex-row items-center justify-between rounded-[32px] relative overflow-hidden group mb-8"
-          >
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
-            
-            <div className="relative z-10 space-y-4 text-center md:text-left">
-              <div>
-                <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-2 tracking-tight">
-                  Welcome back, {user.username}! 👋
-                </h1>
-                <p className="text-slate-600 dark:text-slate-300 text-base font-medium opacity-80">You're making great progress. Ready to continue your journey?</p>
-              </div>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
-                <button 
-                  onClick={() => setActiveTab("video")}
-                  className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg ${activeTab === "video" ? "bg-slate-900 text-white shadow-slate-900/20 dark:bg-white dark:text-slate-900" : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-white/20 hover:scale-105"}`}
-                >
-                  <BookOpen size={18} /> My Courses
-                </button>
-                <button 
-                  onClick={() => setActiveTab("live")}
-                  className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg ${activeTab === "live" ? "bg-rose-600 text-white shadow-rose-600/20" : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-white/20 hover:scale-105"}`}
-                >
-                  <TrendingUp size={18} /> Live Sessions
-                </button>
-                <Link 
-                  href="/courses"
-                  className="px-6 py-3 rounded-2xl font-bold text-sm bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:scale-105 transition-all flex items-center gap-2"
-                >
-                  <PlayCircle size={18} /> Browse All
-                </Link>
+          {/* Next Up / Progress Overview Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div className="lg:col-span-2 relative overflow-hidden bg-gradient-to-br from-indigo-600 to-indigo-900 rounded-[40px] p-8 text-white shadow-2xl shadow-indigo-500/20 group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-125 transition-all duration-1000" />
+              
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                <div className="w-32 h-32 bg-white/10 backdrop-blur-xl rounded-[32px] border border-white/20 flex items-center justify-center p-2 shrink-0">
+                  <div className="w-full h-full bg-white/20 rounded-2xl flex items-center justify-center text-4xl shadow-inner">
+                    ⚡
+                  </div>
+                </div>
+                
+                <div className="flex-1 text-center md:text-left">
+                  <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                    <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                    <p className="text-[10px] font-black uppercase tracking-[3px] text-indigo-200">Next Recommended Node</p>
+                  </div>
+                  <h2 className="text-3xl font-black mb-3 tracking-tighter">
+                    {courses[0]?.title || liveStreams[0]?.title || "Explore New Frontiers"}
+                  </h2>
+                  <p className="text-indigo-100/70 text-sm font-medium mb-6 line-clamp-2">
+                    Your learning velocity is increasing. Jump back into the curriculum and maintain your streak.
+                  </p>
+                  <button className="px-8 py-3 bg-white text-indigo-600 rounded-[20px] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
+                    Resume Mission →
+                  </button>
+                </div>
               </div>
             </div>
-            
-            <div className="relative z-10 hidden lg:block">
-              <div className="w-24 h-24 bg-white/20 backdrop-blur-xl rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl border border-white/30 rotate-12 group-hover:rotate-0 transition-all duration-500">
-                🎓
+
+            <div className="bg-white dark:bg-slate-800 rounded-[40px] border border-slate-200 dark:border-slate-700 p-8 shadow-sm flex flex-col">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-sm font-black text-slate-800 dark:text-white uppercase tracking-widest leading-none">Curriculum Mastery</h3>
+                <Star size={16} className="text-amber-500 fill-amber-500" />
+              </div>
+              
+              <div className="flex-1 flex flex-col items-center justify-center">
+                 <div className="h-40 w-full relative">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie 
+                          data={masteryData} 
+                          innerRadius={50} 
+                          outerRadius={75} 
+                          paddingAngle={5} 
+                          dataKey="value"
+                        >
+                          {masteryData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} strokeWidth={0} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                       <p className="text-3xl font-black text-slate-800 dark:text-white leading-none">82%</p>
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mastery</p>
+                    </div>
+                 </div>
+                 
+                 <div className="flex gap-4 mt-6">
+                    {masteryData.slice(0, 2).map((item) => (
+                      <div key={item.name} className="flex items-center gap-2">
+                        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
+                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-tighter">{item.name}</span>
+                      </div>
+                    ))}
+                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
