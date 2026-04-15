@@ -520,7 +520,7 @@ const AdminDashboard = () => {
     { id: "users", label: "Users", icon: Users },
     { id: "courses", label: "Courses", icon: BookOpen },
     { id: "categories", label: "Categories", icon: Tag },
-    { id: "live", label: "Live Streams", icon: Cpu },
+    { id: "live", label: "Live Sessions", icon: Cpu },
     { id: "knowledge", label: "Knowledge Base", icon: FileText },
     { id: "revenue", label: "Revenue", icon: DollarSign },
   ];
@@ -611,7 +611,20 @@ const AdminDashboard = () => {
       <main className="flex-1 overflow-y-auto">
         {/* Header */}
         <header className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
-          <div></div>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={() => setActiveModule("courses")}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${activeModule === "courses" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
+            >
+              Courses
+            </button>
+            <button 
+              onClick={() => setActiveModule("live")}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${activeModule === "live" ? "bg-rose-600 text-white shadow-lg shadow-rose-500/20" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
+            >
+              Live Sessions
+            </button>
+          </div>
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <div className="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1" />
@@ -702,7 +715,7 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* Quick Actions */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-9 h-9 icon-blue rounded-xl flex items-center justify-center">
@@ -763,6 +776,38 @@ const AdminDashboard = () => {
                         ))}
                         {!stats?.courses?.pending_list?.length && (
                           <p className="text-xs text-slate-400 text-center py-2">No pending courses</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-5">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-9 h-9 icon-teal rounded-xl flex items-center justify-center">
+                          <TrendingUp size={16} className="text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-800 dark:text-white text-sm">Live Sessions Hub</h3>
+                          <p className="text-xs text-slate-500">{liveStreams?.length || 0} active hubs</p>
+                        </div>
+                        <button
+                          onClick={() => setActiveModule("live")}
+                          className="ml-auto text-xs text-teal-600 font-semibold hover:underline"
+                        >
+                          Manage →
+                        </button>
+                      </div>
+                      <div className="space-y-2">
+                        {(liveStreams || []).slice(0, 3).map((s: any) => (
+                          <div key={s.id} className="flex items-center gap-3 py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
+                            <div className="w-7 h-7 bg-teal-100 dark:bg-teal-900/30 rounded-lg flex items-center justify-center text-teal-600 text-xs font-bold shrink-0">
+                              {s.title?.[0]?.toUpperCase()}
+                            </div>
+                            <span className="text-sm text-slate-700 dark:text-slate-200 flex-1 truncate">{s.title}</span>
+                            <span className="text-[10px] text-teal-600 font-bold">{s.enrollment_count}/{s.max_students}</span>
+                          </div>
+                        ))}
+                        {!liveStreams?.length && (
+                          <p className="text-xs text-slate-400 text-center py-2">No active hubs</p>
                         )}
                       </div>
                     </div>
@@ -1354,21 +1399,22 @@ const AdminDashboard = () => {
                             <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-indigo-600">
                                <TrendingUp size={36} />
                             </div>
-                            Cohort Moderation
+                            Live Session Hub
                           </h2>
-                          <p className="text-slate-600 dark:text-slate-300 text-xl font-medium opacity-80 max-w-xl leading-relaxed">Orchestrate and moderate synchronous learning experiences and faculty presence.</p>
+                          <p className="text-slate-600 dark:text-slate-300 text-xl font-medium opacity-80 max-w-xl leading-relaxed">Orchestrate and moderate synchronous learning experiences, session slots, and faculty presence.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row items-center gap-6">
                            <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-indigo-500/10 text-center">
-                              <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Active Cohorts</p>
+                              <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Active Hubs</p>
                               <p className="text-5xl font-black text-indigo-600 tracking-tighter">{liveStreams.length}</p>
                            </div>
                            <button 
                              onClick={() => setShowAddStreamModal(true)}
                              className="w-full sm:w-auto h-20 px-10 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[32px] font-black text-xs uppercase tracking-[3px] shadow-2xl hover:scale-[1.05] active:scale-[0.95] transition-all flex items-center justify-center gap-4"
                            >
-                             <PlusCircle size={24} /> Add Cohort
+                             <PlusCircle size={24} /> New Session
                            </button>
+
                         </div>
                      </div>
                   </div>

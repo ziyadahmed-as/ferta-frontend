@@ -48,6 +48,9 @@ const Navbar = () => {
           <Link href="/courses" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             Courses
           </Link>
+          <Link href="/courses?type=live" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            Live Sessions
+          </Link>
           <Link href="/register?role=instructor" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             Teach
           </Link>
@@ -149,6 +152,7 @@ const Navbar = () => {
         <div className="md:hidden bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-6 px-6 flex flex-col gap-4 shadow-2xl">
           <Link href="/" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Home</Link>
           <Link href="/courses" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Courses</Link>
+          <Link href="/courses?type=live" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Live Sessions</Link>
           <Link href="/register?role=instructor" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">Teach</Link>
           <Link href="/about" onClick={() => setIsOpen(false)} className="text-base font-semibold py-2 text-slate-800 dark:text-slate-100 border-b border-slate-50 dark:border-slate-800/50">About</Link>
           

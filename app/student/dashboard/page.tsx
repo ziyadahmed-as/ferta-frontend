@@ -222,19 +222,47 @@ const StudentDashboard = () => {
         </header>
 
         <div className="p-6 space-y-6">
-          {/* Welcome Banner */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="welcome-banner p-6 flex items-center justify-between rounded-2xl"
+            className="welcome-banner p-8 flex flex-col md:flex-row items-center justify-between rounded-[32px] relative overflow-hidden group mb-8"
           >
-            <div>
-              <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
-                Welcome back, {user.username}! 👋
-              </h1>
-              <p className="text-slate-600 dark:text-slate-300 text-sm">You're making great progress. Keep it up!</p>
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-1000" />
+            
+            <div className="relative z-10 space-y-4 text-center md:text-left">
+              <div>
+                <h1 className="text-3xl font-black text-slate-800 dark:text-slate-100 mb-2 tracking-tight">
+                  Welcome back, {user.username}! 👋
+                </h1>
+                <p className="text-slate-600 dark:text-slate-300 text-base font-medium opacity-80">You're making great progress. Ready to continue your journey?</p>
+              </div>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 pt-2">
+                <button 
+                  onClick={() => setActiveTab("video")}
+                  className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg ${activeTab === "video" ? "bg-slate-900 text-white shadow-slate-900/20 dark:bg-white dark:text-slate-900" : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-white/20 hover:scale-105"}`}
+                >
+                  <BookOpen size={18} /> My Courses
+                </button>
+                <button 
+                  onClick={() => setActiveTab("live")}
+                  className={`px-6 py-3 rounded-2xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg ${activeTab === "live" ? "bg-rose-600 text-white shadow-rose-600/20" : "bg-white/80 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border border-white/20 hover:scale-105"}`}
+                >
+                  <TrendingUp size={18} /> Live Sessions
+                </button>
+                <Link 
+                  href="/courses"
+                  className="px-6 py-3 rounded-2xl font-bold text-sm bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:scale-105 transition-all flex items-center gap-2"
+                >
+                  <PlayCircle size={18} /> Browse All
+                </Link>
+              </div>
             </div>
-            <div className="text-5xl hidden sm:block">🎓</div>
+            
+            <div className="relative z-10 hidden lg:block">
+              <div className="w-24 h-24 bg-white/20 backdrop-blur-xl rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl border border-white/30 rotate-12 group-hover:rotate-0 transition-all duration-500">
+                🎓
+              </div>
+            </div>
           </motion.div>
 
           {/* Stats Grid */}

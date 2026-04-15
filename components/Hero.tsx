@@ -31,7 +31,7 @@ const Hero = () => {
             className="max-w-3xl mx-auto"
           >
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 leading-tight tracking-tight">
-              Explore <span className="text-indigo-600">Learning</span> Paths
+              Explore <span className="text-indigo-600">Learning</span> Path
             </h1>
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-2xl mx-auto font-medium">
               Choose from our comprehensive range of courses designed for every stage of your educational journey
