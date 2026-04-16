@@ -855,7 +855,7 @@ const AdminDashboard = () => {
                       Node Applications
                       {stats?.pending_instructors?.length > 0 && (
                         <span className="bg-indigo-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
-                          {stats.pending_instructors.length}
+                          {stats?.pending_instructors?.length}
                         </span>
                       )}
                     </button>
@@ -1366,10 +1366,18 @@ const AdminDashboard = () => {
                             <Tag size={24} />
                           </div>
                           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => { setEditCategory(cat); setShowEditCategoryModal(true); }} className="p-2 text-slate-400 hover:text-indigo-600 transition-colors">
+                            <button 
+                              onClick={() => { setEditCategory(cat); setShowEditCategoryModal(true); }} 
+                              title="Edit Category"
+                              className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"
+                            >
                               <Edit size={16} />
                             </button>
-                            <button onClick={() => handleDeleteCategory(cat.id)} className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                            <button 
+                              onClick={() => handleDeleteCategory(cat.id)} 
+                              title="Delete Category"
+                              className="p-2 text-slate-400 hover:text-red-500 transition-colors"
+                            >
                               <Trash2 size={16} />
                             </button>
                           </div>
@@ -1668,7 +1676,7 @@ const AdminDashboard = () => {
                     <FileUp className="text-indigo-600 shrink-0 mt-0.5" size={20} />
                     <div>
                       <p className="text-sm font-semibold text-indigo-800 dark:text-indigo-200">How it works</p>
-                      <p className="text-xs text-indigo-600 dark:text-indigo-300 mt-1">Upload PDF, TXT, or MD files here. Active documents are automatically indexed into the AI platform chatbot's knowledge base. Users chatting with the bot will get answers from these documents.</p>
+                      <p className="text-xs text-indigo-600 dark:text-indigo-300 mt-1">Upload PDF, TXT, or MD files here. Active documents are automatically indexed into the AI platform chatbot&apos;s knowledge base. Users chatting with the bot will get answers from these documents.</p>
                     </div>
                   </div>
 
@@ -2586,7 +2594,7 @@ const AdminDashboard = () => {
                       <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2.5px] pb-2 border-b border-slate-100 dark:border-slate-800">Biological Summary</h4>
                       <div className="relative p-6 bg-indigo-50/30 dark:bg-indigo-900/10 rounded-[28px] border border-indigo-100/50 dark:border-indigo-800/30">
                         <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium italic">
-                          "{userDetail.bio || "No biological summary provided to the registry."}"
+                          &quot;{userDetail.bio || "No biological summary provided to the registry."}&quot;
                         </p>
                         <div className="absolute -top-3 -left-3 bg-white dark:bg-slate-900 p-2 text-indigo-500">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L20.017 3C21.1216 3 22.017 3.89543 22.017 5V19C22.017 20.1046 21.1216 21 20.017 21H14.017ZM2.01697 21L2.01697 18C2.01697 16.8954 2.9124 16 4.01697 16H7.01697C7.56925 16 8.01697 15.5523 8.01697 15V9C8.01697 8.44772 7.56925 8 7.01697 8H4.01697C2.9124 8 2.01697 7.10457 2.01697 6V3L8.01697 3C9.12154 3 10.017 3.89543 10.017 5V19C10.017 20.1046 9.12154 21 8.01697 21H2.01697Z"/></svg>
