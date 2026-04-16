@@ -33,6 +33,11 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [activeModule, setActiveModule] = useState("overview");
   const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   /* User Management State */
   const [allUsers, setAllUsers] = useState<any[]>([]);
@@ -493,6 +498,8 @@ const AdminDashboard = () => {
     }
   };
 
+
+  if (!mounted) return null;
 
   if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN" && !user.is_superuser)) {
     return (

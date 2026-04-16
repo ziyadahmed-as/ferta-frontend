@@ -54,6 +54,11 @@ const StudentDashboard = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submittingRating, setSubmittingRating] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   /* Secure Artifact Viewer State */
   const [showArtifactViewer, setShowArtifactViewer] = useState(false);
@@ -95,6 +100,8 @@ const StudentDashboard = () => {
       setSubmittingRating(false);
     }
   };
+
+  if (!mounted) return null;
 
   if (!user) {
     return (

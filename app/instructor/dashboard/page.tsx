@@ -46,6 +46,11 @@ const InstructorDashboard = () => {
   const [selectedSessionId, setSelectedSessionId] = useState<string>("");
   const [artifactData, setArtifactData] = useState({ title: "", type: "pdf", url: "", file: null as File | null });
   const [uploading, setUploading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -109,6 +114,8 @@ const InstructorDashboard = () => {
       setUploading(false);
     }
   };
+
+  if (!mounted) return null;
 
   if (!user || (user.role !== "INSTRUCTOR" && !user.is_superuser && user.role !== "ADMIN")) {
     return (
