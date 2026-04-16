@@ -1536,7 +1536,10 @@ const AdminDashboard = () => {
                     )}
                   </div>
                 </div>
-                          <div className="space-y-8">
+              )}
+
+              {activeModule === "revenue" && (
+                <div className="space-y-8">
                     <div className="gradient-primary-soft p-12 rounded-[48px] border border-indigo-100/50 dark:border-indigo-900/20 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-8">
                       <div>
                         <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-2 tracking-tighter">Financial Architecture</h2>
@@ -1632,7 +1635,8 @@ const AdminDashboard = () => {
                           </table>
                        </div>
                     </div>
-                  </div>       )}
+                  </div>
+              )}
 
               {activeModule === "knowledge" && (
                 <div className="space-y-6">
