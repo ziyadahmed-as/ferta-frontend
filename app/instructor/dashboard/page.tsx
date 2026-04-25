@@ -163,7 +163,7 @@ const InstructorDashboard = () => {
     },
     {
       label: "Wallet Balance",
-      value: stats?.wallet_balance ? `$${Math.round(stats.wallet_balance).toLocaleString()}` : "—",
+      value: stats?.wallet_balance ? `${Math.round(stats.wallet_balance).toLocaleString()} Birr` : "—",
       sub: "Available for payout",
       icon: DollarSign,
       iconClass: "icon-purple",

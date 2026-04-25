@@ -550,8 +550,8 @@ const AdminDashboard = () => {
     },
     {
       label: "Platform Revenue",
-      value: stats?.revenue?.total ? `$${Math.round(stats.revenue.total / 1000)}K` : "$168K",
-      sub: "+$23K this month",
+      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total / 1000)}K Birr` : "168K Birr",
+      sub: "+23K Birr this month",
       icon: DollarSign,
       iconClass: "icon-purple",
     },
@@ -1314,7 +1314,7 @@ const AdminDashboard = () => {
                                </div>
                                <div className="p-5 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800">
                                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1 leading-none">Asset Valuation</p>
-                                  <p className="text-lg font-black text-slate-800 dark:text-white leading-none">${c.price}</p>
+                                  <p className="text-lg font-black text-slate-800 dark:text-white leading-none">{c.price} Birr</p>
                                </div>
                             </div>
                             <div className="flex gap-4">
@@ -1595,7 +1595,7 @@ const AdminDashboard = () => {
                           <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Platform Revenue Growth</h3>
                           <div className="flex items-center gap-2">
                             <span className="w-3 h-3 bg-teal-600 rounded-full" />
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gross (USD)</span>
+                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gross (ETB)</span>
                           </div>
                         </div>
                         <div className="h-72">
@@ -1615,7 +1615,7 @@ const AdminDashboard = () => {
                         <div className="bg-white dark:bg-slate-800 p-10 rounded-[48px] border border-slate-100 dark:border-slate-700 shadow-sm transition-all hover:shadow-2xl">
                           <div className="w-16 h-16 bg-teal-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-teal-500/30"><DollarSign size={32} className="text-white" /></div>
                           <p className="text-[11px] font-black text-slate-400 uppercase tracking-[4px] mb-2 leading-none">Gross Revenue</p>
-                          <p className="text-5xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">${stats?.revenue?.total || "168,000"}</p>
+                          <p className="text-5xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">{stats?.revenue?.total?.toLocaleString() || "168,000"} Birr</p>
                           <div className="mt-6 flex items-center gap-2 text-xs font-bold text-emerald-500">
                             <TrendingUp size={14} /> +18.2% from last cycle
                           </div>
@@ -1625,7 +1625,7 @@ const AdminDashboard = () => {
                            <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000" />
                            <div className="relative z-10">
                               <p className="text-[10px] font-black text-teal-400 uppercase tracking-[4px] mb-2">Protocol Balance</p>
-                              <p className="text-4xl font-black text-white tracking-tighter">$42,850.24</p>
+                              <p className="text-4xl font-black text-white tracking-tighter">42,850 Birr</p>
                               <button className="mt-8 w-full py-4 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-teal-50 transition-colors">Initiate Payout</button>
                            </div>
                         </div>
@@ -1656,7 +1656,7 @@ const AdminDashboard = () => {
                                          <p className="text-sm font-bold text-slate-800 dark:text-white">Knowledge Node Enrollment</p>
                                          <p className="text-[10px] text-slate-500 font-medium italic">Protocol: Stripe_L2</p>
                                       </td>
-                                      <td className="px-8 py-6 text-sm font-black text-slate-800 dark:text-white">$49.99</td>
+                                      <td className="px-8 py-6 text-sm font-black text-slate-800 dark:text-white">49.99 Birr</td>
                                       <td className="px-8 py-6 text-xs font-medium text-slate-500">2026.04.{15-i}</td>
                                       <td className="px-8 py-6 text-right">
                                          <span className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black rounded-lg uppercase">Confirmed</span>

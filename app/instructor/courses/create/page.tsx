@@ -144,10 +144,10 @@ const CreateCoursePage = () => {
                                     </div>
                                     <div className="space-y-2">
                                         <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
-                                            <DollarSign size={14} /> Price (USD)
+                                            <DollarSign size={14} /> Price (Birr)
                                         </label>
                                         <div className="relative">
-                                            <span className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-black">$</span>
+                                            <span className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-black text-[10px]">Birr</span>
                                             <input 
                                                 required
                                                 type="number" 

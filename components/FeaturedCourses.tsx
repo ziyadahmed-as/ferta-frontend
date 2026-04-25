@@ -75,7 +75,7 @@ const FeaturedCourses = () => {
                   <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-bold ${
                     course.price === 0 ? "bg-emerald-100 text-emerald-700" : "bg-white text-slate-800"
                   }`}>
-                    {course.price === 0 ? "Free" : `$${course.price}`}
+                    {course.price === 0 ? "Free" : `${course.price} Birr`}
                   </span>
                 </div>
 

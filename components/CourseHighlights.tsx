@@ -129,7 +129,7 @@ const CourseHighlights = () => {
                   <div className="flex flex-col">
                     <span className="text-[10px] font-black text-teal-600 uppercase tracking-tighter">Lifetime access</span>
                     <span className="text-2xl font-black text-zinc-900 dark:text-white">
-                      ${course.price || "Free"}
+                      {course.price ? `${course.price} Birr` : "Free"}
                     </span>
                   </div>
                   <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-teal-600 dark:hover:bg-teal-600 hover:text-white dark:hover:text-white transition-all duration-300">

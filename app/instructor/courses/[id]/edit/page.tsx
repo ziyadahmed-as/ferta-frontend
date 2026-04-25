@@ -242,7 +242,7 @@ const EditCoursePage = () => {
                                             </select>
                                         </div>
                                         <div className="space-y-2">
-                                            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Price ($)</label>
+                                            <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Price (Birr)</label>
                                             <input 
                                                 type="number" 
                                                 title="Course Price"
