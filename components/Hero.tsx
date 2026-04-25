@@ -41,8 +41,8 @@ const Hero = () => {
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 leading-[1.1] tracking-tight">
-              Advance Your Career with <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-700">Expert-Led</span> Education
+              Master New Skills with <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-700">Online Learning</span> & Accredited Programs
             </h1>
             
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-2xl mx-auto font-medium">
