@@ -820,6 +820,88 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Recent Users Registry */}
+                  <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                    <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+                      <div>
+                        <h3 className="font-black text-slate-800 dark:text-white tracking-tight">Unified User Registry</h3>
+                        <p className="text-xs text-slate-500 font-medium">Recently registered nodes and identities</p>
+                      </div>
+                      <button 
+                        onClick={() => setActiveModule("users")}
+                        className="text-xs font-black text-teal-600 uppercase tracking-widest hover:underline"
+                      >
+                        View Full Database
+                      </button>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left">
+                        <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-[10px] font-black uppercase tracking-[2px]">
+                          <tr>
+                            <th className="px-6 py-4">Identity</th>
+                            <th className="px-6 py-4">Role from DB</th>
+                            <th className="px-6 py-4">Registry Date</th>
+                            <th className="px-6 py-4 text-right">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
+                          {(stats?.recent_users || []).map((u: any) => (
+                            <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                              <td className="px-6 py-4">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-[10px] font-black">{u.username?.[0]?.toUpperCase()}</div>
+                                  <div>
+                                    <p className="text-sm font-bold text-slate-800 dark:text-white leading-none mb-1">{u.username}</p>
+                                    <p className="text-[10px] text-slate-400 font-medium">{u.email}</p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className={`text-[9px] font-black px-2.5 py-1 rounded-lg uppercase tracking-wider ${
+                                  u.role === 'SUPER_ADMIN' ? 'bg-rose-100 text-rose-600 dark:bg-rose-900/30 dark:text-rose-400' : 
+                                  u.role === 'ADMIN' ? 'bg-teal-100 text-teal-600 dark:bg-teal-900/30 dark:text-teal-400' : 
+                                  u.role === 'INSTRUCTOR' ? 'bg-sky-100 text-sky-600 dark:bg-sky-900/30 dark:text-sky-400' :
+                                  'bg-slate-100 text-slate-500 dark:bg-slate-900 dark:text-slate-400'
+                                }`}>{u.role}</span>
+                              </td>
+                              <td className="px-6 py-4 text-xs font-bold text-slate-500">{u.joined}</td>
+                              <td className="px-6 py-4 text-right">
+                                <div className="flex items-center justify-end gap-1">
+                                  <button 
+                                    onClick={() => { setUserDetail(u); setShowDetailModal(true); }}
+                                    title="View Detail"
+                                    className="p-2 text-slate-400 hover:text-cyan-600 transition-colors"
+                                  >
+                                    <Eye size={14} />
+                                  </button>
+                                  <button 
+                                    onClick={() => { setEditUser(u); setShowEditModal(true); }}
+                                    title="Edit Identity"
+                                    className="p-2 text-slate-400 hover:text-teal-600 transition-colors"
+                                  >
+                                    <Edit size={14} />
+                                  </button>
+                                  <button 
+                                    onClick={() => handleDeleteUser(u.id)} 
+                                    title="Revoke Access"
+                                    className="p-2 text-slate-400 hover:text-rose-500 transition-colors"
+                                  >
+                                    <Trash2 size={14} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                          {(!stats?.recent_users || stats.recent_users.length === 0) && (
+                            <tr>
+                              <td colSpan={4} className="px-6 py-10 text-center text-xs text-slate-400 font-medium">No recent activity detected in the user registry.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -919,6 +1001,7 @@ const AdminDashboard = () => {
                                   <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${
                                     u.role === 'SUPER_ADMIN' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 
                                     u.role === 'ADMIN' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400' : 
+                                    u.role === 'INSTRUCTOR' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400' :
                                     'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                                   }`}>{u.role}</span>
                                 </td>
@@ -960,32 +1043,31 @@ const AdminDashboard = () => {
                                     )}
                                   </div>
                                 </td>
-                                <td className="px-6 py-4 text-right">
-                                  <div className="flex items-center justify-end gap-1">
-                                    <button 
-                                      onClick={() => { setUserDetail(u); setShowDetailModal(true); }}
-                                      title="System Identity Detail"
-                                      className="p-2 text-slate-400 hover:text-cyan-600 transition-colors"
-                                    >
-                                      <Eye size={16} />
-                                    </button>
-                                    <button 
-                                      onClick={() => { setEditUser(u); setShowEditModal(true); }}
-                                      title="Edit User"
-                                      className="p-2 text-slate-400 hover:text-teal-600 transition-colors"
-                                    >
-                                      <Edit size={16} />
-                                    </button>
-                                    <button 
-                                      onClick={() => handleDeleteUser(u.id)} 
-                                      title="Delete User"
-                                      aria-label="Delete User"
-                                      className="p-2 text-slate-400 hover:text-red-500 transition-colors"
-                                    >
-                                      <Trash2 size={16} />
-                                    </button>
-                                  </div>
-                                </td>
+                                  <td className="px-6 py-4 text-right">
+                                    <div className="flex items-center justify-end gap-2">
+                                      <button 
+                                        onClick={() => { setUserDetail(u); setShowDetailModal(true); }}
+                                        title="View Detail"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all hover:bg-cyan-100 dark:hover:bg-cyan-900/40"
+                                      >
+                                        <Eye size={14} /> Detail
+                                      </button>
+                                      <button 
+                                        onClick={() => { setEditUser(u); setShowEditModal(true); }}
+                                        title="Edit User"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all hover:bg-teal-100 dark:hover:bg-teal-900/40"
+                                      >
+                                        <Edit size={14} /> Edit
+                                      </button>
+                                      <button 
+                                        onClick={() => handleDeleteUser(u.id)} 
+                                        title="Delete User"
+                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all hover:bg-rose-100 dark:hover:bg-rose-900/40"
+                                      >
+                                        <Trash2 size={14} /> Delete
+                                      </button>
+                                    </div>
+                                  </td>
                               </tr>
                             ))}
                           </tbody>
@@ -2463,6 +2545,42 @@ const AdminDashboard = () => {
                     className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">First Name</label>
+                    <input 
+                      type="text" 
+                      title="First Name"
+                      placeholder="e.g. John"
+                      value={editUser.first_name || ""}
+                      onChange={e => setEditUser({...editUser, first_name: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Last Name</label>
+                    <input 
+                      type="text" 
+                      title="Last Name"
+                      placeholder="e.g. Doe"
+                      value={editUser.last_name || ""}
+                      onChange={e => setEditUser({...editUser, last_name: e.target.value})}
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Biography / About</label>
+                  <textarea 
+                    title="User Biography"
+                    placeholder="Tell us about this user..."
+                    value={editUser.bio || ""}
+                    onChange={e => setEditUser({...editUser, bio: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
+                  />
+                </div>
+
                 <div className="space-y-1.5">
                   <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Institutional Role</label>
                   <select 
@@ -2478,6 +2596,39 @@ const AdminDashboard = () => {
                     <option value="SUPER_ADMIN">Super Admin (System Architect)</option>
                   </select>
                 </div>
+
+                {editUser.role === 'INSTRUCTOR' && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    className="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-700 mt-4"
+                  >
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Expertise</label>
+                        <input 
+                          type="text" 
+                          title="Expertise"
+                          placeholder="e.g. Mathematics"
+                          value={editUser.expertise || ""}
+                          onChange={e => setEditUser({...editUser, expertise: e.target.value})}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Education</label>
+                        <input 
+                          type="text" 
+                          title="Education"
+                          placeholder="e.g. PhD in AI"
+                          value={editUser.education_level || ""}
+                          onChange={e => setEditUser({...editUser, education_level: e.target.value})}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
 
                 <div className="pt-4 flex gap-3">
                   <button 
