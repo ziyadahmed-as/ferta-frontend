@@ -45,13 +45,13 @@ const Features = () => {
   ];
 
   return (
-    <section className="py-24 bg-white dark:bg-zinc-950 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-teal-600 mb-4 font-mono italic">Core Platform Features</h2>
-          <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-6 tracking-tighter italic">Everything you need to <span className="text-teal-600">Teach and Learn</span></h3>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed opacity-80">
-            A complete suite of modern tools designed for instructors to build successful courses and for students to have a world-class learning experience.
+    <section className="section-padding bg-white dark:bg-zinc-950">
+      <div className="container-max">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="badge-text italic">Platform Architecture</span>
+          <h2 className="section-title italic tracking-tighter mb-6">Optimized <span className="text-transparent bg-clip-text gradient-primary">Pedagogical Framework</span></h2>
+          <p className="section-subtitle uppercase tracking-[0.2em] text-xs font-bold opacity-70 italic">
+            Engineered for high-fidelity knowledge transfer and institutional scaling.
           </p>
         </div>
 

@@ -36,10 +36,15 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         
+        <Stats />
+
+        <CategoryExplore />
+        
         {/* SEO Optimized Content Section */}
-        <section className="py-20 bg-slate-50 dark:bg-slate-900/50">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-3xl font-bold text-slate-800 dark:text-white mb-8">About Our Platform</h2>
+        <section className="section-padding bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-800">
+          <div className="max-w-4xl mx-auto text-center">
+            <span className="badge-text">Educational Ecosystem</span>
+            <h2 className="section-title mb-8 text-transparent bg-clip-text gradient-primary">About Our Platform</h2>
             <div className="space-y-6 text-lg text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
               <p>
                 Our AI-powered platform is designed for entrance exam and GAT success. We combine interactive live sessions with high-quality recorded courses to provide a flexible, expert-led learning experience tailored to your needs.
@@ -51,11 +56,9 @@ export default function Home() {
           </div>
         </section>
 
-        <CategoryExplore />
         <CourseHighlights />
         <FeaturedCourses />
         <Features />
-        <Stats />
       </main>
       <Footer />
     </div>

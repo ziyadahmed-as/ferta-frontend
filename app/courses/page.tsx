@@ -54,16 +54,16 @@ const CatalogContent = () => {
   });
 
   return (
-    <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen">
+    <main className="section-padding container-max min-h-screen">
       {/* Page Header */}
       <div className="text-center mb-16">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="text-cyan-600 font-bold text-sm uppercase tracking-wider mb-3">Explore Our Programs</p>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
-            Comprehensive Course <span className="text-transparent bg-clip-text gradient-primary">Catalog</span>
+          <span className="badge-text italic">Educational Catalog</span>
+          <h1 className="section-title italic tracking-tighter mb-6">
+            Comprehensive <span className="text-transparent bg-clip-text gradient-primary text-slate-900 dark:text-white">Course Registry</span>
           </h1>
-          <p className="text-slate-500 max-w-2xl mx-auto text-lg">
-            Choose from our extensive range of courses designed to help you master new skills and advance your career.
+          <p className="section-subtitle max-w-2xl mx-auto italic uppercase tracking-widest text-[10px] font-black opacity-60">
+            Synchronizing mastery across our global network of professional and academic disciplines.
           </p>
         </motion.div>
       </div>

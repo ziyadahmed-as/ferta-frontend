@@ -57,17 +57,16 @@ const CourseHighlights = () => {
   }
 
   return (
-    <section className="py-24 bg-white dark:bg-zinc-950 px-6 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section className="section-padding bg-white dark:bg-zinc-950 overflow-hidden">
+      <div className="container-max">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-2">Popular Courses</h2>
-            <h3 className="text-4xl lg:text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight">Explore the <span className="text-teal-600">Most Popular</span> Programs</h3>
-            <p className="text-zinc-600 dark:text-zinc-400 text-lg">Empower yourself with world-class education and expert guidance on your path to success.</p>
+            <span className="badge-text italic">Curated Excellence</span>
+            <h2 className="section-title italic tracking-tighter mb-6">Mastery <span className="text-transparent bg-clip-text gradient-primary">Highlights</span></h2>
+            <p className="section-subtitle uppercase tracking-[0.2em] text-[10px] font-black opacity-60 italic">Synchronizing academic rigor with professional trajectory through elite programs.</p>
           </div>
-          <Link href="/courses" className="flex items-center gap-2 text-teal-600 font-bold hover:gap-4 transition-all duration-300">
-            View All Courses
-            <ArrowRight size={20} />
+          <Link href="/courses" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 hover:gap-4 transition-all duration-300 italic">
+            Synchronize All <ArrowRight size={20} />
           </Link>
         </div>
 

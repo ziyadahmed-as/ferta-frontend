@@ -40,8 +40,8 @@ const Hero = () => {
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 leading-[1.1] tracking-tight italic">
-              AI-Powered <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-700">Online Learning</span> for Entrance & GAT Prep
+            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-slate-900 dark:text-white mb-8 leading-[0.95] tracking-tighter italic">
+              Architecting <span className="text-transparent bg-clip-text gradient-primary">Mastery</span> Through Artificial Intelligence
             </h1>
             
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-3xl mx-auto font-medium">

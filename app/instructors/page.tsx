@@ -37,31 +37,31 @@ const InstructorsCatalog = () => {
     <div className="min-h-screen bg-white dark:bg-black">
       <Navbar />
       
-      <main className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+      <main className="section-padding container-max min-h-screen">
         {/* Header Module */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-teal-600 mb-2 block font-mono italic">Faculty Node Registry</span>
-              <h1 className="text-3xl lg:text-4xl font-black text-zinc-900 dark:text-white tracking-tighter italic">
-                 Vetted Educational <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-500">Architects</span>
+              <span className="badge-text italic">Faculty Node Registry</span>
+              <h1 className="section-title italic tracking-tighter">
+                 Vetted Educational <span className="text-transparent bg-clip-text gradient-primary">Architects</span>
               </h1>
            </motion.div>
-           <p className="text-zinc-500 font-medium text-sm max-w-sm italic opacity-80 uppercase tracking-widest text-right">
+           <p className="section-subtitle max-w-sm italic opacity-80 uppercase tracking-widest text-right text-xs font-bold">
               Global scholars and industry masters driving institutional excellence.
            </p>
         </div>
 
         {/* Global Search Signal */}
-        <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-zinc-100 dark:border-zinc-800 p-6 rounded-[3rem] mb-16 shadow-2xl shadow-zinc-200/10">
+        <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-xl border border-zinc-100 dark:border-zinc-800 p-6 rounded-3xl mb-16 shadow-2xl shadow-zinc-200/10">
            <div className="relative group">
-              <Search className="absolute left-8 top-5 text-zinc-400 group-focus-within:text-teal-600 transition-colors" size={24} />
+              <Search className="absolute left-8 top-1/2 -translate-y-1/2 text-zinc-400 group-focus-within:text-teal-600 transition-colors" size={24} />
               <input 
                 type="text" 
                 placeholder="Synchronize with faculty nodes..." 
                 title="Search Faculty"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-20 pr-8 py-5 bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-[2rem] focus:ring-4 focus:ring-teal-600/10 outline-none font-medium transition-all text-lg italic tracking-tight"
+                className="w-full pl-20 pr-8 py-5 bg-white dark:bg-black border border-zinc-200 dark:border-zinc-800 rounded-2xl focus:ring-4 focus:ring-teal-600/10 outline-none font-medium transition-all text-lg italic tracking-tight"
               />
            </div>
         </div>

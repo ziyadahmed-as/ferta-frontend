@@ -34,15 +34,15 @@ const FeaturedCourses = () => {
   if (loading || courses.length === 0) return null;
 
   return (
-    <section className="py-20 bg-white dark:bg-zinc-950 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-10">
+    <section className="section-padding bg-white dark:bg-zinc-950">
+      <div className="container-max">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
-            <p className="text-teal-600 font-semibold text-sm mb-1">Popular Courses</p>
-            <h2 className="text-3xl font-bold text-slate-800 dark:text-white">Featured Courses</h2>
+            <span className="badge-text italic">Elite Selections</span>
+            <h2 className="section-title italic tracking-tighter">Featured <span className="text-transparent bg-clip-text gradient-primary">Courses</span></h2>
           </div>
-          <Link href="/courses" className="hidden md:flex items-center gap-2 text-sm text-teal-600 font-semibold hover:text-teal-700 transition-colors">
-            View all courses <ArrowRight size={16} />
+          <Link href="/courses" className="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 hover:text-teal-700 transition-colors italic">
+            Synchronize with Registry <ArrowRight size={16} />
           </Link>
         </div>
 

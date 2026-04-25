@@ -40,11 +40,12 @@ const Stats = () => {
   ];
 
   return (
-    <section className="py-20 px-6 relative overflow-hidden bg-white dark:bg-zinc-950">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12 relative z-10">
-          <h2 className="text-3xl font-bold text-zinc-900 dark:text-white mb-3 tracking-tight">Trusted by Thousands of Learners</h2>
-          <p className="text-zinc-500 dark:text-zinc-400 text-sm max-w-md mx-auto font-medium">Join our growing community of students and instructors worldwide</p>
+    <section className="section-padding relative overflow-hidden bg-white dark:bg-zinc-950 border-b border-slate-100 dark:border-slate-800">
+      <div className="container-max">
+        <div className="text-center mb-16 relative z-10">
+          <span className="badge-text italic">Global Scholarly Metrics</span>
+          <h2 className="section-title italic tracking-tighter mb-4">Institutional <span className="text-transparent bg-clip-text gradient-primary">Impact Data</span></h2>
+          <p className="section-subtitle max-w-xl mx-auto uppercase tracking-widest text-[10px] font-black opacity-60">Synchronizing excellence across thousands of knowledge nodes worldwide.</p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
            {stats.map((stat, idx) => (
