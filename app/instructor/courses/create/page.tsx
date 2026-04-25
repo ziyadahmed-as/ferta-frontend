@@ -21,7 +21,7 @@ const CreateCoursePage = () => {
         description: "",
         category: "",
         price: "0",
-        course_type: "HARD_SKILL_RECORDED",
+        course_type: "VIDEO_BASED",
         thumbnail: null as File | null,
     });
 
@@ -72,8 +72,13 @@ const CreateCoursePage = () => {
         }
     };
 
+    useEffect(() => {
+        if (user && user.role !== "INSTRUCTOR" && !user.is_superuser) {
+            router.push("/instructor/dashboard");
+        }
+    }, [user, router]);
+
     if (!user || (user.role !== "INSTRUCTOR" && !user.is_superuser)) {
-        router.push("/instructor/dashboard");
         return null;
     }
 

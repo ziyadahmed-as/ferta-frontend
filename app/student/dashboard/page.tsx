@@ -273,7 +273,7 @@ const StudentDashboard = () => {
               
               <div className="flex-1 flex flex-col items-center justify-center">
                  <div className="h-40 w-full relative">
-                    <ResponsiveContainer width="100%" height="100%">
+                    <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                       <PieChart>
                         <Pie 
                           data={masteryData} 
@@ -337,7 +337,7 @@ const StudentDashboard = () => {
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-white mb-4 text-base">Learning Progress</h3>
               <div className="h-52">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                   <LineChart data={learningProgressData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                     <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
@@ -360,7 +360,7 @@ const StudentDashboard = () => {
             <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-semibold text-slate-800 dark:text-white mb-4 text-base">Course Performance</h3>
               <div className="h-52">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
                   <BarChart data={coursePerformanceData}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                     <XAxis dataKey="course" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
