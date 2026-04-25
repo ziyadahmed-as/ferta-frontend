@@ -7,40 +7,40 @@ import { motion } from "framer-motion";
 const Features = () => {
   const features = [
     {
-      title: "AI Course Builder",
-      description: "Generate structured curriculums and lesson descriptions in seconds using our integrated AI tools.",
+      title: "AI-Powered Learning Paths",
+      description: "Smart algorithms personalize your study plan based on your unique needs, helping you focus on the right topics at the right time.",
       icon: <Sparkles className="text-teal-600" />,
       bg: "bg-teal-50 dark:bg-teal-900/20"
     },
     {
-      title: "Live Streaming",
-      description: "Host real-time interactive classes with students around the globe with high-quality video support.",
+      title: "Live Interactive Classes",
+      description: "Join real-time sessions with expert instructors who provide guidance, answer questions, and ensure deep understanding of complex topics.",
       icon: <Video className="text-violet-600" />,
       bg: "bg-violet-50 dark:bg-violet-900/20"
     },
     {
-      title: "Student Community",
-      description: "Engagement focused forums and groups to help students learn together and solve challenges.",
+      title: "Exam & GAT Preparation",
+      description: "Comprehensive curricula specifically designed for entrance exams and GAT training, covering all essential modules and strategies.",
       icon: <Users2 className="text-emerald-600" />,
       bg: "bg-emerald-50 dark:bg-emerald-900/20"
     },
     {
-      title: "Secure Payments",
-      description: "Integrated with Stripe for safe and smooth transitions, supporting multiple global currencies.",
-      icon: <ShieldCheck className="text-amber-600" />,
-      bg: "bg-amber-50 dark:bg-amber-900/20"
+      title: "Recorded Courses 24/7",
+      description: "Access high-quality prerecorded lessons anytime, anywhere, allowing for self-paced learning that fits your personal schedule.",
+      icon: <Laptop className="text-cyan-600" />,
+      bg: "bg-cyan-50 dark:bg-cyan-900/20"
     },
     {
-      title: "Course Analytics",
-      description: "Detailed insights for instructors on student progress, engagement, and revenue generation.",
+      title: "Smart Performance Metrics",
+      description: "Intelligent analytics provide recommendations based on your performance, ensuring you master every subject efficiently.",
       icon: <Zap className="text-rose-600" />,
       bg: "bg-rose-50 dark:bg-rose-900/20"
     },
     {
-      title: "Multi-device Learning",
-      description: "Responsive platform optimized for mobile, tablet, and desktop for learning on the go.",
-      icon: <Laptop className="text-cyan-600" />,
-      bg: "bg-cyan-50 dark:bg-cyan-900/20"
+      title: "Flexible Learning Platform",
+      description: "Access our adaptive education system from any device, providing a seamless and consistent learning experience globally.",
+      icon: <ShieldCheck className="text-amber-600" />,
+      bg: "bg-amber-50 dark:bg-amber-900/20"
     }
   ];
 

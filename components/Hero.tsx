@@ -40,13 +40,12 @@ const Hero = () => {
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 leading-[1.1] tracking-tight">
-              Master New Skills with <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-700">Online Learning</span> & Accredited Programs
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 leading-[1.1] tracking-tight italic">
+              AI-Powered <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-cyan-700">Online Learning</span> for Entrance & GAT Prep
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-2xl mx-auto font-medium">
-              Join thousands of professionals mastering new skills through our accredited programs, interactive live sessions, and comprehensive curricula.
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-3xl mx-auto font-medium">
+              Start your journey today and experience the future of education with AI-driven learning. Prepare smarter, learn faster, and achieve better results through interactive live classes and expert-led recorded courses.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
