@@ -10,6 +10,7 @@ interface User {
   email: string;
   role: "STUDENT" | "INSTRUCTOR" | "ADMIN" | "SUPER_ADMIN";
   is_superuser?: boolean;
+  is_approved_instructor?: boolean;
   instructor_type?: "VIDEO_CREATOR" | "LIVE_STREAMER" | "BOTH";
 }
 

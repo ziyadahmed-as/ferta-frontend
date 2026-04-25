@@ -1078,23 +1078,40 @@ const AdminDashboard = () => {
                                </div>
                                <p className="text-xs font-bold text-slate-400 mb-4">{app.email}</p>
                                
-                               <div className="flex items-center gap-3 mb-6">
-                                  <div className="px-3 py-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">Specialization: TBD</div>
-                                  <div className="px-3 py-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">Clearance: L1</div>
+                               <div className="space-y-4 mb-6">
+                                  <div className="flex flex-wrap gap-2">
+                                     <div className="px-3 py-1 bg-teal-50 dark:bg-teal-900/20 rounded-lg text-[10px] font-bold text-teal-600 uppercase border border-teal-100 dark:border-teal-800">Expertise: {app.expertise || 'General'}</div>
+                                     <div className="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-[10px] font-bold text-blue-600 uppercase border border-blue-100 dark:border-blue-800">Experience: {app.years_of_experience}y</div>
+                                     <div className="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 rounded-lg text-[10px] font-bold text-purple-600 uppercase border border-purple-100 dark:border-purple-800">{app.education_level || 'Faculty'}</div>
+                                     <div className="px-3 py-1 bg-slate-100 dark:bg-slate-900/50 rounded-lg text-[10px] font-bold text-slate-500 uppercase">{app.instructor_type?.replace('_', ' ') || 'Instructor'}</div>
+                                  </div>
+
+                                  {app.cv_file && (
+                                    <a 
+                                      href={app.cv_file} 
+                                      target="_blank" 
+                                      rel="noreferrer"
+                                      className="flex items-center gap-2 text-[10px] font-black text-cyan-600 uppercase tracking-widest hover:text-cyan-700 transition-colors bg-cyan-50 dark:bg-cyan-900/20 w-fit px-4 py-2 rounded-xl border border-cyan-100 dark:border-cyan-800"
+                                    >
+                                      <FileText size={14} /> Open CV Registry
+                                    </a>
+                                  )}
                                </div>
 
                                <div className="flex gap-3">
                                   <button 
                                     onClick={() => handleInstructorAction(app.id, true)} 
-                                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
+                                    disabled={actionLoading === app.id}
+                                    className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                                   >
                                     <Check size={14} /> 
-                                    <span className="hidden sm:inline">Grant Node Access</span>
+                                    <span>{actionLoading === app.id ? "Validating..." : "Grant Node Access"}</span>
                                   </button>
                                   <button 
                                      onClick={() => handleInstructorAction(app.id, false)} 
+                                     disabled={actionLoading === app.id}
                                      title="Decline Node Access Request"
-                                     className="px-6 py-3 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 transition-all"
+                                     className="px-6 py-3 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-600 transition-all disabled:opacity-50"
                                    >
                                      <X size={14} /> 
                                    </button>
