@@ -61,7 +61,7 @@ const CourseDetail = () => {
   if (loading) return (
     <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
         <p className="text-slate-500 font-medium">Loading course details...</p>
       </div>
     </div>
@@ -82,7 +82,7 @@ const CourseDetail = () => {
       
       {/* Hero Section */}
       <div className="relative pt-32 pb-20 px-6 overflow-hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
-        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-50/50 to-indigo-50/30 dark:from-blue-900/10 dark:to-transparent -z-10" />
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-50/50 to-teal-50/30 dark:from-cyan-900/10 dark:to-transparent -z-10" />
         
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <motion.div 
@@ -91,7 +91,7 @@ const CourseDetail = () => {
             className="lg:col-span-7"
           >
             <div className="flex items-center gap-3 mb-6">
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg text-xs font-bold uppercase tracking-wider">
+              <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-lg text-xs font-bold uppercase tracking-wider">
                 {course.category_name}
               </span>
               <div className="flex items-center gap-1 text-amber-500">
@@ -110,7 +110,7 @@ const CourseDetail = () => {
             
             <div className="flex flex-wrap items-center gap-8 mb-10">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-blue-600">
+                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600">
                   {course.instructor_name?.[0]?.toUpperCase()}
                 </div>
                 <div>
@@ -120,7 +120,7 @@ const CourseDetail = () => {
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-blue-600">
+                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600">
                   <Clock size={18} />
                 </div>
                 <div>
@@ -130,7 +130,7 @@ const CourseDetail = () => {
               </div>
               
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-blue-600">
+                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600">
                   <Users size={18} />
                 </div>
                 <div>
@@ -158,7 +158,7 @@ const CourseDetail = () => {
                 )}
                 <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <Play size={24} className="text-blue-600 fill-blue-600 ml-1" />
+                    <Play size={24} className="text-cyan-600 fill-cyan-600 ml-1" />
                   </div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4 text-center">
@@ -175,7 +175,7 @@ const CourseDetail = () => {
                 {isEnrolled ? (
                   <button 
                     onClick={() => router.push(`/courses/${id}/learn`)} 
-                    className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                    className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-95 transition-all"
                   >
                     Continue Learning <ArrowRight size={18}/>
                   </button>
@@ -183,7 +183,7 @@ const CourseDetail = () => {
                   <button 
                     onClick={handleEnroll} 
                     disabled={enrolling} 
-                    className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
+                    className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
                   >
                     {enrolling ? <Loader2 className="animate-spin" size={18}/> : <>Enroll Now <ArrowRight size={18}/></>}
                   </button>
@@ -253,7 +253,7 @@ const CourseDetail = () => {
                     <div key={chapter.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
                       <div className="p-5 flex items-center justify-between bg-white dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
                         <h4 className="font-bold text-slate-800 dark:text-white flex items-center gap-3">
-                          <span className="text-xs text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Section {i+1}</span>
+                          <span className="text-xs text-cyan-600 bg-cyan-50 dark:bg-cyan-900/30 px-2 py-1 rounded">Section {i+1}</span>
                           {chapter.title}
                         </h4>
                         <span className="text-xs text-slate-500 font-medium">{chapter.lessons?.length || 0} lectures</span>
@@ -262,11 +262,11 @@ const CourseDetail = () => {
                         {chapter.lessons?.map((lesson: any) => (
                           <div key={lesson.id} className="flex items-center justify-between p-4 hover:bg-white dark:hover:bg-slate-700/50 transition-colors group cursor-pointer">
                             <div className="flex items-center gap-4">
-                              <PlayCircle size={18} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                              <PlayCircle size={18} className="text-slate-400 group-hover:text-cyan-500 transition-colors" />
                               <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{lesson.title}</span>
                             </div>
                             <div className="flex items-center gap-4">
-                              {lesson.is_preview && <span className="text-[10px] font-bold text-blue-600 px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 rounded uppercase">Preview</span>}
+                              {lesson.is_preview && <span className="text-[10px] font-bold text-cyan-600 px-2 py-0.5 bg-cyan-50 dark:bg-cyan-900/30 rounded uppercase">Preview</span>}
                               {!isEnrolled && !lesson.is_preview ? <Lock size={14} className="text-slate-300" /> : <Clock size={14} className="text-slate-300" />}
                             </div>
                           </div>
@@ -289,7 +289,7 @@ const CourseDetail = () => {
             {/* Instructor Info */}
             <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6">About Instructor</h3>
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto mb-6 shadow-lg shadow-blue-500/20">
+              <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto mb-6 shadow-lg shadow-cyan-500/20">
                 {course.instructor_name?.[0].toUpperCase()}
               </div>
               <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{course.instructor_name}</h4>
@@ -306,18 +306,18 @@ const CourseDetail = () => {
                 </div>
               </div>
               
-              <button className="text-sm font-bold text-blue-600 hover:text-blue-700 hover:underline underline-offset-4 transition-all">View Instructor Profile</button>
+              <button className="text-sm font-bold text-cyan-600 hover:text-cyan-700 hover:underline underline-offset-4 transition-all">View Instructor Profile</button>
             </div>
 
             {/* Platform Trust */}
             <div className="p-8 bg-slate-900 dark:bg-blue-950 rounded-3xl text-white shadow-xl">
               <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                <Shield size={20} className="text-blue-400" /> Fatra Academy Guarantee
+                <Shield size={20} className="text-cyan-400" /> Fatra Academy Guarantee
               </h3>
               <ul className="space-y-6">
                 <li className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <Globe size={20} className="text-blue-300" />
+                    <Globe size={20} className="text-cyan-300" />
                   </div>
                   <div>
                     <h5 className="text-sm font-bold">Learn from anywhere</h5>
@@ -326,7 +326,7 @@ const CourseDetail = () => {
                 </li>
                 <li className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <Award size={20} className="text-blue-300" />
+                    <Award size={20} className="text-cyan-300" />
                   </div>
                   <div>
                     <h5 className="text-sm font-bold">Verifiable Certificates</h5>
@@ -335,7 +335,7 @@ const CourseDetail = () => {
                 </li>
                 <li className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <Info size={20} className="text-blue-300" />
+                    <Info size={20} className="text-cyan-300" />
                   </div>
                   <div>
                     <h5 className="text-sm font-bold">24/7 Support</h5>

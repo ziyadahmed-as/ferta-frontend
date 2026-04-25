@@ -189,7 +189,7 @@ const RegisterContent = () => {
               <div className="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                 <BookOpen size={28} className="text-white" />
               </div>
-              <span className="text-xl font-bold text-slate-800">Fatra<span className="text-blue-600"> Academy</span></span>
+              <span className="text-xl font-bold text-slate-800">Fatra<span className="text-cyan-600"> Academy</span></span>
             </Link>
             <h1 className="text-3xl font-bold text-slate-800 mt-5 mb-2">Join Fatra Academy</h1>
             <p className="text-slate-500 text-base">Choose how you want to get started</p>
@@ -202,9 +202,9 @@ const RegisterContent = () => {
               whileHover={{ y: -4 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => { setRole("STUDENT"); setStep("form"); }}
-              className="bg-white border-2 border-slate-200 hover:border-blue-400 hover:shadow-lg rounded-2xl p-8 text-left transition-all group"
+              className="bg-white border-2 border-slate-200 hover:border-cyan-400 hover:shadow-lg rounded-2xl p-8 text-left transition-all group"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-md shadow-blue-500/20">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-md shadow-cyan-500/20">
                 <GraduationCap size={32} className="text-white" />
               </div>
               <h2 className="text-xl font-bold text-slate-800 mb-2">I&apos;m a Student</h2>
@@ -214,14 +214,14 @@ const RegisterContent = () => {
               <ul className="space-y-2 mb-6">
                 {["Access to 250+ courses", "Learn from expert instructors", "Track your progress", "Get certificates"].map((item) => (
                   <li key={item} className="flex items-center gap-2 text-sm text-slate-600">
-                    <span className="w-4 h-4 rounded-full bg-blue-100 flex items-center justify-center">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                    <span className="w-4 h-4 rounded-full bg-cyan-100 flex items-center justify-center">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-600" />
                     </span>
                     {item}
                   </li>
                 ))}
               </ul>
-              <div className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-sm">
+              <div className="flex items-center justify-center gap-2 w-full py-3 bg-gradient-to-r from-cyan-600 to-teal-600 text-white rounded-xl font-semibold text-sm">
                 Register as Student <ChevronRight size={16} />
               </div>
             </motion.button>
@@ -258,7 +258,7 @@ const RegisterContent = () => {
 
           <p className="text-center text-sm text-slate-500 mt-6">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 font-semibold hover:underline">Sign in</Link>
+            <Link href="/login" className="text-cyan-600 font-semibold hover:underline">Sign in</Link>
           </p>
         </motion.div>
       </div>
@@ -275,7 +275,7 @@ const RegisterContent = () => {
             <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen size={20} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800">Fatra<span className="text-blue-600"> Academy</span></span>
+            <span className="text-lg font-bold text-slate-800">Fatra<span className="text-cyan-600"> Academy</span></span>
           </Link>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
             {role === "INSTRUCTOR" ? "Instructor Registration" : "Student Registration"}
@@ -287,7 +287,7 @@ const RegisterContent = () => {
           </p>
           <button
             onClick={() => setStep("choose")}
-            className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="mt-2 text-sm text-cyan-600 hover:text-cyan-700 font-medium"
           >
             ← Change role
           </button>
@@ -345,7 +345,7 @@ const RegisterContent = () => {
                 className="overflow-hidden"
               >
                 <div className="mb-8 pt-8 border-t border-slate-100">
-                  <SectionHeader number="03" title="Professional Details" color="bg-purple-600" />
+                  <SectionHeader number="03" title="Professional Details" color="bg-sky-600" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     {/* Expertise */}
@@ -392,7 +392,7 @@ const RegisterContent = () => {
                           name="instructor_type"
                           value={formData.instructor_type}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all appearance-none cursor-pointer"
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all appearance-none cursor-pointer"
                         >
                           <option value="VIDEO_CREATOR">🎬 Video Creator</option>
                           <option value="LIVE_STREAMER">📡 Live Streamer</option>
@@ -437,7 +437,7 @@ const RegisterContent = () => {
                         placeholder="Tell students about your background and teaching style..."
                         value={formData.bio}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none transition-all"
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 resize-none transition-all"
                       />
                     </div>
 
@@ -453,7 +453,7 @@ const RegisterContent = () => {
                           type="file"
                           accept=".pdf,.doc,.docx"
                           onChange={(e) => setCvFile(e.target.files?.[0] || null)}
-                          className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer transition-all"
+                          className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100 cursor-pointer transition-all"
                         />
                       </div>
                       {cvFile && (
@@ -473,7 +473,7 @@ const RegisterContent = () => {
                         placeholder="What courses are you planning to teach? e.g. Python for Beginners, Advanced SQL..."
                         value={formData.proposed_courses}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none transition-all"
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 resize-none transition-all"
                       />
                     </div>
 
@@ -488,7 +488,7 @@ const RegisterContent = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full max-w-sm py-4 gradient-primary text-white rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full max-w-sm py-4 gradient-primary text-white rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 shadow-lg shadow-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? <Loader2 className="animate-spin" size={18} /> : (
                 <>Complete Registration <ArrowRight size={18} /></>
@@ -496,7 +496,7 @@ const RegisterContent = () => {
             </button>
             <p className="text-sm text-slate-500">
               Already have an account?{" "}
-              <Link href="/login" className="text-blue-600 font-semibold hover:underline">Sign in</Link>
+              <Link href="/login" className="text-cyan-600 font-semibold hover:underline">Sign in</Link>
             </p>
           </div>
         </motion.form>
@@ -559,7 +559,7 @@ const FormField = ({
         required={required}
         value={value}
         onChange={onChange}
-        className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all`}
+        className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all`}
       />
     </div>
   </div>
@@ -570,7 +570,7 @@ const RegisterPage = () => {
   return (
     <Suspense fallback={
       <div className="h-screen flex items-center justify-center bg-white">
-        <Loader2 className="text-blue-600 animate-spin" size={40} />
+        <Loader2 className="text-cyan-600 animate-spin" size={40} />
       </div>
     }>
       <RegisterContent />

@@ -9,8 +9,8 @@ const Features = () => {
     {
       title: "AI Course Builder",
       description: "Generate structured curriculums and lesson descriptions in seconds using our integrated AI tools.",
-      icon: <Sparkles className="text-indigo-600" />,
-      bg: "bg-indigo-50 dark:bg-indigo-900/20"
+      icon: <Sparkles className="text-teal-600" />,
+      bg: "bg-teal-50 dark:bg-teal-900/20"
     },
     {
       title: "Live Streaming",
@@ -48,8 +48,8 @@ const Features = () => {
     <section className="py-24 bg-white dark:bg-zinc-950 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600 mb-4 font-mono italic">Core Platform Features</h2>
-          <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-6 tracking-tighter italic">Everything you need to <span className="text-indigo-600">Teach and Learn</span></h3>
+          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-teal-600 mb-4 font-mono italic">Core Platform Features</h2>
+          <h3 className="text-2xl md:text-3xl font-black text-zinc-900 dark:text-white mb-6 tracking-tighter italic">Everything you need to <span className="text-teal-600">Teach and Learn</span></h3>
           <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed opacity-80">
             A complete suite of modern tools designed for instructors to build successful courses and for students to have a world-class learning experience.
           </p>
@@ -64,7 +64,7 @@ const Features = () => {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ scale: 1.05 }}
-              className="text-center p-6 bg-white dark:bg-zinc-900/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300"
+              className="text-center p-6 bg-white dark:bg-zinc-900/50 rounded-3xl border border-zinc-100 dark:border-zinc-800 hover:shadow-xl hover:shadow-teal-500/5 transition-all duration-300"
             >
               <div className={`w-12 h-12 ${feature.bg} rounded-xl flex items-center justify-center mb-6 shadow-xl shadow-zinc-200/20 dark:shadow-none transition-transform`}>
                 {React.cloneElement(feature.icon as React.ReactElement<{ size: number }>, { size: 24 })}

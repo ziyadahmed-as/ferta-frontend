@@ -114,7 +114,7 @@ const LearnPage = () => {
   if (loading) return (
     <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
         <p className="text-slate-500 font-medium">Hydrating your learning environment...</p>
       </div>
     </div>
@@ -124,7 +124,7 @@ const LearnPage = () => {
     <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 px-6 text-center">
       <X size={48} className="text-red-500 mb-4" />
       <h1 className="text-xl font-bold text-slate-800 dark:text-white mb-2">{error}</h1>
-      <button onClick={() => router.push(`/courses/${id}`)} className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg">Back to Course</button>
+      <button onClick={() => router.push(`/courses/${id}`)} className="mt-4 px-6 py-2 bg-cyan-600 text-white rounded-lg">Back to Course</button>
     </div>
   );
 
@@ -168,7 +168,7 @@ const LearnPage = () => {
             </div>
             <button 
                 onClick={() => router.push(`/student/dashboard`)}
-                className="px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-colors"
+                className="px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-cyan-600 transition-colors"
             >
                 Exit
             </button>
@@ -189,7 +189,7 @@ const LearnPage = () => {
               {course.chapters.map((chapter: any, idx: number) => (
                 <div key={chapter.id}>
                   <h3 className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4">
-                    <span className="w-6 h-6 rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[10px] text-blue-600">
+                    <span className="w-6 h-6 rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[10px] text-cyan-600">
                       {idx + 1}
                     </span>
                     {chapter.title}
@@ -205,19 +205,19 @@ const LearnPage = () => {
                           onClick={() => handleLessonSelect(lesson)}
                           className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all group text-left ${
                             isActive 
-                              ? "bg-white dark:bg-slate-800 shadow-md ring-1 ring-blue-500/10" 
+                              ? "bg-white dark:bg-slate-800 shadow-md ring-1 ring-cyan-500/10" 
                               : "hover:bg-white dark:hover:bg-slate-800"
                           }`}
                         >
-                          <div className={`mt-0.5 shrink-0 ${isDone ? "text-green-500" : isActive ? "text-blue-500" : "text-slate-300"}`}>
+                          <div className={`mt-0.5 shrink-0 ${isDone ? "text-green-500" : isActive ? "text-cyan-500" : "text-slate-300"}`}>
                             {isDone ? <CheckCircle2 size={16} /> : <PlayCircle size={16} />}
                           </div>
                           <div className="flex-1">
-                            <p className={`text-xs font-bold leading-snug ${isActive ? "text-blue-600 dark:text-blue-400" : "text-slate-600 dark:text-slate-400"}`}>
+                            <p className={`text-xs font-bold leading-snug ${isActive ? "text-cyan-600 dark:text-cyan-400" : "text-slate-600 dark:text-slate-400"}`}>
                               {lesson.title}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
-                              {lesson.is_preview && <span className="text-[8px] font-black uppercase text-blue-500 bg-blue-50 px-1 rounded">Preview</span>}
+                              {lesson.is_preview && <span className="text-[8px] font-black uppercase text-cyan-500 bg-cyan-50 px-1 rounded">Preview</span>}
                               <span className="text-[9px] text-slate-400 font-medium">10 Min</span>
                             </div>
                           </div>
@@ -253,7 +253,7 @@ const LearnPage = () => {
                 {/* Lesson Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                   <div>
-                    <div className="flex items-center gap-2 mb-2 text-blue-600 font-bold text-[10px] uppercase tracking-wider">
+                    <div className="flex items-center gap-2 mb-2 text-cyan-600 font-bold text-[10px] uppercase tracking-wider">
                       <Sparkles size={14} /> Lesson Content
                     </div>
                     <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
@@ -265,7 +265,7 @@ const LearnPage = () => {
                         onClick={goToPrevLesson}
                         disabled={isFirstLesson}
                         title="Previous Lesson"
-                        className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                        className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 hover:text-cyan-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
                     >
                         <ChevronLeft size={20} />
                     </button>
@@ -273,7 +273,7 @@ const LearnPage = () => {
                         onClick={goToNextLesson}
                         disabled={isLastLesson}
                         title="Next Lesson"
-                        className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 hover:text-blue-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                        className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 hover:text-cyan-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
                     >
                         <ChevronRight size={20} />
                     </button>
@@ -297,7 +297,7 @@ const LearnPage = () => {
                             <SkipBack size={20} />
                          </div>
                          <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                            <div className="w-1/3 h-full bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                            <div className="w-1/3 h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
                          </div>
                          <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
                             <SkipForward size={20} />
@@ -337,7 +337,7 @@ const LearnPage = () => {
                                </div>
                              )}
                              {(block.type === 'pdf' || block.type === 'file') && (
-                               <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-blue-500/50 transition-all cursor-pointer">
+                               <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-cyan-500/50 transition-all cursor-pointer">
                                   <div className="flex items-center gap-4">
                                      <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 flex items-center justify-center">
                                         <FileText size={20} />
@@ -352,12 +352,12 @@ const LearnPage = () => {
                              )}
                              {block.type === 'video_link' && block.url && (
                                <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                                   <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center">
+                                   <div className="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 flex items-center justify-center">
                                        <Globe size={20} />
                                    </div>
                                    <div className="flex-1">
                                        <p className="text-sm font-bold text-slate-800 dark:text-white">{block.title || "External Content"}</p>
-                                       <a href={block.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 font-bold hover:underline">View Source Artifact</a>
+                                       <a href={block.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-600 font-bold hover:underline">View Source Artifact</a>
                                    </div>
                                    <ExternalLink className="text-slate-400" size={16} />
                                </div>
@@ -369,11 +369,11 @@ const LearnPage = () => {
                   </div>
 
                   <div className="space-y-6">
-                    <div className="p-8 gradient-primary rounded-[2.5rem] text-white shadow-xl shadow-blue-500/20 sticky top-0">
+                    <div className="p-8 gradient-primary rounded-[2.5rem] text-white shadow-xl shadow-cyan-500/20 sticky top-0">
                       <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
                         <Award size={22} className="text-white fill-white/20" /> Completion Logic
                       </h4>
-                      <p className="text-xs text-blue-100 leading-relaxed mb-8 font-medium">
+                      <p className="text-xs text-cyan-100 leading-relaxed mb-8 font-medium">
                         Signals processed for this lesson will be recorded in your scholarly registry once validated. Mark as complete to advance.
                       </p>
                       
@@ -385,7 +385,7 @@ const LearnPage = () => {
                         <button 
                             onClick={handleMarkComplete}
                             disabled={completing}
-                            className="w-full py-4 bg-white text-blue-600 rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                            className="w-full py-4 bg-white text-cyan-600 rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                         >
                             {completing ? <Loader2 className="animate-spin" size={20} /> : <><Check size={20} /> Complete Lesson</>}
                         </button>
@@ -393,8 +393,8 @@ const LearnPage = () => {
                       
                       <div className="mt-8 pt-8 border-t border-white/10">
                         <div className="flex items-center justify-between mb-4">
-                            <span className="text-[10px] font-black uppercase text-blue-100 tracking-widest">Next Lesson</span>
-                            <ChevronRight size={14} className="text-blue-100" />
+                            <span className="text-[10px] font-black uppercase text-cyan-100 tracking-widest">Next Lesson</span>
+                            <ChevronRight size={14} className="text-cyan-100" />
                         </div>
                         <p className="text-sm font-bold truncate opacity-90">
                             {allLessons[currentIndex + 1]?.title || "Course Completed"}
@@ -419,7 +419,7 @@ const LearnPage = () => {
                                  <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">I found a useful doc for that part, attaching it above.</p>
                               </div>
                            </div>
-                           <button className="w-full py-3 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 hover:border-blue-500/30 transition-all">Join Pulse Conversation</button>
+                           <button className="w-full py-3 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-cyan-600 hover:border-cyan-500/30 transition-all">Join Pulse Conversation</button>
                         </div>
                     </div>
                   </div>

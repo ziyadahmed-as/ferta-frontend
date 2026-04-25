@@ -12,8 +12,8 @@ const SettingsPage = () => {
         <div className="min-h-screen bg-white dark:bg-black pt-28 px-6 pb-24">
             <div className="max-w-4xl mx-auto">
                 <div className="flex flex-col md:flex-row items-center gap-12 mb-16 px-8 py-12 bg-white dark:bg-zinc-900/50 rounded-[4rem] border border-zinc-100 dark:border-zinc-800 shadow-2xl relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px] -z-1 group-hover:scale-150 transition-all duration-1000" />
-                    <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-600/20 group-hover:rotate-12 transition-all">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-teal-600/10 rounded-full blur-[100px] -z-1 group-hover:scale-150 transition-all duration-1000" />
+                    <div className="w-16 h-16 bg-teal-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-teal-600/20 group-hover:rotate-12 transition-all">
                         <Settings size={32} />
                     </div>
                     <div>
@@ -53,7 +53,7 @@ const SettingsPage = () => {
 
 const SettingGroup = ({ icon, title, children }: any) => (
     <div className="p-10 bg-white dark:bg-zinc-900/40 rounded-[3rem] border border-zinc-100 dark:border-zinc-800">
-        <div className="flex items-center gap-3 mb-10 text-indigo-600">
+        <div className="flex items-center gap-3 mb-10 text-teal-600">
             {icon}
             <h3 className="text-sm font-black uppercase tracking-widest italic">{title}</h3>
         </div>
@@ -69,7 +69,7 @@ const SettingItem = ({ title, description, action }: any) => (
             <h4 className="text-sm font-black text-zinc-900 dark:text-white italic mb-2">{title}</h4>
             <p className="text-xs text-zinc-500 font-medium italic leading-relaxed">{description}</p>
         </div>
-        <button className="px-6 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-600 hover:text-white text-zinc-700 dark:text-zinc-300 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
+        <button className="px-6 py-3 bg-zinc-100 dark:bg-zinc-800 hover:bg-teal-600 hover:text-white text-zinc-700 dark:text-zinc-300 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
             {action}
         </button>
     </div>

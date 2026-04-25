@@ -61,11 +61,11 @@ const CourseHighlights = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-2">Popular Courses</h2>
-            <h3 className="text-4xl lg:text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight">Explore the <span className="text-indigo-600">Most Popular</span> Programs</h3>
+            <h2 className="text-sm font-bold uppercase tracking-widest text-teal-600 mb-2">Popular Courses</h2>
+            <h3 className="text-4xl lg:text-5xl font-black text-zinc-900 dark:text-white mb-6 tracking-tight">Explore the <span className="text-teal-600">Most Popular</span> Programs</h3>
             <p className="text-zinc-600 dark:text-zinc-400 text-lg">Empower yourself with world-class education and expert guidance on your path to success.</p>
           </div>
-          <Link href="/courses" className="flex items-center gap-2 text-indigo-600 font-bold hover:gap-4 transition-all duration-300">
+          <Link href="/courses" className="flex items-center gap-2 text-teal-600 font-bold hover:gap-4 transition-all duration-300">
             View All Courses
             <ArrowRight size={20} />
           </Link>
@@ -79,7 +79,7 @@ const CourseHighlights = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="p-6 sm:p-8 lg:p-10 bg-white dark:bg-zinc-900/50 rounded-[2.5rem] lg:rounded-[3rem] border border-zinc-200 dark:border-zinc-800 hover:border-indigo-600/30 transition-all duration-300 hover:-translate-y-2"
+              className="p-6 sm:p-8 lg:p-10 bg-white dark:bg-zinc-900/50 rounded-[2.5rem] lg:rounded-[3rem] border border-zinc-200 dark:border-zinc-800 hover:border-teal-600/30 transition-all duration-300 hover:-translate-y-2"
             >
               <div className="relative h-56 w-full overflow-hidden">
                 <Image
@@ -110,7 +110,7 @@ const CourseHighlights = () => {
                   <span className="text-xs font-bold text-zinc-500">{course.rating || 4.9} (120+)</span>
                 </div>
 
-                <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
                   {course.title}
                 </h4>
 
@@ -127,12 +127,12 @@ const CourseHighlights = () => {
 
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-indigo-600 uppercase tracking-tighter">Lifetime access</span>
+                    <span className="text-[10px] font-black text-teal-600 uppercase tracking-tighter">Lifetime access</span>
                     <span className="text-2xl font-black text-zinc-900 dark:text-white">
                       ${course.price || "Free"}
                     </span>
                   </div>
-                  <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white transition-all duration-300">
+                  <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-teal-600 dark:hover:bg-teal-600 hover:text-white dark:hover:text-white transition-all duration-300">
                     <ArrowRight size={20} />
                   </Link>
                 </div>

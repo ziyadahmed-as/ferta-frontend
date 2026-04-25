@@ -38,10 +38,10 @@ const FeaturedCourses = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-10">
           <div>
-            <p className="text-indigo-600 font-semibold text-sm mb-1">Popular Courses</p>
+            <p className="text-teal-600 font-semibold text-sm mb-1">Popular Courses</p>
             <h2 className="text-3xl font-bold text-slate-800 dark:text-white">Featured Courses</h2>
           </div>
-          <Link href="/courses" className="hidden md:flex items-center gap-2 text-sm text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">
+          <Link href="/courses" className="hidden md:flex items-center gap-2 text-sm text-teal-600 font-semibold hover:text-teal-700 transition-colors">
             View all courses <ArrowRight size={16} />
           </Link>
         </div>
@@ -68,7 +68,7 @@ const FeaturedCourses = () => {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   {course.category_name && (
-                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-lg">
+                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-teal-600 text-white text-xs font-semibold rounded-lg">
                       {course.category_name}
                     </span>
                   )}
@@ -81,7 +81,7 @@ const FeaturedCourses = () => {
 
                 {/* Content */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug group-hover:text-indigo-600 transition-colors">
+                  <h3 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug group-hover:text-teal-600 transition-colors">
                     {course.title}
                   </h3>
                   {course.instructor_name && (

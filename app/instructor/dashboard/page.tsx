@@ -120,7 +120,7 @@ const InstructorDashboard = () => {
   if (!user || (user.role !== "INSTRUCTOR" && !user.is_superuser && user.role !== "ADMIN")) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6 text-slate-800 dark:text-slate-100">
-        <BookOpen size={56} className="text-blue-600 mb-5" />
+        <BookOpen size={56} className="text-cyan-600 mb-5" />
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Instructor Access Only</h1>
         <p className="text-slate-500 mb-6">You need an instructor account to access this dashboard.</p>
         <Link href="/" className="px-6 py-3 gradient-primary text-white rounded-xl font-semibold">Go Home</Link>
@@ -132,7 +132,7 @@ const InstructorDashboard = () => {
     return (
       <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium">Loading your dashboard...</p>
         </div>
       </div>
@@ -186,7 +186,7 @@ const InstructorDashboard = () => {
             <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen size={18} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-blue-600"> Academy</span></span>
+            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-cyan-600"> Academy</span></span>
           </Link>
         </div>
 
@@ -284,14 +284,14 @@ const InstructorDashboard = () => {
             <div className="flex gap-3">
               <Link
                 href="/instructor/live-streams/create"
-                className="hidden sm:flex items-center gap-2 px-5 py-3 bg-white text-blue-600 rounded-xl font-bold text-sm hover:bg-blue-50 transition-all border border-blue-100"
+                className="hidden sm:flex items-center gap-2 px-5 py-3 bg-white text-cyan-600 rounded-xl font-bold text-sm hover:bg-cyan-50 transition-all border border-cyan-100"
               >
                 <Plus size={18} />
                 Live Hub
               </Link>
               <Link
                 href="/instructor/courses/create"
-                className="hidden sm:flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-md shadow-blue-500/20"
+                className="hidden sm:flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl font-bold text-sm hover:opacity-90 transition-all shadow-md shadow-cyan-500/20"
               >
                 <Plus size={18} />
                 Video Course
@@ -368,7 +368,7 @@ const InstructorDashboard = () => {
                   <div key={item.name} className="flex items-center gap-2 text-xs">
                     <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
                       item.name === 'Completed' ? 'bg-emerald-500' : 
-                      item.name === 'In Progress' ? 'bg-blue-500' : 'bg-slate-200'
+                      item.name === 'In Progress' ? 'bg-cyan-500' : 'bg-slate-200'
                     }`} />
                     <span className="text-slate-600 dark:text-slate-300">{item.name}</span>
                     <span className="ml-auto font-semibold text-slate-700 dark:text-white">{item.value}%</span>
@@ -387,7 +387,7 @@ const InstructorDashboard = () => {
                   title="View Video Content"
                   aria-label="Switch to Video Content tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "video"
-                      ? "text-blue-600 border-blue-600"
+                      ? "text-cyan-600 border-cyan-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
                     }`}
                 >
@@ -398,14 +398,14 @@ const InstructorDashboard = () => {
                   title="View Live Stream Hub"
                   aria-label="Switch to Live Stream Hub tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "live"
-                      ? "text-blue-600 border-blue-600"
+                      ? "text-cyan-600 border-cyan-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
                     }`}
                 >
                   Live Stream Hub
                 </button>
               </div>
-              <Link href="/instructor/courses" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+              <Link href="/instructor/courses" className="text-sm text-cyan-600 hover:text-cyan-700 font-medium">
                 Manage All Hubs →
               </Link>
             </div>
@@ -452,9 +452,9 @@ const InstructorDashboard = () => {
                             href={`/instructor/courses/${course.id}/edit`} 
                             title="Edit Course" 
                             aria-label={`Edit course ${course.title}`}
-                            className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                            className="p-1.5 bg-slate-100 dark:bg-slate-700 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-900/30 transition-colors"
                           >
-                            <Settings size={14} className="text-slate-500 hover:text-blue-600" />
+                            <Settings size={14} className="text-slate-500 hover:text-cyan-600" />
                           </Link>
                         </div>
                       </div>
@@ -486,7 +486,7 @@ const InstructorDashboard = () => {
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute top-3 left-3 px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded-full uppercase tracking-wider">
+                        <div className="absolute top-3 left-3 px-2 py-1 bg-cyan-600 text-white text-[10px] font-bold rounded-full uppercase tracking-wider">
                           {stream.group_type}
                         </div>
                         <div className="absolute top-3 right-3 px-2.5 py-1 bg-white/90 dark:bg-slate-800/90 rounded-full text-xs font-bold text-slate-800 dark:text-white">
@@ -503,7 +503,7 @@ const InstructorDashboard = () => {
                             onClick={() => { setSelectedStream(stream); setShowManageModal(true); }}
                             title="Manage Hub"
                             aria-label={`Manage live hub for ${stream.title}`}
-                            className="px-4 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg hover:bg-blue-700 transition-all"
+                            className="px-4 py-1.5 bg-cyan-600 text-white text-xs font-bold rounded-lg hover:bg-cyan-700 transition-all"
                           >
                             Manage Hub
                           </button>
@@ -538,7 +538,7 @@ const InstructorDashboard = () => {
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                 <div>
                   <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                    <BarChart3 className="text-blue-600" size={20} />
+                    <BarChart3 className="text-cyan-600" size={20} />
                     Live Hub Management
                   </h3>
                   <p className="text-xs text-slate-500 mt-0.5">{selectedStream?.title}</p>
@@ -565,7 +565,7 @@ const InstructorDashboard = () => {
                       aria-label={`Manage artifacts for session ${session.title}`}
                       className={`w-full text-left p-3 rounded-2xl transition-all ${
                         selectedSessionId === session.id 
-                        ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 border border-blue-100 dark:border-blue-800" 
+                        ? "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-600 border border-cyan-100 dark:border-cyan-800" 
                         : "hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-600 dark:text-slate-400"
                       }`}
                     >
@@ -586,18 +586,18 @@ const InstructorDashboard = () => {
                             onClick={() => setArtifactData({...artifactData, type: 'pdf'})}
                             title="Select Research PDF"
                             aria-label="Set artifact type to Research PDF"
-                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'pdf' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-blue-200'}`}
+                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'pdf' ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-cyan-200'}`}
                           >
-                            <FileText size={20} className={artifactData.type === 'pdf' ? 'text-blue-600' : 'text-slate-400'} />
+                            <FileText size={20} className={artifactData.type === 'pdf' ? 'text-cyan-600' : 'text-slate-400'} />
                             <span className="text-[10px] font-bold">Research PDF</span>
                           </button>
                           <button 
                             onClick={() => setArtifactData({...artifactData, type: 'link'})}
                             title="Select External Link"
                             aria-label="Set artifact type to External Link"
-                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'link' ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-blue-200'}`}
+                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-2 ${artifactData.type === 'link' ? 'border-cyan-600 bg-cyan-50 dark:bg-cyan-900/20' : 'border-slate-100 dark:border-slate-700 hover:border-cyan-200'}`}
                           >
-                            <Link2 size={20} className={artifactData.type === 'link' ? 'text-blue-600' : 'text-slate-400'} />
+                            <Link2 size={20} className={artifactData.type === 'link' ? 'text-cyan-600' : 'text-slate-400'} />
                             <span className="text-[10px] font-bold">External Link</span>
                           </button>
                         </div>
@@ -610,12 +610,12 @@ const InstructorDashboard = () => {
                               placeholder="e.g. Week 1 Supporting Docs"
                               value={artifactData.title}
                               onChange={(e) => setArtifactData({...artifactData, title: e.target.value})}
-                              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
                             />
                           </div>
 
                           {artifactData.type === 'pdf' ? (
-                            <div className="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 hover:border-blue-400 transition-all group">
+                            <div className="relative border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-8 flex flex-col items-center justify-center gap-3 hover:border-cyan-400 transition-all group">
                               <input 
                                 type="file" 
                                 accept=".pdf"
@@ -624,7 +624,7 @@ const InstructorDashboard = () => {
                                 onChange={(e) => setArtifactData({...artifactData, file: e.target.files?.[0] || null})}
                                 className="absolute inset-0 opacity-0 cursor-pointer"
                               />
-                              <UploadCloud size={32} className="text-slate-400 group-hover:text-blue-500 transition-colors" />
+                              <UploadCloud size={32} className="text-slate-400 group-hover:text-cyan-500 transition-colors" />
                               <p className="text-xs text-slate-500 font-medium">{artifactData.file ? artifactData.file.name : "Drop PDF here or click to browse"}</p>
                             </div>
                           ) : (
@@ -635,7 +635,7 @@ const InstructorDashboard = () => {
                                 placeholder="https://..."
                                 value={artifactData.url}
                                 onChange={(e) => setArtifactData({...artifactData, url: e.target.value})}
-                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                                className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-cyan-500 outline-none"
                               />
                             </div>
                           )}
@@ -643,7 +643,7 @@ const InstructorDashboard = () => {
                           <button 
                             onClick={handleUploadArtifact}
                             disabled={uploading || !artifactData.title}
-                            className="w-full py-4 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-blue-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
+                            className="w-full py-4 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-cyan-500/20 disabled:opacity-50 flex items-center justify-center gap-2"
                           >
                             {uploading ? "Provisioning..." : <><CheckCircle size={18} /> Deploy Artifact</>}
                           </button>
@@ -656,7 +656,7 @@ const InstructorDashboard = () => {
                           {selectedStream?.live_sessions?.find((s: any) => s.id === selectedSessionId)?.content_blocks?.map((block: any) => (
                             <div key={block.id} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
                               <div className="flex items-center gap-3">
-                                {block.type === 'pdf' ? <FileText size={14} className="text-red-500" /> : <Link2 size={14} className="text-blue-500" />}
+                                {block.type === 'pdf' ? <FileText size={14} className="text-red-500" /> : <Link2 size={14} className="text-cyan-500" />}
                                 <span className="text-xs font-medium text-slate-700 dark:text-slate-200">{block.title}</span>
                               </div>
                               <span className="text-[10px] text-slate-400 bg-slate-200 dark:bg-slate-800 px-2 py-0.5 rounded-full uppercase">{block.type}</span>

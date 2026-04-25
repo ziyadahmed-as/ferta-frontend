@@ -504,7 +504,7 @@ const AdminDashboard = () => {
   if (!user || (user.role !== "ADMIN" && user.role !== "SUPER_ADMIN" && !user.is_superuser)) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6 text-slate-800 dark:text-slate-100">
-        <ShieldCheck size={56} className="text-indigo-600 mb-5" />
+        <ShieldCheck size={56} className="text-teal-600 mb-5" />
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Admin Access Required</h1>
         <p className="text-slate-500 mb-6">You need administrator privileges to access this panel.</p>
         <Link href="/" className="px-6 py-3 gradient-primary text-white rounded-xl font-semibold">Go Home</Link>
@@ -516,7 +516,7 @@ const AdminDashboard = () => {
     return (
       <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-teal-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium">Loading admin panel...</p>
         </div>
       </div>
@@ -573,7 +573,7 @@ const AdminDashboard = () => {
             <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen size={18} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-indigo-600"> Academy</span></span>
+            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-teal-600"> Academy</span></span>
           </Link>
         </div>
 
@@ -622,7 +622,7 @@ const AdminDashboard = () => {
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setActiveModule("courses")}
-              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${activeModule === "courses" ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${activeModule === "courses" ? "bg-teal-600 text-white shadow-lg shadow-teal-500/20" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"}`}
             >
               Courses
             </button>
@@ -704,8 +704,8 @@ const AdminDashboard = () => {
                     <div className="flex items-center justify-between mb-5">
                       <h3 className="font-semibold text-slate-800 dark:text-white">Platform Growth Overview</h3>
                       <div className="flex gap-4 text-xs text-slate-500">
-                        <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-indigo-500 inline-block rounded" /> Users</span>
-                        <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-purple-500 inline-block rounded" /> Revenue</span>
+                        <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-teal-500 inline-block rounded" /> Users</span>
+                        <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-sky-500 inline-block rounded" /> Revenue</span>
                       </div>
                     </div>
                     <div className="h-64">
@@ -735,7 +735,7 @@ const AdminDashboard = () => {
                         </div>
                         <button
                           onClick={() => setActiveModule("users")}
-                          className="ml-auto text-xs text-blue-600 font-semibold hover:underline"
+                          className="ml-auto text-xs text-cyan-600 font-semibold hover:underline"
                         >
                           Review →
                         </button>
@@ -767,7 +767,7 @@ const AdminDashboard = () => {
                         </div>
                         <button
                           onClick={() => setActiveModule("courses")}
-                          className="ml-auto text-xs text-blue-600 font-semibold hover:underline"
+                          className="ml-auto text-xs text-cyan-600 font-semibold hover:underline"
                         >
                           Review →
                         </button>
@@ -775,11 +775,11 @@ const AdminDashboard = () => {
                       <div className="space-y-2">
                         {(stats?.courses?.pending_list || []).slice(0, 3).map((c: any) => (
                           <div key={c.id} className="flex items-center gap-3 py-2 border-b border-slate-100 dark:border-slate-700 last:border-0">
-                            <div className="w-7 h-7 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center text-purple-600 text-xs font-bold shrink-0">
+                            <div className="w-7 h-7 bg-sky-100 dark:bg-sky-900/30 rounded-lg flex items-center justify-center text-sky-600 text-xs font-bold shrink-0">
                               {c.title?.[0]?.toUpperCase()}
                             </div>
                             <span className="text-sm text-slate-700 dark:text-slate-200 flex-1 truncate">{c.title}</span>
-                            <span className="text-xs text-purple-600 bg-purple-50 dark:bg-purple-900/20 px-2 py-0.5 rounded-full">Review</span>
+                            <span className="text-xs text-sky-600 bg-sky-50 dark:bg-sky-900/20 px-2 py-0.5 rounded-full">Review</span>
                           </div>
                         ))}
                         {!stats?.courses?.pending_list?.length && (
@@ -828,14 +828,14 @@ const AdminDashboard = () => {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="welcome-banner p-6 rounded-2xl flex-1">
                       <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1 tracking-tight flex items-center gap-2">
-                        <Users className="text-indigo-600" size={24} />
+                        <Users className="text-teal-600" size={24} />
                         User Management
                       </h2>
                       <p className="text-slate-500 dark:text-slate-400 text-sm">Control platform access and instructor nodes</p>
                     </div>
                     <button 
                       onClick={() => setShowAddModal(true)}
-                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-teal-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <Plus size={18} /> Add New User
                     </button>
@@ -844,17 +844,17 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/50 rounded-2xl w-fit border border-slate-200 dark:border-slate-700">
                     <button 
                       onClick={() => setUserTab("all")}
-                      className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${userTab === "all" ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
+                      className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${userTab === "all" ? "bg-white dark:bg-slate-700 text-teal-600 shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
                     >
                       All Platform Users
                     </button>
                     <button 
                       onClick={() => setUserTab("applications")}
-                      className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${userTab === "applications" ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
+                      className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${userTab === "applications" ? "bg-white dark:bg-slate-700 text-teal-600 shadow-sm" : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"}`}
                     >
                       Node Applications
                       {stats?.pending_instructors?.length > 0 && (
-                        <span className="bg-indigo-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
+                        <span className="bg-teal-600 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full">
                           {stats?.pending_instructors?.length}
                         </span>
                       )}
@@ -871,7 +871,7 @@ const AdminDashboard = () => {
                             placeholder="Search users..."
                             value={userSearch}
                             onChange={(e) => setUserSearch(e.target.value)}
-                            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none"
                           />
                         </div>
                         <div className="flex items-center gap-3">
@@ -881,7 +881,7 @@ const AdminDashboard = () => {
                             title="Filter by role"
                             aria-label="Filter by role"
                             onChange={(e) => setRoleFilter(e.target.value)}
-                            className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl py-2 px-4 text-sm focus:ring-2 focus:ring-indigo-500"
+                            className="bg-slate-50 dark:bg-slate-900 border-none rounded-xl py-2 px-4 text-sm focus:ring-2 focus:ring-teal-500"
                           >
                             <option value="all">All Roles</option>
                             <option value="STUDENT">Students</option>
@@ -918,7 +918,7 @@ const AdminDashboard = () => {
                                 <td className="px-6 py-4">
                                   <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${
                                     u.role === 'SUPER_ADMIN' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 
-                                    u.role === 'ADMIN' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400' : 
+                                    u.role === 'ADMIN' ? 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400' : 
                                     'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
                                   }`}>{u.role}</span>
                                 </td>
@@ -932,7 +932,7 @@ const AdminDashboard = () => {
                                     </div>
                                   ) : u.role === 'STUDENT' ? (
                                     <div className="flex flex-col">
-                                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                                      <span className="text-xs font-bold text-teal-600 dark:text-teal-400">
                                         {u.points || 0} Unified Points
                                       </span>
                                       <span className="text-[10px] text-slate-400">Active Scholar</span>
@@ -945,7 +945,7 @@ const AdminDashboard = () => {
                                   <div className="flex flex-wrap gap-1 max-w-[200px]">
                                     {u.role === 'INSTRUCTOR' && (u.taught_courses || []).length > 0 ? (
                                       u.taught_courses.map((c: string, idx: number) => (
-                                        <span key={idx} className="text-[9px] bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 px-1.5 py-0.5 rounded border border-indigo-100 dark:border-indigo-800">
+                                        <span key={idx} className="text-[9px] bg-teal-50 dark:bg-teal-900/20 text-teal-600 px-1.5 py-0.5 rounded border border-teal-100 dark:border-teal-800">
                                           {c}
                                         </span>
                                       ))
@@ -965,14 +965,14 @@ const AdminDashboard = () => {
                                     <button 
                                       onClick={() => { setUserDetail(u); setShowDetailModal(true); }}
                                       title="System Identity Detail"
-                                      className="p-2 text-slate-400 hover:text-blue-600 transition-colors"
+                                      className="p-2 text-slate-400 hover:text-cyan-600 transition-colors"
                                     >
                                       <Eye size={16} />
                                     </button>
                                     <button 
                                       onClick={() => { setEditUser(u); setShowEditModal(true); }}
                                       title="Edit User"
-                                      className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"
+                                      className="p-2 text-slate-400 hover:text-teal-600 transition-colors"
                                     >
                                       <Edit size={16} />
                                     </button>
@@ -1003,7 +1003,7 @@ const AdminDashboard = () => {
                               onClick={() => setCurrentPage(1)}
                               disabled={currentPage === 1}
                               title="First Page"
-                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                              className="p-2 text-slate-400 hover:text-teal-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
                             >
                               <ChevronsLeft size={16} />
                             </button>
@@ -1011,7 +1011,7 @@ const AdminDashboard = () => {
                               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                               disabled={currentPage === 1}
                               title="Previous Page"
-                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                              className="p-2 text-slate-400 hover:text-teal-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
                             >
                               <ChevronLeft size={16} />
                             </button>
@@ -1030,7 +1030,7 @@ const AdminDashboard = () => {
                                     onClick={() => setCurrentPage(pageNum)}
                                     className={`w-8 h-8 rounded-lg text-xs font-bold transition-all ${
                                       currentPage === pageNum 
-                                        ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" 
+                                        ? "bg-teal-600 text-white shadow-md shadow-teal-500/20" 
                                         : "text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
                                     }`}
                                   >
@@ -1044,7 +1044,7 @@ const AdminDashboard = () => {
                               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                               disabled={currentPage === totalPages}
                               title="Next Page"
-                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                              className="p-2 text-slate-400 hover:text-teal-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
                             >
                               <ChevronRight size={16} />
                             </button>
@@ -1052,7 +1052,7 @@ const AdminDashboard = () => {
                               onClick={() => setCurrentPage(totalPages)}
                               disabled={currentPage === totalPages}
                               title="Last Page"
-                              className="p-2 text-slate-400 hover:text-indigo-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
+                              className="p-2 text-slate-400 hover:text-teal-600 disabled:opacity-30 disabled:hover:text-slate-400 transition-colors"
                             >
                               <ChevronsRight size={16} />
                             </button>
@@ -1063,7 +1063,7 @@ const AdminDashboard = () => {
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {(stats?.pending_instructors || []).map((app: any) => (
-                        <div key={app.id} className="group relative bg-white dark:bg-slate-800 rounded-[32px] border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-indigo-500/10">
+                        <div key={app.id} className="group relative bg-white dark:bg-slate-800 rounded-[32px] border border-slate-200 dark:border-slate-700/50 p-8 shadow-sm transition-all hover:shadow-xl hover:shadow-teal-500/10">
                           <div className="flex items-start gap-6">
                             <div className="w-20 h-20 gradient-primary rounded-3xl flex items-center justify-center text-white font-black text-2xl shadow-lg relative shrink-0">
                                {app.username?.[0]?.toUpperCase() || "C"}
@@ -1119,12 +1119,12 @@ const AdminDashboard = () => {
 
               {activeModule === "courses" && (
                 <div className="space-y-8">
-                  <div className="gradient-primary-soft p-12 rounded-[48px] relative overflow-hidden group border border-indigo-100/50 dark:border-indigo-900/20">
+                  <div className="gradient-primary-soft p-12 rounded-[48px] relative overflow-hidden group border border-teal-100/50 dark:border-teal-900/20">
                      <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-40 -mt-40 group-hover:scale-125 transition-all duration-1000" />
                      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
                         <div>
                           <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-3 tracking-tighter flex items-center gap-5">
-                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-indigo-600">
+                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-teal-600">
                                <BookOpen size={36} />
                             </div>
                             Knowledge Lab
@@ -1133,9 +1133,9 @@ const AdminDashboard = () => {
                         </div>
                         <div className="flex flex-col sm:flex-row items-center gap-6">
                            <div className="flex items-center gap-4">
-                             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-indigo-500/10 text-center">
+                             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-teal-500/10 text-center">
                                 <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Artifact Content</p>
-                                <p className="text-5xl font-black text-indigo-600 tracking-tighter">{allCourses.length}</p>
+                                <p className="text-5xl font-black text-teal-600 tracking-tighter">{allCourses.length}</p>
                              </div>
                              <div className="bg-amber-500 px-8 py-5 rounded-[32px] shadow-2xl shadow-amber-500/30 text-white text-center">
                                 <p className="text-[10px] uppercase font-black text-amber-100 tracking-[3px] mb-1">Queue Size</p>
@@ -1155,7 +1155,7 @@ const AdminDashboard = () => {
                   <div className="flex items-center gap-4 p-2 bg-slate-100 dark:bg-slate-800/80 rounded-[28px] w-fit border border-slate-200 dark:border-slate-700/50">
                     <button 
                       onClick={() => setCourseTab("all")}
-                      className={`px-10 py-4 rounded-[22px] text-xs font-black uppercase tracking-[2px] transition-all ${courseTab === "all" ? "bg-white dark:bg-slate-700 text-indigo-600 shadow-2xl" : "text-slate-500 hover:text-slate-700"}`}
+                      className={`px-10 py-4 rounded-[22px] text-xs font-black uppercase tracking-[2px] transition-all ${courseTab === "all" ? "bg-white dark:bg-slate-700 text-teal-600 shadow-2xl" : "text-slate-500 hover:text-slate-700"}`}
                     >
                       Institutional Registry
                     </button>
@@ -1175,14 +1175,14 @@ const AdminDashboard = () => {
                   {courseTab === "all" ? (
                     <div className="bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
                       <div className="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col md:flex-row gap-6 items-center justify-between">
-                        <div className="relative w-full md:w-[450px] shadow-2xl shadow-indigo-500/5">
+                        <div className="relative w-full md:w-[450px] shadow-2xl shadow-teal-500/5">
                           <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                           <input 
                             type="text" 
                             placeholder="Search Knowledge Artifacts..."
                             value={courseSearch}
                             onChange={(e) => setCourseSearch(e.target.value)}
-                            className="w-full pl-14 pr-6 py-5 bg-white dark:bg-slate-900 border-none rounded-[28px] text-sm font-bold focus:ring-4 focus:ring-indigo-500/10 outline-none transition-all"
+                            className="w-full pl-14 pr-6 py-5 bg-white dark:bg-slate-900 border-none rounded-[28px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
                           />
                         </div>
                         <div className="flex items-center gap-4">
@@ -1212,7 +1212,7 @@ const AdminDashboard = () => {
                                         <img src={c.thumbnail || "/api/placeholder/120/80"} alt={c.title} className="w-full h-full object-cover" />
                                       </div>
                                       <div>
-                                        <span className="text-[9px] font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-md uppercase tracking-widest mb-1.5 inline-block">{c.category_name || "General"}</span>
+                                        <span className="text-[9px] font-black text-teal-600 bg-teal-50 dark:bg-teal-900/30 px-2 py-0.5 rounded-md uppercase tracking-widest mb-1.5 inline-block">{c.category_name || "General"}</span>
                                         <p className="text-base font-black text-slate-800 dark:text-white tracking-tight leading-tight">{c.title}</p>
                                       </div>
                                     </div>
@@ -1249,7 +1249,7 @@ const AdminDashboard = () => {
                                     <div className="flex items-center justify-end gap-2">
                                       <button 
                                         onClick={() => { setEditCourseData(c); setShowCourseModal(true); }}
-                                        className="p-4 bg-slate-50 dark:bg-slate-900/50 text-slate-400 hover:text-indigo-600 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
+                                        className="p-4 bg-slate-50 dark:bg-slate-900/50 text-slate-400 hover:text-teal-600 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
                                         title="Modify Artifact"
                                       >
                                         <Edit size={18} />
@@ -1272,7 +1272,7 @@ const AdminDashboard = () => {
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                        {allCourses.filter(c => !c.is_approved && c.is_submitted).map((c: any) => (
-                         <div key={c.id} className="bg-white dark:bg-slate-800 rounded-[48px] border-b-8 border-amber-500 p-10 shadow-2xl shadow-indigo-500/5 flex flex-col gap-8 transition-transform hover:-translate-y-2 duration-500">
+                         <div key={c.id} className="bg-white dark:bg-slate-800 rounded-[48px] border-b-8 border-amber-500 p-10 shadow-2xl shadow-teal-500/5 flex flex-col gap-8 transition-transform hover:-translate-y-2 duration-500">
                             <div className="flex gap-8">
                                <div className="w-40 h-28 rounded-3xl overflow-hidden shadow-2xl shrink-0 border-4 border-white dark:border-slate-900">
                                   <img src={c.thumbnail || "/api/placeholder/160/120"} alt="ModView" className="w-full h-full object-cover" />
@@ -1341,12 +1341,12 @@ const AdminDashboard = () => {
                       </div>
                       <div className="bg-white/50 dark:bg-slate-700/50 px-4 py-2 rounded-xl border border-white/20">
                         <p className="text-[10px] uppercase font-bold text-slate-500">Categories</p>
-                        <p className="text-xl font-black text-indigo-600">{categories.length}</p>
+                        <p className="text-xl font-black text-teal-600">{categories.length}</p>
                       </div>
                     </div>
                     <button 
                       onClick={() => setShowAddCategoryModal(true)}
-                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-teal-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <Plus size={18} /> Add Category
                     </button>
@@ -1359,17 +1359,17 @@ const AdminDashboard = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: idx * 0.05 }}
-                        className="group bg-white dark:bg-slate-800 rounded-[32px] border border-slate-100 dark:border-slate-700 p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all border-b-4 border-b-indigo-500"
+                        className="group bg-white dark:bg-slate-800 rounded-[32px] border border-slate-100 dark:border-slate-700 p-6 shadow-sm hover:shadow-2xl hover:shadow-teal-500/10 transition-all border-b-4 border-b-teal-500"
                       >
                         <div className="flex items-center justify-between mb-6">
-                          <div className="w-12 h-12 bg-indigo-50 dark:bg-indigo-900/30 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                          <div className="w-12 h-12 bg-teal-50 dark:bg-teal-900/30 rounded-2xl flex items-center justify-center text-teal-600 group-hover:scale-110 transition-transform">
                             <Tag size={24} />
                           </div>
                           <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button 
                               onClick={() => { setEditCategory(cat); setShowEditCategoryModal(true); }} 
                               title="Edit Category"
-                              className="p-2 text-slate-400 hover:text-indigo-600 transition-colors"
+                              className="p-2 text-slate-400 hover:text-teal-600 transition-colors"
                             >
                               <Edit size={16} />
                             </button>
@@ -1391,7 +1391,7 @@ const AdminDashboard = () => {
                         <div className="flex items-center justify-between pt-6 border-t border-slate-50 dark:border-slate-700">
                           <div className="flex flex-col">
                             <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Node Count</span>
-                            <span className="text-lg font-black text-indigo-600">{cat.node_count || 0}</span>
+                            <span className="text-lg font-black text-teal-600">{cat.node_count || 0}</span>
                           </div>
                           <div className="px-3 py-1 bg-slate-50 dark:bg-slate-900 rounded-lg">
                             <span className="text-[9px] font-bold text-slate-400 uppercase tracking-tighter">Active</span>
@@ -1412,12 +1412,12 @@ const AdminDashboard = () => {
 
               {activeModule === "live" && (
                 <div className="space-y-8">
-                  <div className="gradient-primary-soft p-12 rounded-[48px] relative overflow-hidden group border border-indigo-100/50 dark:border-indigo-900/20">
+                  <div className="gradient-primary-soft p-12 rounded-[48px] relative overflow-hidden group border border-teal-100/50 dark:border-teal-900/20">
                      <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-40 -mt-40 group-hover:scale-125 transition-all duration-1000" />
                      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-10">
                         <div>
                           <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-3 tracking-tighter flex items-center gap-5">
-                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-indigo-600">
+                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-3xl flex items-center justify-center shadow-2xl text-teal-600">
                                <TrendingUp size={36} />
                             </div>
                             Live Session Hub
@@ -1425,9 +1425,9 @@ const AdminDashboard = () => {
                           <p className="text-slate-600 dark:text-slate-300 text-xl font-medium opacity-80 max-w-xl leading-relaxed">Orchestrate and moderate synchronous learning experiences, session slots, and faculty presence.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row items-center gap-6">
-                           <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-indigo-500/10 text-center">
+                           <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-teal-500/10 text-center">
                               <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Active Hubs</p>
-                              <p className="text-5xl font-black text-indigo-600 tracking-tighter">{liveStreams.length}</p>
+                              <p className="text-5xl font-black text-teal-600 tracking-tighter">{liveStreams.length}</p>
                            </div>
                            <button 
                              onClick={() => setShowAddStreamModal(true)}
@@ -1442,7 +1442,7 @@ const AdminDashboard = () => {
 
                   <div className="grid grid-cols-1 gap-8">
                     {liveStreams.map((stream: any) => (
-                      <div key={stream.id} className="group bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700/50 p-10 shadow-sm transition-all hover:shadow-2xl hover:shadow-indigo-500/10 border-l-8 border-l-indigo-600">
+                      <div key={stream.id} className="group bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700/50 p-10 shadow-sm transition-all hover:shadow-2xl hover:shadow-teal-500/10 border-l-8 border-l-teal-600">
                         <div className="flex flex-col lg:flex-row gap-10">
                            <div className="lg:w-1/3 space-y-6">
                               <div className="flex items-center gap-4">
@@ -1451,7 +1451,7 @@ const AdminDashboard = () => {
                                  </div>
                                  <div className="flex-1">
                                     <h4 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter leading-tight">{stream.title}</h4>
-                                    <p className="text-sm font-bold text-indigo-600 dark:text-indigo-400">@{stream.instructor_name}</p>
+                                    <p className="text-sm font-bold text-teal-600 dark:text-teal-400">@{stream.instructor_name}</p>
                                  </div>
                               </div>
                               <div className="grid grid-cols-2 gap-4">
@@ -1473,7 +1473,7 @@ const AdminDashboard = () => {
                               <div className="flex flex-col gap-3">
                                  <button 
                                    onClick={() => { setSelectedStreamForSession(stream); setShowAddSessionModal(true); }}
-                                   className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-[24px] text-xs font-black uppercase tracking-[2px] shadow-xl shadow-indigo-500/20 transition-all flex items-center justify-center gap-3"
+                                   className="w-full py-5 bg-teal-600 hover:bg-teal-700 text-white rounded-[24px] text-xs font-black uppercase tracking-[2px] shadow-xl shadow-teal-500/20 transition-all flex items-center justify-center gap-3"
                                  >
                                    <Calendar size={18} /> Add Schedule Slot
                                  </button>
@@ -1509,13 +1509,13 @@ const AdminDashboard = () => {
                               </h5>
                               <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                                  {stream.live_sessions && stream.live_sessions.length > 0 ? stream.live_sessions.map((session: any) => (
-                                   <div key={session.id} className="relative group/session bg-slate-50 dark:bg-slate-900/50 p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 hover:border-indigo-500/30 transition-all">
+                                   <div key={session.id} className="relative group/session bg-slate-50 dark:bg-slate-900/50 p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 hover:border-teal-500/30 transition-all">
                                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                          <div>
                                             <h6 className="text-base font-black text-slate-800 dark:text-white mb-2 leading-none">{session.title}</h6>
                                             <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                               <span className="flex items-center gap-1.5"><Calendar size={12} className="text-indigo-500" /> {new Date(session.scheduled_at).toLocaleDateString()}</span>
-                                               <span className="flex items-center gap-1.5"><TrendingUp size={12} className="text-indigo-500" /> {new Date(session.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                               <span className="flex items-center gap-1.5"><Calendar size={12} className="text-teal-500" /> {new Date(session.scheduled_at).toLocaleDateString()}</span>
+                                               <span className="flex items-center gap-1.5"><TrendingUp size={12} className="text-teal-500" /> {new Date(session.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                             </div>
                                          </div>
                                          {session.meeting_link && (
@@ -1523,7 +1523,7 @@ const AdminDashboard = () => {
                                              href={session.meeting_link} 
                                              target="_blank" 
                                              rel="noreferrer" 
-                                             className="px-6 py-2.5 bg-white dark:bg-slate-800 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-indigo-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
+                                             className="px-6 py-2.5 bg-white dark:bg-slate-800 text-teal-600 text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-teal-600 hover:text-white transition-all shadow-sm flex items-center gap-2"
                                            >
                                              Meet Link <PlusCircle size={12} />
                                            </a>
@@ -1555,7 +1555,7 @@ const AdminDashboard = () => {
 
               {activeModule === "revenue" && (
                 <div className="space-y-8">
-                    <div className="gradient-primary-soft p-12 rounded-[48px] border border-indigo-100/50 dark:border-indigo-900/20 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div className="gradient-primary-soft p-12 rounded-[48px] border border-teal-100/50 dark:border-teal-900/20 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-8">
                       <div>
                         <h2 className="text-5xl font-black text-slate-800 dark:text-white mb-2 tracking-tighter">Financial Architecture</h2>
                         <p className="text-slate-600 dark:text-slate-400 text-lg font-medium opacity-80">Real-time revenue monitoring and protocol growth analytics.</p>
@@ -1563,7 +1563,7 @@ const AdminDashboard = () => {
                       <div className="flex gap-4">
                         <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl p-6 rounded-[32px] border border-white/60 shadow-xl">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Fiscal Velocity</p>
-                          <p className="text-3xl font-black text-indigo-600">+12.4%</p>
+                          <p className="text-3xl font-black text-teal-600">+12.4%</p>
                         </div>
                         <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl p-6 rounded-[32px] border border-white/60 shadow-xl">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Growth Index</p>
@@ -1577,7 +1577,7 @@ const AdminDashboard = () => {
                         <div className="flex items-center justify-between mb-8">
                           <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Platform Revenue Growth</h3>
                           <div className="flex items-center gap-2">
-                            <span className="w-3 h-3 bg-indigo-600 rounded-full" />
+                            <span className="w-3 h-3 bg-teal-600 rounded-full" />
                             <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gross (USD)</span>
                           </div>
                         </div>
@@ -1596,7 +1596,7 @@ const AdminDashboard = () => {
 
                       <div className="space-y-8">
                         <div className="bg-white dark:bg-slate-800 p-10 rounded-[48px] border border-slate-100 dark:border-slate-700 shadow-sm transition-all hover:shadow-2xl">
-                          <div className="w-16 h-16 bg-indigo-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-indigo-500/30"><DollarSign size={32} className="text-white" /></div>
+                          <div className="w-16 h-16 bg-teal-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-teal-500/30"><DollarSign size={32} className="text-white" /></div>
                           <p className="text-[11px] font-black text-slate-400 uppercase tracking-[4px] mb-2 leading-none">Gross Revenue</p>
                           <p className="text-5xl font-black text-slate-800 dark:text-slate-100 tracking-tighter">${stats?.revenue?.total || "168,000"}</p>
                           <div className="mt-6 flex items-center gap-2 text-xs font-bold text-emerald-500">
@@ -1605,11 +1605,11 @@ const AdminDashboard = () => {
                         </div>
 
                         <div className="bg-slate-900 dark:bg-indigo-950 p-10 rounded-[48px] shadow-2xl relative overflow-hidden group">
-                           <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000" />
+                           <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-1000" />
                            <div className="relative z-10">
-                              <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[4px] mb-2">Protocol Balance</p>
+                              <p className="text-[10px] font-black text-teal-400 uppercase tracking-[4px] mb-2">Protocol Balance</p>
                               <p className="text-4xl font-black text-white tracking-tighter">$42,850.24</p>
-                              <button className="mt-8 w-full py-4 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-indigo-50 transition-colors">Initiate Payout</button>
+                              <button className="mt-8 w-full py-4 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-teal-50 transition-colors">Initiate Payout</button>
                            </div>
                         </div>
                       </div>
@@ -1618,7 +1618,7 @@ const AdminDashboard = () => {
                     <div className="bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
                        <div className="p-8 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                           <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Recent Financial Events</h3>
-                          <button className="text-xs font-bold text-indigo-600 uppercase tracking-widest hover:underline">View All Ledger →</button>
+                          <button className="text-xs font-bold text-teal-600 uppercase tracking-widest hover:underline">View All Ledger →</button>
                        </div>
                        <div className="overflow-x-auto">
                           <table className="w-full text-left">
@@ -1658,25 +1658,25 @@ const AdminDashboard = () => {
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="welcome-banner p-6 rounded-2xl flex-1">
                       <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-1 tracking-tight flex items-center gap-2">
-                        <FileText className="text-indigo-600" size={24} />
+                        <FileText className="text-teal-600" size={24} />
                         AI Knowledge Base
                       </h2>
                       <p className="text-slate-500 dark:text-slate-400 text-sm">Upload documents that the AI chatbot can access and answer questions from.</p>
                     </div>
                     <button 
                       onClick={() => setShowUploadModal(true)}
-                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                      className="gradient-primary text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 shadow-lg shadow-teal-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <Upload size={18} /> Upload Document
                     </button>
                   </div>
 
                   {/* Info Banner */}
-                  <div className="bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/30 rounded-2xl p-5 flex items-start gap-3">
-                    <FileUp className="text-indigo-600 shrink-0 mt-0.5" size={20} />
+                  <div className="bg-teal-50 dark:bg-teal-900/20 border border-teal-100 dark:border-teal-800/30 rounded-2xl p-5 flex items-start gap-3">
+                    <FileUp className="text-teal-600 shrink-0 mt-0.5" size={20} />
                     <div>
-                      <p className="text-sm font-semibold text-indigo-800 dark:text-indigo-200">How it works</p>
-                      <p className="text-xs text-indigo-600 dark:text-indigo-300 mt-1">Upload PDF, TXT, or MD files here. Active documents are automatically indexed into the AI platform chatbot&apos;s knowledge base. Users chatting with the bot will get answers from these documents.</p>
+                      <p className="text-sm font-semibold text-teal-800 dark:text-teal-200">How it works</p>
+                      <p className="text-xs text-teal-600 dark:text-teal-300 mt-1">Upload PDF, TXT, or MD files here. Active documents are automatically indexed into the AI platform chatbot&apos;s knowledge base. Users chatting with the bot will get answers from these documents.</p>
                     </div>
                   </div>
 
@@ -1690,13 +1690,13 @@ const AdminDashboard = () => {
                           placeholder="Search knowledge artifacts..."
                           value={knowledgeSearch}
                           onChange={(e) => setKnowledgeSearch(e.target.value)}
-                          className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                          className="w-full pl-12 pr-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                         />
                       </div>
                       <div className="flex items-center gap-4">
-                         <div className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl border border-indigo-100 dark:border-indigo-800/50">
-                            <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest leading-none mb-1">Total Logic</p>
-                            <p className="text-xl font-black text-indigo-800 dark:text-indigo-200">{knowledgeDocs.length}</p>
+                         <div className="px-4 py-2 bg-teal-50 dark:bg-teal-900/30 rounded-xl border border-teal-100 dark:border-teal-800/50">
+                            <p className="text-[10px] font-black text-teal-600 uppercase tracking-widest leading-none mb-1">Total Logic</p>
+                            <p className="text-xl font-black text-teal-800 dark:text-teal-200">{knowledgeDocs.length}</p>
                          </div>
                       </div>
                     </div>
@@ -1728,7 +1728,7 @@ const AdminDashboard = () => {
                                   <div className="flex items-center gap-4">
                                     <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm ${
                                       doc.file_extension === 'pdf' ? 'bg-rose-50 dark:bg-rose-900/20 text-rose-500' :
-                                      doc.file_extension === 'md' ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-500' :
+                                      doc.file_extension === 'md' ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-500' :
                                       'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-500'
                                     }`}>
                                       <FileText size={24} />
@@ -1763,7 +1763,7 @@ const AdminDashboard = () => {
                                       className={`p-2.5 rounded-xl transition-all ${
                                         doc.is_active 
                                           ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 hover:scale-110'
-                                          : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-indigo-600'
+                                          : 'bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-teal-600'
                                       }`}
                                       title={doc.is_active ? "Deactivate Node" : "Activate Node"}
                                     >
@@ -1811,7 +1811,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <UserPlus className="text-indigo-600" size={20} />
+                  <UserPlus className="text-teal-600" size={20} />
                   Provision New Identity
                 </h3>
                 <button 
@@ -1832,7 +1832,7 @@ const AdminDashboard = () => {
                     placeholder="e.g. Satoshi_99"
                     value={newUser.username}
                     onChange={e => setNewUser({...newUser, username: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -1843,7 +1843,7 @@ const AdminDashboard = () => {
                     placeholder="satoshi@fatra.academy"
                     value={newUser.email}
                     onChange={e => setNewUser({...newUser, email: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -1854,7 +1854,7 @@ const AdminDashboard = () => {
                     placeholder="••••••••"
                     value={newUser.password}
                     onChange={e => setNewUser({...newUser, password: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -1863,7 +1863,7 @@ const AdminDashboard = () => {
                     value={newUser.role}
                     aria-label="New user role"
                     onChange={e => setNewUser({...newUser, role: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   >
                     <option value="STUDENT">Student (Default Node)</option>
                     <option value="INSTRUCTOR">Instructor (Faculty)</option>
@@ -1882,7 +1882,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Confirm Provision
                   </button>
@@ -1922,7 +1922,7 @@ const AdminDashboard = () => {
                     placeholder="Enter Instructor User ID"
                     value={duplicateInstructorId}
                     onChange={(e) => setDuplicateInstructorId(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 
@@ -1935,7 +1935,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     onClick={handleDuplicateStream}
-                    className="flex-1 px-4 py-3 bg-indigo-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-indigo-500/20"
+                    className="flex-1 px-4 py-3 bg-teal-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-teal-500/20"
                   >
                     Launch Stream
                   </button>
@@ -1965,7 +1965,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Plus className="text-indigo-600" size={20} />
+                  <Plus className="text-teal-600" size={20} />
                   Create Live Course
                 </h3>
                 <button 
@@ -1988,7 +1988,7 @@ const AdminDashboard = () => {
                     placeholder="e.g. Advanced Crypto Strategies"
                     value={newStream.title}
                     onChange={e => setNewStream({...newStream, title: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -1998,7 +1998,7 @@ const AdminDashboard = () => {
                     placeholder="What will students learn?"
                     value={newStream.description}
                     onChange={e => setNewStream({...newStream, description: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2008,7 +2008,7 @@ const AdminDashboard = () => {
                     title="Select Instructor"
                     value={newStream.instructor}
                     onChange={e => setNewStream({...newStream, instructor: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   >
                     <option value="">Select Instructor...</option>
                     {allUsers.filter(u => u.role === 'INSTRUCTOR').map(u => (
@@ -2025,7 +2025,7 @@ const AdminDashboard = () => {
                       title="Initial Schedule Date"
                       value={newStream.scheduled_at}
                       onChange={e => setNewStream({...newStream, scheduled_at: e.target.value})}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -2038,7 +2038,7 @@ const AdminDashboard = () => {
                       placeholder="0.00"
                       value={newStream.price}
                       onChange={e => setNewStream({...newStream, price: e.target.value})}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -2049,7 +2049,7 @@ const AdminDashboard = () => {
                     placeholder="https://zoom.us/j/..."
                     value={newStream.meeting_link}
                     onChange={e => setNewStream({...newStream, meeting_link: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2058,7 +2058,7 @@ const AdminDashboard = () => {
                     title="Group Type"
                     value={newStream.group_type}
                     onChange={e => setNewStream({...newStream, group_type: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   >
                     <option value="VVIP">VVIP (1 Student)</option>
                     <option value="VIP1">VIP1 (5 Students)</option>
@@ -2077,7 +2077,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Create Course
                   </button>
@@ -2135,7 +2135,7 @@ const AdminDashboard = () => {
                     placeholder="e.g. Genesis Block Node"
                     value={newSession.title}
                     onChange={e => setNewSession({...newSession, title: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2145,7 +2145,7 @@ const AdminDashboard = () => {
                     placeholder="Technical nodes and discovery..."
                     value={newSession.description}
                     onChange={e => setNewSession({...newSession, description: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2156,7 +2156,7 @@ const AdminDashboard = () => {
                     title="Time & Date"
                     value={newSession.scheduled_at}
                     onChange={e => setNewSession({...newSession, scheduled_at: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2167,7 +2167,7 @@ const AdminDashboard = () => {
                     placeholder="https://zoom.us/j/..."
                     value={newSession.meeting_link}
                     onChange={e => setNewSession({...newSession, meeting_link: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
 
@@ -2211,7 +2211,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <BookOpen className="text-indigo-600" size={20} />
+                  <BookOpen className="text-teal-600" size={20} />
                   {editCourseData ? "Modify Academic Node" : "Provision New Node"}
                 </h3>
                 <button 
@@ -2237,7 +2237,7 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, title: e.target.value})
                         : setNewCourse({...newCourse, title: e.target.value})
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -2252,7 +2252,7 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, slug: e.target.value})
                         : setNewCourse({...newCourse, slug: e.target.value})
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -2267,7 +2267,7 @@ const AdminDashboard = () => {
                       ? setEditCourseData({...editCourseData, description: e.target.value})
                       : setNewCourse({...newCourse, description: e.target.value})
                     }
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-24"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-24"
                   />
                 </div>
 
@@ -2281,7 +2281,7 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, course_type: e.target.value})
                         : setNewCourse({...newCourse, course_type: e.target.value})
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     >
                       <option value="VIDEO_BASED">Video-Based Course</option>
                       <option value="LIVE_STREAM">Live Stream Cohort</option>
@@ -2299,7 +2299,7 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, price: e.target.value})
                         : setNewCourse({...newCourse, price: e.target.value})
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -2315,7 +2315,7 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, instructor: e.target.value})
                         : setNewCourse({...newCourse, instructor: e.target.value})
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     >
                       <option value="">Select Faculty Node...</option>
                       {allUsers.filter(u => u.role === 'INSTRUCTOR').map(u => (
@@ -2333,7 +2333,7 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, category: e.target.value})
                         : setNewCourse({...newCourse, category: e.target.value})
                       }
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     >
                       <option value="">Select Domain...</option>
                       {categories.map(c => (
@@ -2353,9 +2353,9 @@ const AdminDashboard = () => {
                         ? setEditCourseData({...editCourseData, is_published: e.target.checked})
                         : setNewCourse({...newCourse, is_published: e.target.checked})
                       }
-                      className="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500 cursor-pointer"
+                      className="w-5 h-5 rounded-lg border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer"
                     />
-                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 transition-colors">Publish to Platform Registry</span>
+                    <span className="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-teal-600 transition-colors">Publish to Platform Registry</span>
                   </label>
                 </div>
 
@@ -2369,7 +2369,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     {editCourseData ? "Sync Modifications" : "Launch Knowledge Node"}
                   </button>
@@ -2398,7 +2398,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Edit className="text-indigo-600" size={20} />
+                  <Edit className="text-teal-600" size={20} />
                   Modify Network Identity
                 </h3>
                 <button 
@@ -2420,7 +2420,7 @@ const AdminDashboard = () => {
                     placeholder="Username"
                     value={editUser.username}
                     onChange={e => setEditUser({...editUser, username: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2432,7 +2432,7 @@ const AdminDashboard = () => {
                     placeholder="Email Address"
                     value={editUser.email}
                     onChange={e => setEditUser({...editUser, email: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2443,7 +2443,7 @@ const AdminDashboard = () => {
                     placeholder="••••••••"
                     value={editUser.password || ""}
                     onChange={e => setEditUser({...editUser, password: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2453,7 +2453,7 @@ const AdminDashboard = () => {
                     title="Institutional Role"
                     aria-label="Edit user role"
                     onChange={e => setEditUser({...editUser, role: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   >
                     <option value="STUDENT">Student (Default Node)</option>
                     <option value="INSTRUCTOR">Instructor (Faculty)</option>
@@ -2472,7 +2472,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Update Identity
                   </button>
@@ -2513,9 +2513,9 @@ const AdminDashboard = () => {
               <div className="px-10 pb-10 -mt-16 relative">
                 <div className="flex flex-col md:flex-row items-end gap-8 mb-12">
                   <div className="relative group">
-                    <div className="w-36 h-36 rounded-[36px] bg-white dark:bg-slate-800 border-8 border-white dark:border-slate-900 flex items-center justify-center text-5xl font-black text-indigo-600 shadow-2xl relative z-10 overflow-hidden">
+                    <div className="w-36 h-36 rounded-[36px] bg-white dark:bg-slate-800 border-8 border-white dark:border-slate-900 flex items-center justify-center text-5xl font-black text-teal-600 shadow-2xl relative z-10 overflow-hidden">
                       {userDetail.username?.charAt(0)?.toUpperCase() || "U"}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-tr from-teal-500/10 to-transparent" />
                     </div>
                     <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-2 rounded-2xl shadow-lg z-20 border-4 border-white dark:border-slate-900">
                       <ShieldCheck size={24} />
@@ -2532,7 +2532,7 @@ const AdminDashboard = () => {
                       )}
                     </div>
                     <div className="flex flex-wrap gap-3 mt-2">
-                      <span className="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest rounded-xl border border-indigo-100/50 dark:border-indigo-800/30">
+                      <span className="px-4 py-1.5 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 text-xs font-black uppercase tracking-widest rounded-xl border border-teal-100/50 dark:border-teal-800/30">
                         Institutional Role: {userDetail.role}
                       </span>
                       {userDetail.is_approved_instructor && (
@@ -2553,7 +2553,7 @@ const AdminDashboard = () => {
                         <div className="space-y-4">
                           <div className="flex items-start gap-4">
                             <div className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl">
-                              <Mail size={18} className="text-indigo-500" />
+                              <Mail size={18} className="text-teal-500" />
                             </div>
                             <div>
                               <p className="text-[10px] font-bold text-slate-400 uppercase">Primary Endpoint</p>
@@ -2562,7 +2562,7 @@ const AdminDashboard = () => {
                           </div>
                           <div className="flex items-start gap-4">
                             <div className="p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl">
-                              <User size={18} className="text-indigo-500" />
+                              <User size={18} className="text-teal-500" />
                             </div>
                             <div>
                               <p className="text-[10px] font-bold text-slate-400 uppercase">Legal Identity</p>
@@ -2584,7 +2584,7 @@ const AdminDashboard = () => {
                           </div>
                           <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800/50">
                             <span className="text-xs font-bold text-slate-500">Security Clearance</span>
-                            <span className="text-xs font-black text-indigo-600 uppercase">Level 4</span>
+                            <span className="text-xs font-black text-teal-600 uppercase">Level 4</span>
                           </div>
                         </div>
                       </div>
@@ -2592,11 +2592,11 @@ const AdminDashboard = () => {
 
                     <div className="space-y-4">
                       <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2.5px] pb-2 border-b border-slate-100 dark:border-slate-800">Biological Summary</h4>
-                      <div className="relative p-6 bg-indigo-50/30 dark:bg-indigo-900/10 rounded-[28px] border border-indigo-100/50 dark:border-indigo-800/30">
+                      <div className="relative p-6 bg-teal-50/30 dark:bg-teal-900/10 rounded-[28px] border border-teal-100/50 dark:border-teal-800/30">
                         <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed font-medium italic">
                           &quot;{userDetail.bio || "No biological summary provided to the registry."}&quot;
                         </p>
-                        <div className="absolute -top-3 -left-3 bg-white dark:bg-slate-900 p-2 text-indigo-500">
+                        <div className="absolute -top-3 -left-3 bg-white dark:bg-slate-900 p-2 text-teal-500">
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H16.017C14.9124 8 14.017 7.10457 14.017 6V3L20.017 3C21.1216 3 22.017 3.89543 22.017 5V19C22.017 20.1046 21.1216 21 20.017 21H14.017ZM2.01697 21L2.01697 18C2.01697 16.8954 2.9124 16 4.01697 16H7.01697C7.56925 16 8.01697 15.5523 8.01697 15V9C8.01697 8.44772 7.56925 8 7.01697 8H4.01697C2.9124 8 2.01697 7.10457 2.01697 6V3L8.01697 3C9.12154 3 10.017 3.89543 10.017 5V19C10.017 20.1046 9.12154 21 8.01697 21H2.01697Z"/></svg>
                         </div>
                       </div>
@@ -2605,9 +2605,9 @@ const AdminDashboard = () => {
 
                   {/* Right Section: Scorecard & Activity */}
                   <div className="space-y-8">
-                    <div className="bg-slate-900 rounded-[32px] p-8 text-white shadow-xl shadow-indigo-500/20 relative overflow-hidden group">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-all duration-1000" />
-                      <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-6">Performance Scorecard</h4>
+                    <div className="bg-slate-900 rounded-[32px] p-8 text-white shadow-xl shadow-teal-500/20 relative overflow-hidden group">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-teal-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-all duration-1000" />
+                      <h4 className="text-[10px] font-black text-teal-400 uppercase tracking-widest mb-6">Performance Scorecard</h4>
                       <div className="space-y-6 relative z-10">
                         <div>
                           <div className="flex justify-between items-end mb-2">
@@ -2618,7 +2618,7 @@ const AdminDashboard = () => {
                             <motion.div 
                               initial={{ width: 0 }}
                               animate={{ width: `${Math.min(100, (userDetail.points || 0) / 100)}%` }}
-                              className="h-full bg-gradient-to-r from-indigo-500 to-emerald-400" 
+                              className="h-full bg-gradient-to-r from-teal-500 to-emerald-400" 
                             />
                           </div>
                         </div>
@@ -2640,7 +2640,7 @@ const AdminDashboard = () => {
                       <div className="flex flex-wrap gap-2">
                         {userDetail.role === 'INSTRUCTOR' ? (
                           (userDetail.taught_courses || []).length > 0 ? userDetail.taught_courses.map((c: string, i: number) => (
-                            <span key={i} className="px-3 py-2 bg-indigo-50/50 dark:bg-indigo-900/10 border border-indigo-100 dark:border-indigo-800/50 rounded-xl text-xs font-bold text-indigo-700 dark:text-indigo-300 shadow-sm transition-all hover:scale-105">{c}</span>
+                            <span key={i} className="px-3 py-2 bg-teal-50/50 dark:bg-teal-900/10 border border-teal-100 dark:border-teal-800/50 rounded-xl text-xs font-bold text-teal-700 dark:text-teal-300 shadow-sm transition-all hover:scale-105">{c}</span>
                           )) : <p className="text-xs text-slate-400 italic">No authored nodes registered in repository.</p>
                         ) : (
                           (userDetail.enrolled_courses || []).length > 0 ? userDetail.enrolled_courses.map((c: string, i: number) => (
@@ -2674,7 +2674,7 @@ const AdminDashboard = () => {
                 <div className="mt-12 flex gap-4 pt-10 border-t border-slate-100 dark:border-slate-800">
                   <button 
                     onClick={() => { setShowDetailModal(false); setEditUser(userDetail); setShowEditModal(true); }}
-                    className="flex-1 py-5 gradient-primary text-white text-xs font-black uppercase tracking-[3px] rounded-[24px] shadow-2xl shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 py-5 gradient-primary text-white text-xs font-black uppercase tracking-[3px] rounded-[24px] shadow-2xl shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Modify Institutional Record
                   </button>
@@ -2710,7 +2710,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Tag className="text-indigo-600" size={20} />
+                  <Tag className="text-teal-600" size={20} />
                   Add Category
                 </h3>
                 <button 
@@ -2732,7 +2732,7 @@ const AdminDashboard = () => {
                     placeholder="e.g. Programming"
                     value={newCategory.name}
                     onChange={e => setNewCategory({...newCategory, name: e.target.value, slug: e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-')})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2744,7 +2744,7 @@ const AdminDashboard = () => {
                     placeholder="artificial-intelligence"
                     value={newCategory.slug}
                     onChange={e => setNewCategory({...newCategory, slug: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2754,7 +2754,7 @@ const AdminDashboard = () => {
                     placeholder="Topics covered in this node domain..."
                     value={newCategory.description}
                     onChange={e => setNewCategory({...newCategory, description: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
                   />
                 </div>
 
@@ -2768,7 +2768,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Save
                   </button>
@@ -2798,7 +2798,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Edit className="text-indigo-600" size={20} />
+                  <Edit className="text-teal-600" size={20} />
                   Edit Category
                 </h3>
                 <button 
@@ -2819,7 +2819,7 @@ const AdminDashboard = () => {
                     title="Category Name"
                     value={editCategory.name}
                     onChange={e => setEditCategory({...editCategory, name: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2830,7 +2830,7 @@ const AdminDashboard = () => {
                     title="Category Slug"
                     value={editCategory.slug}
                     onChange={e => setEditCategory({...editCategory, slug: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2840,7 +2840,7 @@ const AdminDashboard = () => {
                     placeholder="Description"
                     value={editCategory.description || ""}
                     onChange={e => setEditCategory({...editCategory, description: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
                   />
                 </div>
 
@@ -2854,7 +2854,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Update
                   </button>
@@ -2883,7 +2883,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Plus className="text-indigo-600" size={20} />
+                  <Plus className="text-teal-600" size={20} />
                   Modify Live Course
                 </h3>
                 <button 
@@ -2905,7 +2905,7 @@ const AdminDashboard = () => {
                     placeholder="e.g. Advanced Crypto Strategies"
                     value={editStreamData.title}
                     onChange={e => setEditStreamData({...editStreamData, title: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2915,7 +2915,7 @@ const AdminDashboard = () => {
                     placeholder="Description"
                     value={editStreamData.description}
                     onChange={e => setEditStreamData({...editStreamData, description: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none h-20"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2925,7 +2925,7 @@ const AdminDashboard = () => {
                     title="Select Instructor"
                     value={editStreamData.instructor}
                     onChange={e => setEditStreamData({...editStreamData, instructor: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   >
                     <option value="">Select Instructor...</option>
                     {allUsers.filter(u => u.role === 'INSTRUCTOR').map(u => (
@@ -2942,7 +2942,7 @@ const AdminDashboard = () => {
                       title="Update Schedule"
                       value={editStreamData.scheduled_at ? new Date(editStreamData.scheduled_at).toISOString().slice(0, 16) : ""}
                       onChange={e => setEditStreamData({...editStreamData, scheduled_at: e.target.value})}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                   <div className="space-y-1.5">
@@ -2955,7 +2955,7 @@ const AdminDashboard = () => {
                       placeholder="0.00"
                       value={editStreamData.price}
                       onChange={e => setEditStreamData({...editStreamData, price: e.target.value})}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -2966,7 +2966,7 @@ const AdminDashboard = () => {
                     placeholder="https://zoom.us/j/..."
                     value={editStreamData.meeting_link}
                     onChange={e => setEditStreamData({...editStreamData, meeting_link: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -2975,7 +2975,7 @@ const AdminDashboard = () => {
                     value={editStreamData.group_type}
                     title="Select Group Type"
                     onChange={e => setEditStreamData({...editStreamData, group_type: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   >
                     <option value="VVIP">VVIP (1 Student)</option>
                     <option value="VIP1">VIP1 (5 Students)</option>
@@ -2989,7 +2989,7 @@ const AdminDashboard = () => {
                         title="Toggle Active Status"
                         checked={editStreamData.is_active}
                         onChange={e => setEditStreamData({...editStreamData, is_active: e.target.checked})}
-                        className="w-4 h-4 text-indigo-600 border-slate-300 rounded"
+                        className="w-4 h-4 text-teal-600 border-slate-300 rounded"
                     />
                     <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Is Active</label>
                 </div>
@@ -3004,7 +3004,7 @@ const AdminDashboard = () => {
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Update Stream
                   </button>
@@ -3034,7 +3034,7 @@ const AdminDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
                 <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Upload className="text-indigo-600" size={20} />
+                  <Upload className="text-teal-600" size={20} />
                   Upload Knowledge Document
                 </h3>
                 <button 
@@ -3055,7 +3055,7 @@ const AdminDashboard = () => {
                     placeholder="e.g. Platform FAQ, Student Handbook"
                     value={uploadTitle}
                     onChange={e => setUploadTitle(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -3065,7 +3065,7 @@ const AdminDashboard = () => {
                     value={uploadDescription}
                     onChange={e => setUploadDescription(e.target.value)}
                     rows={2}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"
+                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -3078,7 +3078,7 @@ const AdminDashboard = () => {
                       title="Select Document File"
                       placeholder="Select document file"
                       onChange={e => setUploadFile(e.target.files?.[0] || null)}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 cursor-pointer"
+                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all file:mr-4 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-600 hover:file:bg-teal-100 cursor-pointer"
                     />
                   </div>
                   {uploadFile && (
@@ -3099,7 +3099,7 @@ const AdminDashboard = () => {
                   <button 
                     type="submit"
                     disabled={uploadLoading || !uploadFile}
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2"
                   >
                     {uploadLoading ? (
                       <><div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" /> Uploading...</>

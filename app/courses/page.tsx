@@ -58,7 +58,7 @@ const CatalogContent = () => {
       {/* Page Header */}
       <div className="text-center mb-16">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-          <p className="text-blue-600 font-bold text-sm uppercase tracking-wider mb-3">Explore Our Programs</p>
+          <p className="text-cyan-600 font-bold text-sm uppercase tracking-wider mb-3">Explore Our Programs</p>
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
             Comprehensive Course <span className="text-transparent bg-clip-text gradient-primary">Catalog</span>
           </h1>
@@ -72,13 +72,13 @@ const CatalogContent = () => {
       <div className="mb-12 space-y-6">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="relative flex-1 group">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={20} />
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-600 transition-colors" size={20} />
             <input 
               type="text" 
               placeholder="Search for courses, skills, or instructors..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-blue-600/10 outline-none font-medium transition-all text-slate-800 dark:text-white shadow-sm"
+              className="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-600/10 outline-none font-medium transition-all text-slate-800 dark:text-white shadow-sm"
             />
             {search && (
               <button 
@@ -95,7 +95,7 @@ const CatalogContent = () => {
             <button 
               onClick={() => setSelectedCategory(null)}
               className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                !selectedCategory ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
+                !selectedCategory ? "gradient-primary text-white shadow-md shadow-cyan-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
               }`}
             >
               All Categories
@@ -105,7 +105,7 @@ const CatalogContent = () => {
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.slug)}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${
-                  selectedCategory === cat.slug || selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-blue-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
+                  selectedCategory === cat.slug || selectedCategory === cat.name ? "gradient-primary text-white shadow-md shadow-cyan-500/20" : "text-slate-500 hover:bg-white dark:hover:bg-slate-700"
                 }`}
               >
                 {cat.name}
@@ -141,7 +141,7 @@ const CatalogContent = () => {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ delay: i * 0.05 }}
                   key={c.id}
-                  className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden hover:border-blue-300 dark:hover:border-blue-600 transition-all flex flex-col shadow-sm hover:shadow-xl hover:shadow-blue-500/5"
+                  className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden hover:border-cyan-300 dark:hover:border-cyan-600 transition-all flex flex-col shadow-sm hover:shadow-xl hover:shadow-cyan-500/5"
                 >
                   <Link href={`/courses/${c.id}`} className="block relative h-48 overflow-hidden">
                     {c.thumbnail ? (
@@ -152,7 +152,7 @@ const CatalogContent = () => {
                       </div>
                     )}
                     <div className="absolute top-4 left-4">
-                      <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400 shadow-sm border border-white/20">
+                      <span className="px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-lg text-[10px] font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 shadow-sm border border-white/20">
                         {c.category_name}
                       </span>
                     </div>
@@ -166,7 +166,7 @@ const CatalogContent = () => {
                       <span className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">{c.instructor_name}</span>
                     </div>
                     
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 leading-snug group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 line-clamp-2 leading-snug group-hover:text-cyan-600 transition-colors">
                       {c.title}
                     </h3>
 
@@ -204,7 +204,7 @@ const CatalogContent = () => {
               <p className="text-slate-500">Try adjusting your search or category filter to find what you're looking for.</p>
               <button 
                 onClick={() => {setSearch(""); setSelectedCategory(null);}} 
-                className="mt-6 text-blue-600 font-bold hover:underline"
+                className="mt-6 text-cyan-600 font-bold hover:underline"
               >
                 Clear all filters
               </button>
@@ -214,7 +214,7 @@ const CatalogContent = () => {
           {/* Load More Button - Placeholder */}
           {filteredCourses.length > 0 && !loading && (
             <div className="text-center">
-              <button className="px-8 py-3.5 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 font-bold hover:border-blue-600 hover:text-blue-600 transition-all">
+              <button className="px-8 py-3.5 border-2 border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 font-bold hover:border-cyan-600 hover:text-cyan-600 transition-all">
                 Load More Courses
               </button>
             </div>
@@ -231,7 +231,7 @@ const CoursesCatalog = () => {
       <Navbar />
       <Suspense fallback={
         <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium tracking-wider uppercase text-xs">Loading Catalog...</p>
         </div>
       }>

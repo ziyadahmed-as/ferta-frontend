@@ -32,29 +32,29 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
+          <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform duration-300">
             <BookOpen size={22} className="text-white" />
           </div>
           <span className="text-xl font-bold text-slate-800 dark:text-white">
-            Fatra<span className="text-indigo-600"> Academy</span>
+            Fatra<span className="text-teal-600"> Academy</span>
           </span>
         </Link>
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          <Link href="/" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <Link href="/" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             Home
           </Link>
-          <Link href="/courses" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <Link href="/courses" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             Courses
           </Link>
-          <Link href="/courses?type=live" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <Link href="/courses?type=live" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             Live Sessions
           </Link>
-          <Link href="/register?role=instructor" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <Link href="/register?role=instructor" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             Teach
           </Link>
-          <Link href="/about" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <Link href="/about" className="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
             About
           </Link>
         </div>
@@ -67,7 +67,7 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link 
                 href={getDashboardLink()}
-                className="hidden md:flex px-4 py-2 text-xs font-bold uppercase tracking-wider text-white gradient-primary rounded-xl hover:opacity-90 transition-all shadow-md shadow-blue-500/20 items-center gap-2"
+                className="hidden md:flex px-4 py-2 text-xs font-bold uppercase tracking-wider text-white gradient-primary rounded-xl hover:opacity-90 transition-all shadow-md shadow-cyan-500/20 items-center gap-2"
               >
                 <BookOpen size={14} />
                 Dashboard
@@ -80,7 +80,7 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 transition-colors bg-white dark:bg-slate-800"
+                  className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-cyan-300 dark:hover:border-cyan-700 transition-colors bg-white dark:bg-slate-800"
                 >
                   <div className="w-7 h-7 gradient-primary rounded-full flex items-center justify-center text-white text-xs font-bold">
                     {user.username?.[0]?.toUpperCase() || "U"}
@@ -124,13 +124,13 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <Link
                 href="/login"
-                className="px-5 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-xl hover:border-blue-400 hover:text-blue-600 dark:hover:border-blue-500 dark:hover:text-blue-400 transition-all"
+                className="px-5 py-2 text-sm font-semibold text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 rounded-xl hover:border-cyan-400 hover:text-cyan-600 dark:hover:border-cyan-500 dark:hover:text-cyan-400 transition-all"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="px-5 py-2 text-sm font-semibold text-white gradient-primary rounded-xl transition-all hover:opacity-90 shadow-md shadow-blue-500/20"
+                className="px-5 py-2 text-sm font-semibold text-white gradient-primary rounded-xl transition-all hover:opacity-90 shadow-md shadow-cyan-500/20"
               >
                 Sign Up
               </Link>
@@ -159,13 +159,13 @@ const Navbar = () => {
           <div className="mt-4 flex flex-col gap-3">
             {user ? (
               <>
-                <Link href={getDashboardLink()} onClick={() => setIsOpen(false)} className="py-3 px-4 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-xl text-sm font-black uppercase tracking-widest text-center shadow-sm">Dashboard</Link>
+                <Link href={getDashboardLink()} onClick={() => setIsOpen(false)} className="py-3 px-4 bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 rounded-xl text-sm font-black uppercase tracking-widest text-center shadow-sm">Dashboard</Link>
                 <button onClick={() => { setIsOpen(false); logout(); }} className="py-3 px-4 text-red-600 border border-red-100 dark:border-red-900/30 rounded-xl text-sm font-black uppercase tracking-widest shadow-sm">Sign Out</button>
               </>
             ) : (
               <>
                 <Link href="/login" onClick={() => setIsOpen(false)} className="py-3 px-4 text-center border-2 border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-black uppercase tracking-widest shadow-sm">Login</Link>
-                <Link href="/register" onClick={() => setIsOpen(false)} className="py-3 px-4 text-center text-white gradient-primary rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-blue-500/20">Sign Up</Link>
+                <Link href="/register" onClick={() => setIsOpen(false)} className="py-3 px-4 text-center text-white gradient-primary rounded-xl text-sm font-black uppercase tracking-widest shadow-lg shadow-cyan-500/20">Sign Up</Link>
               </>
             )}
           </div>

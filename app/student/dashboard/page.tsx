@@ -106,7 +106,7 @@ const StudentDashboard = () => {
   if (!user) {
     return (
       <div className="h-screen flex flex-col items-center justify-center bg-white dark:bg-slate-900 text-center px-6 text-slate-800 dark:text-slate-100">
-        <GraduationCap size={56} className="text-blue-600 mb-5" />
+        <GraduationCap size={56} className="text-cyan-600 mb-5" />
         <h1 className="text-2xl font-bold text-slate-800 mb-2">Sign in Required</h1>
         <p className="text-slate-500 mb-6">Please sign in to access your student dashboard.</p>
         <Link href="/login" className="px-6 py-3 gradient-primary text-white rounded-xl font-semibold">Sign In</Link>
@@ -118,7 +118,7 @@ const StudentDashboard = () => {
     return (
       <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
           <p className="text-slate-500 font-medium">Loading your dashboard...</p>
         </div>
       </div>
@@ -148,7 +148,7 @@ const StudentDashboard = () => {
             <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center">
               <BookOpen size={18} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-blue-600"> Academy</span></span>
+            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-cyan-600"> Academy</span></span>
           </Link>
         </div>
 
@@ -237,7 +237,7 @@ const StudentDashboard = () => {
         <div className="p-6 space-y-6">
           {/* Next Up / Progress Overview Section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-            <div className="lg:col-span-2 relative overflow-hidden bg-gradient-to-br from-indigo-600 to-indigo-900 rounded-[40px] p-8 text-white shadow-2xl shadow-indigo-500/20 group">
+            <div className="lg:col-span-2 relative overflow-hidden bg-gradient-to-br from-teal-600 to-teal-900 rounded-[40px] p-8 text-white shadow-2xl shadow-teal-500/20 group">
               <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-125 transition-all duration-1000" />
               
               <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
@@ -250,15 +250,15 @@ const StudentDashboard = () => {
                 <div className="flex-1 text-center md:text-left">
                   <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
                     <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                    <p className="text-[10px] font-black uppercase tracking-[3px] text-indigo-200">Next Recommended Node</p>
+                    <p className="text-[10px] font-black uppercase tracking-[3px] text-teal-200">Next Recommended Node</p>
                   </div>
                   <h2 className="text-3xl font-black mb-3 tracking-tighter">
                     {courses[0]?.title || liveStreams[0]?.title || "Explore New Frontiers"}
                   </h2>
-                  <p className="text-indigo-100/70 text-sm font-medium mb-6 line-clamp-2">
+                  <p className="text-teal-100/70 text-sm font-medium mb-6 line-clamp-2">
                     Your learning velocity is increasing. Jump back into the curriculum and maintain your streak.
                   </p>
-                  <button className="px-8 py-3 bg-white text-indigo-600 rounded-[20px] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
+                  <button className="px-8 py-3 bg-white text-teal-600 rounded-[20px] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl">
                     Resume Mission →
                   </button>
                 </div>
@@ -388,7 +388,7 @@ const StudentDashboard = () => {
                   title="View Video Courses"
                   aria-label="Switch to Video Courses tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "video"
-                      ? "text-blue-600 border-blue-600"
+                      ? "text-cyan-600 border-cyan-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
                     }`}
                 >
@@ -399,14 +399,14 @@ const StudentDashboard = () => {
                   title="View Live Sessions"
                   aria-label="Switch to Live Sessions tab"
                   className={`text-base font-bold pb-2 transition-all border-b-2 ${activeTab === "live"
-                      ? "text-blue-600 border-blue-600"
+                      ? "text-cyan-600 border-cyan-600"
                       : "text-slate-400 border-transparent hover:text-slate-600"
                     }`}
                 >
                   Live Sessions
                 </button>
               </div>
-              <Link href="/courses" className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1">
+              <Link href="/courses" className="text-sm text-cyan-600 hover:text-cyan-700 font-medium flex items-center gap-1">
                 Browse More <ChevronRight size={16} />
               </Link>
             </div>
@@ -448,7 +448,7 @@ const StudentDashboard = () => {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-slate-500">{course.completion_percentage || 0}% Complete</span>
-                          <Link href={`/courses/${course.id}/learn`} className="text-xs text-blue-600 font-semibold hover:text-blue-700">Continue →</Link>
+                          <Link href={`/courses/${course.id}/learn`} className="text-xs text-cyan-600 font-semibold hover:text-cyan-700">Continue →</Link>
                         </div>
                       </div>
                     </motion.div>
@@ -491,7 +491,7 @@ const StudentDashboard = () => {
                         <div className="space-y-2 mb-4">
                           {stream.live_sessions?.slice(0, 1).map((session: any) => (
                             <div key={session.id} className="flex items-center gap-2 text-[11px] text-slate-600 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/50 p-2 rounded-lg">
-                              <Calendar size={12} className="text-blue-500" />
+                              <Calendar size={12} className="text-cyan-500" />
                               Next: {new Date(session.scheduled_at).toLocaleDateString()}
                             </div>
                           ))}
@@ -577,7 +577,7 @@ const StudentDashboard = () => {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="What did you learn today? Any feedback for the professor?"
-                    className="w-full h-32 px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none resize-none transition-all"
+                    className="w-full h-32 px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-cyan-500 outline-none resize-none transition-all"
                   />
                 </div>
 
@@ -591,7 +591,7 @@ const StudentDashboard = () => {
                   <button
                     onClick={handleRateStream}
                     disabled={submittingRating}
-                    className="flex-1 py-3 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                    className="flex-1 py-3 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-cyan-500/20 disabled:opacity-50"
                   >
                     {submittingRating ? "Submitting..." : "Submit Rating"}
                   </button>
@@ -620,7 +620,7 @@ const StudentDashboard = () => {
             >
               <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/20">
+                  <div className="w-10 h-10 gradient-primary rounded-xl flex items-center justify-center shadow-lg shadow-cyan-500/20">
                     <GraduationCap size={20} className="text-white" />
                   </div>
                   <div>
@@ -641,7 +641,7 @@ const StudentDashboard = () => {
               <div className="p-6 h-[500px] overflow-y-auto custom-scrollbar space-y-8">
                 {selectedStreamForLearn?.live_sessions?.map((session: any, sIdx: number) => (
                   <div key={session.id} className="relative pl-8 border-l-2 border-slate-100 dark:border-slate-700 last:border-transparent">
-                    <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-blue-600 border-4 border-white dark:border-slate-800 shadow-sm shadow-blue-200" />
+                    <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-cyan-600 border-4 border-white dark:border-slate-800 shadow-sm shadow-cyan-200" />
                     
                     <div className="mb-6">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
@@ -675,14 +675,14 @@ const StudentDashboard = () => {
                             }}
                             className="w-full flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-2xl hover:bg-white dark:hover:bg-slate-700 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-600 shadow-sm group text-left"
                           >
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${block.type === 'pdf' ? 'bg-red-50 text-red-500' : 'bg-blue-50 text-blue-500'}`}>
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${block.type === 'pdf' ? 'bg-red-50 text-red-500' : 'bg-cyan-50 text-cyan-500'}`}>
                               {block.type === 'pdf' ? <FileText size={16} /> : <Link2 size={16} />}
                             </div>
                             <div className="min-w-0 flex-1">
-                              <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate group-hover:text-blue-600 transition-colors">{block.title}</p>
+                              <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate group-hover:text-cyan-600 transition-colors">{block.title}</p>
                               <div className="flex items-center gap-2">
                                 <p className="text-[9px] text-slate-400 uppercase font-bold">{block.type}</p>
-                                <span className="text-[9px] text-indigo-500 font-bold uppercase tracking-widest">• Read Only</span>
+                                <span className="text-[9px] text-teal-500 font-bold uppercase tracking-widest">• Read Only</span>
                               </div>
                             </div>
                             <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 opacity-0 group-hover:opacity-100 transition-all">
@@ -741,7 +741,7 @@ const StudentDashboard = () => {
             >
               <div className="p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
                 <div className="flex items-center gap-4">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg ${activeArtifact.type === 'pdf' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'}`}>
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg ${activeArtifact.type === 'pdf' ? 'bg-red-500 text-white' : 'bg-cyan-500 text-white'}`}>
                     {activeArtifact.type === 'pdf' ? <FileText size={20} /> : <Link2 size={20} />}
                   </div>
                   <div>
@@ -752,7 +752,7 @@ const StudentDashboard = () => {
                        <span className="text-[10px] text-slate-500 flex items-center gap-1">
                          <ShieldAlert size={10} /> Secure Identity Viewer
                        </span>
-                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-black uppercase tracking-widest">Read Only Protocol</span>
+                       <span className="text-[10px] px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 font-black uppercase tracking-widest">Read Only Protocol</span>
                     </div>
                   </div>
                 </div>

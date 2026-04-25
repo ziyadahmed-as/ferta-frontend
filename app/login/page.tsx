@@ -43,7 +43,7 @@ const LoginContent = () => {
         <div className="w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center shadow-lg">
           <BookOpen size={24} className="text-white" />
         </div>
-        <span className="text-slate-800 text-xl font-bold">Fatra<span className="text-indigo-600"> Academy</span></span>
+        <span className="text-slate-800 text-xl font-bold">Fatra<span className="text-teal-600"> Academy</span></span>
       </div>
 
       {/* Login Card */}
@@ -87,7 +87,7 @@ const LoginContent = () => {
                 placeholder="yourname or your@email.com"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-300 focus:bg-white transition-all text-sm"
+                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-300 focus:bg-white transition-all text-sm"
               />
             </div>
           </div>
@@ -104,7 +104,7 @@ const LoginContent = () => {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-300 focus:bg-white transition-all text-sm"
+                className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-300 focus:bg-white transition-all text-sm"
               />
               <button
                 type="button"
@@ -122,7 +122,7 @@ const LoginContent = () => {
               <input type="checkbox" className="w-4 h-4 rounded border-slate-300" />
               <span className="text-sm text-slate-600">Remember me</span>
             </label>
-            <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 transition-colors font-medium">
+            <button type="button" className="text-sm text-teal-600 hover:text-teal-700 transition-colors font-medium">
               Forgot password?
             </button>
           </div>
@@ -131,7 +131,7 @@ const LoginContent = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-blue-900/30 disabled:opacity-60 flex items-center justify-center gap-2 mt-2"
+            className="w-full py-3.5 bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-cyan-900/30 disabled:opacity-60 flex items-center justify-center gap-2 mt-2"
           >
             {loading ? <Loader2 className="animate-spin" size={18} /> : "Sign In"}
           </button>
@@ -166,7 +166,7 @@ const LoginContent = () => {
         {/* Sign up link */}
         <p className="text-center text-sm text-slate-500 mt-5">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-indigo-600 font-semibold hover:underline underline-offset-2">
+          <Link href="/register" className="text-teal-600 font-semibold hover:underline underline-offset-2">
             Sign up
           </Link>
         </p>
@@ -178,7 +178,7 @@ const LoginContent = () => {
 const LoginPage = () => {
   return (
     <Suspense fallback={
-      <div className="h-screen flex items-center justify-center bg-blue-900">
+      <div className="h-screen flex items-center justify-center bg-cyan-900">
         <Loader2 className="text-white animate-spin" size={40} />
       </div>
     }>

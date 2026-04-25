@@ -62,9 +62,7 @@ const CreateCoursePage = () => {
         }
 
         try {
-            const res = await api.post("/courses/courses/", data, {
-                headers: { "Content-Type": "multipart/form-data" }
-            });
+            const res = await api.post("/courses/courses/", data);
             router.push(`/instructor/courses/${res.data.id}/edit`);
         } catch (err) {
             console.error("Failed to create course", err);
@@ -84,18 +82,18 @@ const CreateCoursePage = () => {
             <div className="max-w-4xl mx-auto px-6 py-12">
                 <button 
                     onClick={() => router.back()}
-                    className="flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors mb-8 group"
+                    className="flex items-center gap-2 text-slate-500 hover:text-cyan-600 transition-colors mb-8 group"
                 >
                     <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
                     <span className="font-bold text-sm uppercase tracking-widest">Back to Dashboard</span>
                 </button>
 
                 <div className="bg-white dark:bg-slate-800 rounded-[2.5rem] border border-slate-200 dark:border-slate-700 p-8 sm:p-12 shadow-xl shadow-slate-200/50 dark:shadow-none overflow-hidden relative">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full -mr-32 -mt-32 blur-3xl animate-pulse" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/5 rounded-full -mr-32 -mt-32 blur-3xl animate-pulse" />
                     
                     <div className="relative z-10">
                         <div className="flex items-center gap-4 mb-8">
-                            <div className="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+                            <div className="w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
                                 <Plus size={28} />
                             </div>
                             <div>
@@ -118,7 +116,7 @@ const CreateCoursePage = () => {
                                         placeholder="e.g. Master UX/UI Design in 2026"
                                         value={formData.title}
                                         onChange={handleChange}
-                                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-blue-600/10 outline-none font-bold text-slate-800 dark:text-white transition-all text-lg placeholder:text-slate-300"
+                                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-600/10 outline-none font-bold text-slate-800 dark:text-white transition-all text-lg placeholder:text-slate-300"
                                     />
                                 </div>
 
@@ -180,7 +178,7 @@ const CreateCoursePage = () => {
                                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest flex items-center gap-2">
                                         <Upload size={14} /> Thumbnail Artifact
                                     </label>
-                                    <div className="p-10 border-2 border-dashed border-slate-100 dark:border-slate-700 rounded-3xl bg-slate-50/50 dark:bg-slate-900/30 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-blue-500/50 transition-all">
+                                    <div className="p-10 border-2 border-dashed border-slate-100 dark:border-slate-700 rounded-3xl bg-slate-50/50 dark:bg-slate-900/30 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-cyan-500/50 transition-all">
                                         <input 
                                             type="file" 
                                             accept="image/*"
@@ -189,7 +187,7 @@ const CreateCoursePage = () => {
                                             id="thumbnail-upload"
                                         />
                                         <label htmlFor="thumbnail-upload" className="cursor-pointer">
-                                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-300 dark:text-slate-600 mb-4 group-hover:scale-110 group-hover:text-blue-500 transition-all shadow-sm">
+                                            <div className="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl flex items-center justify-center text-slate-300 dark:text-slate-600 mb-4 group-hover:scale-110 group-hover:text-cyan-500 transition-all shadow-sm">
                                                 <BookOpen size={28} />
                                             </div>
                                             <p className="text-sm font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -204,7 +202,7 @@ const CreateCoursePage = () => {
                             <button 
                                 type="submit"
                                 disabled={loading}
-                                className="w-full py-5 gradient-primary text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                                className="w-full py-5 gradient-primary text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-cyan-500/20 hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                             >
                                 {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <><Save size={18} /> Initialize Course Artifact</>}
                             </button>

@@ -143,7 +143,7 @@ const EditCoursePage = () => {
     if (loading) return (
         <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900">
             <div className="flex flex-col items-center gap-4">
-                <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
                 <p className="text-slate-500 font-medium tracking-widest uppercase text-xs">Accessing Knowledge Node...</p>
             </div>
         </div>
@@ -179,7 +179,7 @@ const EditCoursePage = () => {
                             className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                                 course.is_submitted || course.is_approved 
                                 ? "bg-slate-100 text-slate-400 cursor-not-allowed" 
-                                : "gradient-primary text-white shadow-lg shadow-blue-500/20 active:scale-95"
+                                : "gradient-primary text-white shadow-lg shadow-cyan-500/20 active:scale-95"
                             }`}
                         >
                             {course.is_approved ? "Approved" : course.is_submitted ? "Pending Approval" : "Request Deployment"}
@@ -198,13 +198,13 @@ const EditCoursePage = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center gap-2 py-4 text-[11px] font-black uppercase tracking-widest transition-all relative ${
-                                activeTab === tab.id ? "text-blue-600" : "text-slate-500 hover:text-slate-800 dark:hover:text-white"
+                                activeTab === tab.id ? "text-cyan-600" : "text-slate-500 hover:text-slate-800 dark:hover:text-white"
                             }`}
                         >
                             <tab.icon size={14} />
                             {tab.label}
                             {activeTab === tab.id && (
-                                <motion.div layoutId="activeTabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 rounded-full" />
+                                <motion.div layoutId="activeTabUnderline" className="absolute bottom-0 left-0 right-0 h-0.5 bg-cyan-600 rounded-full" />
                             )}
                         </button>
                     ))}
@@ -271,7 +271,7 @@ const EditCoursePage = () => {
                                     <button 
                                         type="submit" 
                                         disabled={saving}
-                                        className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/10 active:scale-95 transition-all"
+                                        className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/10 active:scale-95 transition-all"
                                     >
                                         {saving ? <Loader2 className="animate-spin" size={18} /> : <><Save size={18} /> Sync Details</>}
                                     </button>
@@ -291,14 +291,14 @@ const EditCoursePage = () => {
                                     <button 
                                         onClick={generateAIStructure}
                                         disabled={aiLoading}
-                                        className="flex items-center gap-2 px-5 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-[11px] font-black uppercase tracking-widest text-blue-600 hover:border-blue-300 transition-all shadow-sm group"
+                                        className="flex items-center gap-2 px-5 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-[11px] font-black uppercase tracking-widest text-cyan-600 hover:border-cyan-300 transition-all shadow-sm group"
                                     >
                                         {aiLoading ? <Loader2 className="animate-spin" size={16} /> : <Sparkles size={16} className="group-hover:animate-bounce" />}
                                         AI Suggestion
                                     </button>
                                     <button 
                                         onClick={handleAddChapter}
-                                        className="flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl text-[11px] font-black uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all active:scale-95"
+                                        className="flex items-center gap-2 px-5 py-3 gradient-primary text-white rounded-xl text-[11px] font-black uppercase tracking-widest shadow-lg shadow-cyan-500/20 hover:opacity-90 transition-all active:scale-95"
                                     >
                                         <Plus size={16} /> Add Module
                                     </button>
@@ -316,7 +316,7 @@ const EditCoursePage = () => {
                                         <div key={chapter.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-md transition-shadow">
                                             <div className="p-6 bg-slate-50 dark:bg-slate-900/50 flex items-center justify-between border-b border-slate-100 dark:border-slate-700">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center font-black text-xs">
+                                                    <div className="w-8 h-8 rounded-lg bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 flex items-center justify-center font-black text-xs">
                                                         {chapIdx + 1}
                                                     </div>
                                                     <label htmlFor={`chapter-title-${chapter.id}`} className="sr-only">Chapter Title</label>
@@ -337,7 +337,7 @@ const EditCoursePage = () => {
                                                 <div className="flex items-center gap-3">
                                                     <button 
                                                         onClick={() => handleAddLesson(chapter.id)}
-                                                        className="text-[10px] font-black uppercase text-blue-600 tracking-widest hover:underline"
+                                                        className="text-[10px] font-black uppercase text-cyan-600 tracking-widest hover:underline"
                                                     >
                                                         Add Lesson
                                                     </button>
@@ -357,7 +357,7 @@ const EditCoursePage = () => {
                                                     <p className="text-center py-8 text-xs text-slate-400 font-medium">No lessons in this module yet.</p>
                                                 ) : (
                                                     chapter.lessons.map((lesson: any) => (
-                                                        <div key={lesson.id} className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-900/20 border border-slate-100 dark:border-slate-700 rounded-2xl group hover:border-blue-500/10 hover:bg-white dark:hover:bg-slate-800 transition-all">
+                                                        <div key={lesson.id} className="flex items-center justify-between p-4 bg-slate-50/50 dark:bg-slate-900/20 border border-slate-100 dark:border-slate-700 rounded-2xl group hover:border-cyan-500/10 hover:bg-white dark:hover:bg-slate-800 transition-all">
                                                             <div className="flex items-center gap-4">
                                                                 <PlayCircle size={18} className="text-slate-300" />
                                                                 <label htmlFor={`lesson-title-${lesson.id}`} className="sr-only">Lesson Title</label>
@@ -384,7 +384,7 @@ const EditCoursePage = () => {
                                                                 <button 
                                                                     onClick={() => router.push(`/instructor/lessons/${lesson.id}/edit`)}
                                                                     title="Edit Lesson Content"
-                                                                    className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 text-blue-600 shadow-sm"
+                                                                    className="p-2 bg-white dark:bg-slate-800 rounded-lg border border-slate-100 dark:border-slate-700 text-cyan-600 shadow-sm"
                                                                 >
                                                                     <Layout size={14} />
                                                                 </button>

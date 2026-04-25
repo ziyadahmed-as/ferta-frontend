@@ -49,7 +49,7 @@ const InstructorCoursesPage = () => {
                     <div>
                         <button 
                             onClick={() => router.push("/instructor/dashboard")}
-                            className="flex items-center gap-2 text-slate-500 hover:text-blue-600 transition-colors mb-4 group"
+                            className="flex items-center gap-2 text-slate-500 hover:text-cyan-600 transition-colors mb-4 group"
                         >
                             <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                             <span className="font-bold text-[10px] uppercase tracking-widest">Back to Dashboard</span>
@@ -59,7 +59,7 @@ const InstructorCoursesPage = () => {
                     </div>
                     <Link 
                         href="/instructor/courses/create"
-                        className="flex items-center gap-2 px-6 py-3.5 gradient-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-500/20 hover:opacity-90 active:scale-95 transition-all"
+                        className="flex items-center gap-2 px-6 py-3.5 gradient-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-cyan-500/20 hover:opacity-90 active:scale-95 transition-all"
                     >
                         <Plus size={18} /> Add New Artifact
                     </Link>
@@ -75,7 +75,7 @@ const InstructorCoursesPage = () => {
                                 title="Search Courses"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-sm font-bold text-slate-700 dark:text-white focus:ring-4 focus:ring-blue-600/5 transition-all"
+                                className="w-full pl-12 pr-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl outline-none text-sm font-bold text-slate-700 dark:text-white focus:ring-4 focus:ring-cyan-600/5 transition-all"
                             />
                         </div>
                         <div className="flex items-center gap-3">
@@ -101,7 +101,7 @@ const InstructorCoursesPage = () => {
                                     <tr>
                                         <td colSpan={5} className="px-8 py-20 text-center">
                                             <div className="flex flex-col items-center gap-3">
-                                                <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                                                <div className="w-8 h-8 border-3 border-cyan-600 border-t-transparent rounded-full animate-spin" />
                                                 <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Hydrating Catalog...</p>
                                             </div>
                                         </td>
@@ -157,14 +157,14 @@ const InstructorCoursesPage = () => {
                                                     <Link 
                                                         href={`/courses/${course.id}`}
                                                         title="View Public Page"
-                                                        className="p-2 border border-slate-100 dark:border-slate-700 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-100 transition-all"
+                                                        className="p-2 border border-slate-100 dark:border-slate-700 rounded-lg text-slate-400 hover:text-cyan-600 hover:border-cyan-100 transition-all"
                                                     >
                                                         <Eye size={16} />
                                                     </Link>
                                                     <Link 
                                                         href={`/instructor/courses/${course.id}/edit`}
                                                         title="Edit Curriculum"
-                                                        className="p-2 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-blue-600 transition-all"
+                                                        className="p-2 bg-slate-50 dark:bg-slate-700 border border-slate-100 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 hover:text-cyan-600 transition-all"
                                                     >
                                                         <Edit3 size={16} />
                                                     </Link>
