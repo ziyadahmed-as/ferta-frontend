@@ -4,25 +4,49 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useAuth } from "@/context/AuthContext";
 import {
   Mail, Lock, User, Briefcase, GraduationCap, Link as LinkIcon,
-  FileText, Loader2, ArrowRight, Globe, Globe2, CheckCircle2, BookOpen,
+  FileText, Loader2, ArrowRight, Globe, CheckCircle2, BookOpen,
   ChevronRight, Users
 } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+type Role = "STUDENT" | "INSTRUCTOR";
+type InstructorType = "VIDEO_CREATOR" | "LIVE_STREAMER" | "BOTH";
+
+interface FormData {
+  username: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+  first_name: string;
+  last_name: string;
+  // Instructor-only fields
+  expertise: string;
+  education_level: string;
+  years_of_experience: number;
+  bio: string;
+  linkedin: string;
+  portfolio: string;
+  proposed_courses: string;
+  instructor_type: InstructorType;
+}
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 const RegisterContent = () => {
   const { register } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [step, setStep] = useState<"choose" | "form">("choose");
-  const [role, setRole] = useState<"STUDENT" | "INSTRUCTOR">("STUDENT");
+  const [role, setRole] = useState<Role>("STUDENT");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>(null);
   const [success, setSuccess] = useState(false);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: "",
     email: "",
     password: "",
@@ -33,9 +57,11 @@ const RegisterContent = () => {
     education_level: "",
     years_of_experience: 0,
     bio: "",
+    // Plain text — backend uses CharField (not URLField) so blank is fine
     linkedin: "",
     portfolio: "",
     proposed_courses: "",
+    instructor_type: "VIDEO_CREATOR",
   });
 
   useEffect(() => {
@@ -49,30 +75,62 @@ const RegisterContent = () => {
     }
   }, [searchParams]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: name === "years_of_experience" ? parseInt(value) || 0 : value,
     }));
+    // Clear password mismatch error live
+    if (name === "password_confirm" || name === "password") {
+      setPasswordError(null);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    // Client-side password match check before hitting the server
+    if (formData.password !== formData.password_confirm) {
+      setPasswordError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
 
     const submissionData = new FormData();
     submissionData.append("role", role);
-    Object.entries(formData).forEach(([key, value]) => {
-      let finalValue = value;
-      if ((key === "username" || key === "email") && typeof value === "string") {
-        finalValue = value.trim();
-      }
-      submissionData.append(key, finalValue.toString());
+
+    // Always-included fields (shared between student and instructor)
+    const sharedFields: (keyof FormData)[] = [
+      "username", "email", "password", "password_confirm",
+      "first_name", "last_name",
+    ];
+    sharedFields.forEach((key) => {
+      const val = formData[key];
+      submissionData.append(
+        key,
+        typeof val === "string" ? val.trim() : String(val)
+      );
     });
-    if (cvFile && role === "INSTRUCTOR") {
-      submissionData.append("cv_file", cvFile);
+
+    // Instructor-only fields — only appended when registering as INSTRUCTOR
+    // This matches the backend's `if role == 'INSTRUCTOR':` guard.
+    if (role === "INSTRUCTOR") {
+      const instructorFields: (keyof FormData)[] = [
+        "expertise", "education_level", "years_of_experience",
+        "bio", "linkedin", "portfolio", "proposed_courses", "instructor_type",
+      ];
+      instructorFields.forEach((key) => {
+        const val = formData[key];
+        submissionData.append(key, String(val));
+      });
+      if (cvFile) {
+        submissionData.append("cv_file", cvFile);
+      }
     }
 
     try {
@@ -80,11 +138,14 @@ const RegisterContent = () => {
       setSuccess(true);
       setTimeout(() => router.push("/login?registered=true"), 3000);
     } catch (err: any) {
-      setError(err.response?.data || { detail: "Registration failed. Please check your information." });
+      setError(
+        err.response?.data || { detail: "Registration failed. Please check your information." }
+      );
       setLoading(false);
     }
   };
 
+  // ─── Success Screen ──────────────────────────────────────────────────────────
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white px-6">
@@ -102,7 +163,10 @@ const RegisterContent = () => {
               ? "Your application has been submitted. Our team will review it shortly."
               : "Welcome to Fatra Academy! Redirecting you to sign in..."}
           </p>
-          <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 gradient-primary text-white rounded-xl font-semibold text-sm">
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 px-6 py-3 gradient-primary text-white rounded-xl font-semibold text-sm"
+          >
             Go to Login <ArrowRight size={16} />
           </Link>
         </motion.div>
@@ -110,7 +174,7 @@ const RegisterContent = () => {
     );
   }
 
-  // Role Choice Screen
+  // ─── Role Choice Screen ──────────────────────────────────────────────────────
   if (step === "choose") {
     return (
       <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-16">
@@ -201,7 +265,7 @@ const RegisterContent = () => {
     );
   }
 
-  // Registration Form
+  // ─── Registration Form ───────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-white px-6 py-16">
       <div className="max-w-4xl mx-auto">
@@ -233,20 +297,21 @@ const RegisterContent = () => {
           onSubmit={handleSubmit}
           className="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 md:p-12"
         >
+          {/* Server-side errors */}
           {error && typeof error === "object" && (
-            <div className="mb-6 p-5 bg-red-50 border border-red-200 rounded-2xl text-red-600 text-sm">
+            <div className="mb-6 p-5 bg-red-50 border border-red-200 rounded-2xl text-red-600 text-sm space-y-1">
               {Object.entries(error).map(([key, val]: [string, any]) => (
-                <div key={key} className="capitalize">• {key}: {Array.isArray(val) ? val.join(", ") : val}</div>
+                <div key={key} className="capitalize">
+                  • <span className="font-semibold">{key.replace(/_/g, " ")}:</span>{" "}
+                  {Array.isArray(val) ? val.join(", ") : String(val)}
+                </div>
               ))}
             </div>
           )}
 
           {/* Section 1: Personal Info */}
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-xs font-bold">01</div>
-              <h3 className="text-base font-semibold text-slate-800">Personal Information</h3>
-            </div>
+            <SectionHeader number="01" title="Personal Information" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField icon={<User size={18} />} label="Username" id="username" required name="username" placeholder="johndoe" value={formData.username} onChange={handleChange} />
               <FormField icon={<Mail size={18} />} label="Email Address" id="email" type="email" required name="email" placeholder="john@example.com" value={formData.email} onChange={handleChange} />
@@ -257,17 +322,20 @@ const RegisterContent = () => {
 
           {/* Section 2: Password */}
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-xs font-bold">02</div>
-              <h3 className="text-base font-semibold text-slate-800">Account Security</h3>
-            </div>
+            <SectionHeader number="02" title="Account Security" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField icon={<Lock size={18} />} label="Password" id="password" type="password" required name="password" placeholder="••••••••" value={formData.password} onChange={handleChange} />
               <FormField icon={<Lock size={18} />} label="Confirm Password" id="password_confirm" type="password" required name="password_confirm" placeholder="••••••••" value={formData.password_confirm} onChange={handleChange} />
             </div>
+            {/* Client-side password match error */}
+            {passwordError && (
+              <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                <span>⚠</span> {passwordError}
+              </p>
+            )}
           </div>
 
-          {/* Instructor Specific */}
+          {/* Section 3: Instructor-only fields */}
           <AnimatePresence>
             {role === "INSTRUCTOR" && (
               <motion.div
@@ -277,48 +345,138 @@ const RegisterContent = () => {
                 className="overflow-hidden"
               >
                 <div className="mb-8 pt-8 border-t border-slate-100">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center text-white text-xs font-bold">03</div>
-                    <h3 className="text-base font-semibold text-slate-800">Professional Details</h3>
-                  </div>
+                  <SectionHeader number="03" title="Professional Details" color="bg-purple-600" />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField icon={<Briefcase size={18} />} label="Primary Expertise" id="expertise" required={role === "INSTRUCTOR"} name="expertise" placeholder="e.g. Full Stack Development" value={formData.expertise} onChange={handleChange} />
-                    <FormField label="Education Level" id="education_level" name="education_level" placeholder="BSc, PhD, etc." value={formData.education_level} onChange={handleChange} />
-                    <FormField label="Years of Experience" id="years_of_experience" type="number" name="years_of_experience" placeholder="0" value={formData.years_of_experience} onChange={handleChange} />
-                    <FormField icon={<LinkIcon size={18} />} label="LinkedIn Profile" id="linkedin" type="url" name="linkedin" placeholder="https://linkedin.com/in/..." value={formData.linkedin} onChange={handleChange} />
-                    <FormField icon={<Globe size={18} />} label="Portfolio/Website" id="portfolio" type="url" name="portfolio" placeholder="https://yourwebsite.com" value={formData.portfolio} onChange={handleChange} />
+
+                    {/* Expertise */}
+                    <FormField
+                      icon={<Briefcase size={18} />}
+                      label="Primary Expertise"
+                      id="expertise"
+                      required
+                      name="expertise"
+                      placeholder="e.g. Full Stack Development"
+                      value={formData.expertise}
+                      onChange={handleChange}
+                    />
+
+                    {/* Education Level */}
+                    <FormField
+                      label="Education Level"
+                      id="education_level"
+                      name="education_level"
+                      placeholder="BSc, MSc, PhD, etc."
+                      value={formData.education_level}
+                      onChange={handleChange}
+                    />
+
+                    {/* Years of Experience */}
+                    <FormField
+                      label="Years of Experience"
+                      id="years_of_experience"
+                      type="number"
+                      name="years_of_experience"
+                      placeholder="0"
+                      value={formData.years_of_experience}
+                      onChange={handleChange}
+                    />
+
+                    {/* Instructor Type — matches InstructorProfile.InstructorType choices */}
+                    <div className="flex flex-col gap-1.5">
+                      <label htmlFor="instructor_type" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+                        Instructor Type
+                      </label>
+                      <div className="relative">
+                        <select
+                          id="instructor_type"
+                          name="instructor_type"
+                          value={formData.instructor_type}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all appearance-none cursor-pointer"
+                        >
+                          <option value="VIDEO_CREATOR">🎬 Video Creator</option>
+                          <option value="LIVE_STREAMER">📡 Live Streamer</option>
+                          <option value="BOTH">🎯 Both</option>
+                        </select>
+                        <span className="pointer-events-none absolute right-4 top-3.5 text-slate-400">▾</span>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-0.5">How will you primarily deliver your courses?</p>
+                    </div>
+
+                    {/* LinkedIn — type="text" because backend uses CharField, not URLField */}
+                    <FormField
+                      icon={<LinkIcon size={18} />}
+                      label="LinkedIn Profile"
+                      id="linkedin"
+                      type="text"
+                      name="linkedin"
+                      placeholder="https://linkedin.com/in/yourname"
+                      value={formData.linkedin}
+                      onChange={handleChange}
+                    />
+
+                    {/* Portfolio — type="text" for same reason */}
+                    <FormField
+                      icon={<Globe size={18} />}
+                      label="Portfolio / Website"
+                      id="portfolio"
+                      type="text"
+                      name="portfolio"
+                      placeholder="https://yourwebsite.com"
+                      value={formData.portfolio}
+                      onChange={handleChange}
+                    />
+
                     {/* Bio */}
                     <div className="md:col-span-2 flex flex-col gap-1.5">
                       <label htmlFor="bio" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Bio</label>
                       <textarea
-                        id="bio" name="bio" rows={3}
-                        placeholder="Tell us about yourself..."
-                        value={formData.bio} onChange={handleChange}
+                        id="bio"
+                        name="bio"
+                        rows={3}
+                        placeholder="Tell students about your background and teaching style..."
+                        value={formData.bio}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none transition-all"
                       />
                     </div>
+
                     {/* CV Upload */}
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="cv_file" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">CV / Resume (PDF)</label>
+                      <label htmlFor="cv_file" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+                        CV / Resume <span className="normal-case font-normal text-slate-400">(PDF, DOC)</span>
+                      </label>
                       <div className="relative">
                         <FileText className="absolute left-4 top-3.5 text-slate-400" size={18} />
                         <input
-                          id="cv_file" type="file" accept=".pdf,.doc,.docx"
+                          id="cv_file"
+                          type="file"
+                          accept=".pdf,.doc,.docx"
                           onChange={(e) => setCvFile(e.target.files?.[0] || null)}
                           className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer transition-all"
                         />
                       </div>
+                      {cvFile && (
+                        <p className="text-xs text-emerald-600 mt-0.5">✓ {cvFile.name}</p>
+                      )}
                     </div>
+
                     {/* Proposed Courses */}
                     <div className="flex flex-col gap-1.5">
-                      <label htmlFor="proposed_courses" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">Proposed Courses</label>
+                      <label htmlFor="proposed_courses" className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+                        Proposed Courses
+                      </label>
                       <textarea
-                        id="proposed_courses" name="proposed_courses" rows={3}
-                        placeholder="What courses are you planning to teach?"
-                        value={formData.proposed_courses} onChange={handleChange}
+                        id="proposed_courses"
+                        name="proposed_courses"
+                        rows={3}
+                        placeholder="What courses are you planning to teach? e.g. Python for Beginners, Advanced SQL..."
+                        value={formData.proposed_courses}
+                        onChange={handleChange}
                         className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 resize-none transition-all"
                       />
                     </div>
+
                   </div>
                 </div>
               </motion.div>
@@ -330,7 +488,7 @@ const RegisterContent = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full max-w-sm py-4 gradient-primary text-white rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 shadow-lg shadow-blue-500/20 disabled:opacity-50"
+              className="w-full max-w-sm py-4 gradient-primary text-white rounded-2xl font-semibold text-sm flex items-center justify-center gap-2 transition-all hover:opacity-90 shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? <Loader2 className="animate-spin" size={18} /> : (
                 <>Complete Registration <ArrowRight size={18} /></>
@@ -347,20 +505,67 @@ const RegisterContent = () => {
   );
 };
 
-const FormField = ({ icon, label, id, type = "text", required, name, placeholder, value, onChange }: any) => (
+// ─── Reusable Sub-components ──────────────────────────────────────────────────
+
+const SectionHeader = ({
+  number,
+  title,
+  color = "gradient-primary",
+}: {
+  number: string;
+  title: string;
+  color?: string;
+}) => (
+  <div className="flex items-center gap-3 mb-5">
+    <div className={`w-8 h-8 ${color} rounded-lg flex items-center justify-center text-white text-xs font-bold`}>
+      {number}
+    </div>
+    <h3 className="text-base font-semibold text-slate-800">{title}</h3>
+  </div>
+);
+
+const FormField = ({
+  icon,
+  label,
+  id,
+  type = "text",
+  required,
+  name,
+  placeholder,
+  value,
+  onChange,
+}: {
+  icon?: React.ReactNode;
+  label: string;
+  id: string;
+  type?: string;
+  required?: boolean;
+  name: string;
+  placeholder?: string;
+  value: string | number;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+}) => (
   <div className="flex flex-col gap-1.5">
-    <label htmlFor={id} className="text-xs font-semibold text-slate-600 uppercase tracking-wide">{label}</label>
+    <label htmlFor={id} className="text-xs font-semibold text-slate-600 uppercase tracking-wide">
+      {label}
+    </label>
     <div className="relative">
       {icon && <span className="absolute left-4 top-3.5 text-slate-400">{icon}</span>}
       <input
-        id={id} type={type} name={name} placeholder={placeholder}
-        required={required} value={value} onChange={onChange}
+        id={id}
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        required={required}
+        value={value}
+        onChange={onChange}
         className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 transition-all`}
       />
     </div>
   </div>
 );
 
+// ─── Page Wrapper ─────────────────────────────────────────────────────────────
 const RegisterPage = () => {
   return (
     <Suspense fallback={
