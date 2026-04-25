@@ -432,9 +432,13 @@ const InstructorDashboard = () => {
                 <div className="text-center py-10">
                   <BookOpen size={40} className="mx-auto text-slate-300 mb-3" />
                   <p className="text-slate-500 mb-4">No video courses created yet.</p>
-                  <Link href="/instructor/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
-                    Create First Course
-                  </Link>
+                  {user.is_approved_instructor ? (
+                    <Link href="/instructor/courses/create" className="px-5 py-2.5 gradient-primary text-white rounded-xl text-sm font-semibold inline-block">
+                      Create First Course
+                    </Link>
+                  ) : (
+                    <p className="text-xs text-amber-600 font-medium">Creation tools locked until approval.</p>
+                  )}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

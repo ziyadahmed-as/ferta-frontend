@@ -7,7 +7,7 @@ import {
   CheckCircle2, XCircle, Bell, LogOut, ShieldCheck, Cpu, BarChart3,
   Search, Plus, Trash2, Filter, ShieldAlert, MoreVertical, Check, X, Edit, Eye, User, Calendar, Mail, Award, Book,
   ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Tag, PlusCircle, LayoutDashboard,
-  FileText, Upload, ToggleLeft, ToggleRight, FileUp
+  FileText, Upload, ToggleLeft, ToggleRight, FileUp, Globe, Link2 as LinkIcon
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
@@ -2627,6 +2627,31 @@ const AdminDashboard = () => {
                         />
                       </div>
                     </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-4">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Professional Website</label>
+                        <input 
+                          type="text" 
+                          title="Website"
+                          placeholder="https://..."
+                          value={editUser.website || ""}
+                          onChange={e => setEditUser({...editUser, website: e.target.value})}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Portfolio Link</label>
+                        <input 
+                          type="text" 
+                          title="Portfolio"
+                          placeholder="https://..."
+                          value={editUser.portfolio || ""}
+                          onChange={e => setEditUser({...editUser, portfolio: e.target.value})}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                        />
+                      </div>
+                    </div>
                   </motion.div>
                 )}
 
@@ -2833,6 +2858,51 @@ const AdminDashboard = () => {
                         <div className="flex items-center gap-2">
                           <span className="px-2 py-1 bg-white dark:bg-slate-700 rounded-lg text-[10px] font-bold shadow-sm">{userDetail.years_of_experience || 0}+ Years</span>
                           <span className="px-2 py-1 bg-white dark:bg-slate-700 rounded-lg text-[10px] font-bold shadow-sm">Verified Credentials</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {userDetail.role === 'INSTRUCTOR' && (
+                      <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-[32px] border border-slate-100 dark:border-slate-700/50 mt-4">
+                        <h4 className="text-[10px] font-black text-slate-500 uppercase mb-3">Professional Connections</h4>
+                        <div className="space-y-3">
+                          {userDetail.website && (
+                            <a 
+                              href={userDetail.website} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all border border-slate-100 dark:border-slate-700"
+                            >
+                              <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900/40 rounded-lg flex items-center justify-center text-teal-600">
+                                <Globe size={16} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-slate-400 uppercase">Website</p>
+                                <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{userDetail.website}</p>
+                              </div>
+                              <ChevronRight size={14} className="text-slate-300" />
+                            </a>
+                          )}
+                          {userDetail.portfolio && (
+                            <a 
+                              href={userDetail.portfolio} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 p-3 bg-white dark:bg-slate-800 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-900/20 transition-all border border-slate-100 dark:border-slate-700"
+                            >
+                              <div className="w-8 h-8 bg-sky-100 dark:bg-sky-900/40 rounded-lg flex items-center justify-center text-sky-600">
+                                <LinkIcon size={16} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-slate-400 uppercase">Portfolio</p>
+                                <p className="text-xs font-bold text-slate-700 dark:text-slate-200 truncate">{userDetail.portfolio}</p>
+                              </div>
+                              <ChevronRight size={14} className="text-slate-300" />
+                            </a>
+                          )}
+                          {!userDetail.website && !userDetail.portfolio && (
+                            <p className="text-xs text-slate-400 italic text-center py-2">No external links registered.</p>
+                          )}
                         </div>
                       </div>
                     )}

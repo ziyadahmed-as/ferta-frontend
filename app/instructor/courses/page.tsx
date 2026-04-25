@@ -57,12 +57,18 @@ const InstructorCoursesPage = () => {
                         <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Course Inventory</h1>
                         <p className="text-slate-500 font-medium">Manage and monitor your catalog of knowledge artifacts</p>
                     </div>
-                    <Link 
-                        href="/instructor/courses/create"
-                        className="flex items-center gap-2 px-6 py-3.5 gradient-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-cyan-500/20 hover:opacity-90 active:scale-95 transition-all"
-                    >
-                        <Plus size={18} /> Add New Artifact
-                    </Link>
+                    {user.is_approved_instructor ? (
+                        <Link 
+                            href="/instructor/courses/create"
+                            className="flex items-center gap-2 px-6 py-3.5 gradient-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-cyan-500/20 hover:opacity-90 active:scale-95 transition-all"
+                        >
+                            <Plus size={18} /> Add New Artifact
+                        </Link>
+                    ) : (
+                        <div className="flex items-center gap-2 px-6 py-3.5 bg-slate-200 dark:bg-slate-800 text-slate-400 rounded-2xl font-black text-xs uppercase tracking-widest cursor-not-allowed">
+                            <Plus size={18} /> Restricted Access
+                        </div>
+                    )}
                 </div>
 
                 <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[2.5rem] overflow-hidden shadow-sm">

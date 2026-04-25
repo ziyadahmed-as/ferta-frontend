@@ -27,7 +27,7 @@ interface FormData {
   education_level: string;
   years_of_experience: number;
   bio: string;
-  linkedin: string;
+  website: string;
   portfolio: string;
   proposed_courses: string;
   instructor_type: InstructorType;
@@ -58,7 +58,7 @@ const RegisterContent = () => {
     years_of_experience: 0,
     bio: "",
     // Plain text — backend uses CharField (not URLField) so blank is fine
-    linkedin: "",
+    website: "",
     portfolio: "",
     proposed_courses: "",
     instructor_type: "VIDEO_CREATOR",
@@ -122,7 +122,7 @@ const RegisterContent = () => {
     if (role === "INSTRUCTOR") {
       const instructorFields: (keyof FormData)[] = [
         "expertise", "education_level", "years_of_experience",
-        "bio", "linkedin", "portfolio", "proposed_courses", "instructor_type",
+        "bio", "website", "portfolio", "proposed_courses", "instructor_type",
       ];
       instructorFields.forEach((key) => {
         const val = formData[key];
@@ -403,26 +403,26 @@ const RegisterContent = () => {
                       <p className="text-xs text-slate-400 mt-0.5">How will you primarily deliver your courses?</p>
                     </div>
 
-                    {/* LinkedIn — type="text" because backend uses CharField, not URLField */}
+                    {/* Website — type="text" because backend uses CharField, not URLField */}
                     <FormField
-                      icon={<LinkIcon size={18} />}
-                      label="LinkedIn Profile"
-                      id="linkedin"
+                      icon={<Globe size={18} />}
+                      label="Professional Website"
+                      id="website"
                       type="text"
-                      name="linkedin"
-                      placeholder="https://linkedin.com/in/yourname"
-                      value={formData.linkedin}
+                      name="website"
+                      placeholder="https://yourwebsite.com"
+                      value={formData.website}
                       onChange={handleChange}
                     />
 
                     {/* Portfolio — type="text" for same reason */}
                     <FormField
                       icon={<Globe size={18} />}
-                      label="Portfolio / Website"
+                      label="Portfolio Link"
                       id="portfolio"
                       type="text"
                       name="portfolio"
-                      placeholder="https://yourwebsite.com"
+                      placeholder="https://yourportfolio.com"
                       value={formData.portfolio}
                       onChange={handleChange}
                     />
