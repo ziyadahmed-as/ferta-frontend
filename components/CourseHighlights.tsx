@@ -45,12 +45,12 @@ const CourseHighlights = () => {
     return (
       <section className="py-24 bg-white dark:bg-zinc-950 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
-            <div className="w-48 h-8 bg-white dark:bg-zinc-800 rounded animate-pulse mb-8" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-                {[1,2,3,4].map(idx => (
-                    <div key={idx} className="h-96 bg-white dark:bg-zinc-800 rounded-3xl animate-pulse" />
-                ))}
-            </div>
+          <div className="w-48 h-8 bg-white dark:bg-zinc-800 rounded animate-pulse mb-8" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+            {[1, 2, 3, 4].map(idx => (
+              <div key={idx} className="h-96 bg-white dark:bg-zinc-800 rounded-3xl animate-pulse" />
+            ))}
+          </div>
         </div>
       </section>
     );
@@ -100,16 +100,16 @@ const CourseHighlights = () => {
 
               <div className="p-8">
                 <div className="flex items-center gap-2 mb-4">
-                   <div className="flex items-center gap-0.5 text-amber-400">
-                      <Star size={16} fill="currentColor" />
-                      <Star size={16} fill="currentColor" />
-                      <Star size={16} fill="currentColor" />
-                      <Star size={16} fill="currentColor" />
-                      <Star size={16} fill="currentColor" />
-                   </div>
-                   <span className="text-xs font-bold text-zinc-500">{course.rating || 4.9} (120+)</span>
+                  <div className="flex items-center gap-0.5 text-amber-400">
+                    <Star size={16} fill="currentColor" />
+                    <Star size={16} fill="currentColor" />
+                    <Star size={16} fill="currentColor" />
+                    <Star size={16} fill="currentColor" />
+                    <Star size={16} fill="currentColor" />
+                  </div>
+                  <span className="text-xs font-bold text-zinc-500">{course.rating || 4.9} (120+)</span>
                 </div>
-                
+
                 <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-tight group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                   {course.title}
                 </h4>
@@ -126,15 +126,15 @@ const CourseHighlights = () => {
                 </div>
 
                 <div className="flex items-center justify-between">
-                   <div className="flex flex-col">
-                      <span className="text-[10px] font-black text-indigo-600 uppercase tracking-tighter">Lifetime access</span>
-                      <span className="text-2xl font-black text-zinc-900 dark:text-white">
-                        ${course.price || "Free"}
-                      </span>
-                   </div>
-                   <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white transition-all duration-300">
-                      <ArrowRight size={20} />
-                   </Link>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black text-indigo-600 uppercase tracking-tighter">Lifetime access</span>
+                    <span className="text-2xl font-black text-zinc-900 dark:text-white">
+                      ${course.price || "Free"}
+                    </span>
+                  </div>
+                  <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-indigo-600 dark:hover:bg-indigo-600 hover:text-white dark:hover:text-white transition-all duration-300">
+                    <ArrowRight size={20} />
+                  </Link>
                 </div>
               </div>
             </motion.div>
