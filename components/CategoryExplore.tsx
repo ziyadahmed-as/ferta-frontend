@@ -114,7 +114,7 @@ const CategoryExplore = () => {
                         <IconComponent size={24} className="text-white" strokeWidth={2.5} />
                       </div>
                       
-                      <h3 className="text-xl font-black text-slate-800 dark:text-white mb-3 group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors uppercase tracking-tight">
+                      <h3 className="text-xl font-black text-slate-800 dark:text-white mb-3 transition-colors uppercase tracking-tight">
                         {cat.title}
                       </h3>
                       

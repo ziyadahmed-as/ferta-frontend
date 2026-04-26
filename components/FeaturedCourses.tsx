@@ -81,7 +81,7 @@ const FeaturedCourses = () => {
 
                 {/* Content */}
                 <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug group-hover:text-teal-600 transition-colors">
+                  <h3 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug transition-colors">
                     {course.title}
                   </h3>
                   {course.instructor_name && (

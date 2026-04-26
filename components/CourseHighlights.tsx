@@ -109,7 +109,7 @@ const CourseHighlights = () => {
                   <span className="text-xs font-bold text-zinc-500">{course.rating || 4.9} (120+)</span>
                 </div>
 
-                <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-tight group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors">
+                <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-tight transition-colors">
                   {course.title}
                 </h4>
 
