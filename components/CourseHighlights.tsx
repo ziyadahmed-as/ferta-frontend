@@ -62,7 +62,7 @@ const CourseHighlights = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div className="max-w-2xl">
             <span className="badge-text italic">Curated Excellence</span>
-            <h2 className="section-title italic tracking-tighter mb-6">Mastery <span className="text-transparent bg-clip-text gradient-primary">Highlights</span></h2>
+            <h2 className="section-title italic tracking-tighter mb-6">Mastery Highlights</h2>
             <p className="section-subtitle uppercase tracking-[0.2em] text-[10px] font-black opacity-60 italic">Synchronizing academic rigor with professional trajectory through elite programs.</p>
           </div>
           <Link href="/courses" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 hover:gap-4 transition-all duration-300 italic">
@@ -131,7 +131,7 @@ const CourseHighlights = () => {
                       {course.price ? `${course.price} Birr` : "Free"}
                     </span>
                   </div>
-                  <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-teal-600 dark:hover:bg-teal-600 hover:text-white dark:hover:text-white transition-all duration-300">
+                  <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-teal-600 dark:hover:bg-teal-600 transition-all duration-300">
                     <ArrowRight size={20} />
                   </Link>
                 </div>

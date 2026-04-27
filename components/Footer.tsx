@@ -22,7 +22,7 @@ const Footer = () => {
             </p>
             <div className="flex items-center gap-3">
               {[Share2, MessageCircle, Globe, ExternalLink].map((Icon, i) => (
-                <a key={i} href="#" title="Social link" className="w-9 h-9 bg-slate-50 dark:bg-zinc-900 hover:bg-teal-600 dark:hover:bg-teal-600 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-all shadow-sm border border-slate-100 dark:border-zinc-800">
+                <a key={i} href="#" title="Social link" className="w-9 h-9 bg-slate-50 dark:bg-zinc-900 hover:bg-teal-600 dark:hover:bg-teal-600 rounded-xl flex items-center justify-center text-slate-400 transition-all shadow-sm border border-slate-100 dark:border-zinc-800">
                   <Icon size={16} />
                 </a>
               ))}
@@ -35,7 +35,7 @@ const Footer = () => {
             <ul className="space-y-3">
               {["All Courses", "Entrance Exam Prep", "Technology", "Soft Skills", "Certifications"].map((item) => (
                 <li key={item}>
-                  <Link href="/courses" className="text-sm text-slate-500 hover:text-teal-600 transition-colors font-medium">{item}</Link>
+                  <Link href="/courses" className="text-sm text-slate-500 transition-colors font-medium">{item}</Link>
                 </li>
               ))}
             </ul>
@@ -53,7 +53,7 @@ const Footer = () => {
                 { label: "Contact", href: "#" },
               ].map((item) => (
                 <li key={item.label}>
-                  <Link href={item.href} className="text-sm text-slate-500 hover:text-teal-600 transition-colors font-medium">{item.label}</Link>
+                  <Link href={item.href} className="text-sm text-slate-500 transition-colors font-medium">{item.label}</Link>
                 </li>
               ))}
             </ul>
@@ -83,9 +83,9 @@ const Footer = () => {
         <div className="border-t border-slate-100 dark:border-zinc-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
           <p>© 2026 Fatra Academy. All rights reserved.</p>
           <div className="flex gap-5">
-            <Link href="#" className="hover:text-teal-600 dark:hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-teal-600 dark:hover:text-white transition-colors">Privacy Policy</Link>
-            <Link href="#" className="hover:text-teal-600 dark:hover:text-white transition-colors">Cookie Policy</Link>
+            <Link href="#" className="transition-colors">Terms of Service</Link>
+            <Link href="#" className="transition-colors">Privacy Policy</Link>
+            <Link href="#" className="transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>

@@ -41,7 +41,7 @@ const Hero = () => {
             </div>
             
             <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-slate-900 dark:text-white mb-8 leading-[0.95] tracking-tighter italic">
-              Architecting <span className="text-transparent bg-clip-text gradient-primary">Mastery</span> Through Artificial Intelligence
+              Architecting Mastery Through Artificial Intelligence
             </h1>
             
             <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-3xl mx-auto font-medium">
@@ -57,7 +57,7 @@ const Hero = () => {
               </Link>
               <Link
                 href="/register"
-                className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm hover:border-teal-600 dark:hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition-all hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm hover:border-teal-600 dark:hover:border-teal-500 transition-all hover:scale-105 active:scale-95"
               >
                 Join as Faculty
               </Link>

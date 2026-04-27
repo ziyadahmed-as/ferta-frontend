@@ -152,7 +152,7 @@ const Chatbot = () => {
             {/* Input Area */}
             <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
               <form onSubmit={handleSend} className="flex gap-2 items-center bg-white dark:bg-slate-800 p-2 rounded-2xl border border-slate-200 dark:border-slate-700 focus-within:border-teal-300 dark:focus-within:border-teal-600 transition-all">
-                <button type="button" title="Attach file" className="p-2 text-slate-400 hover:text-teal-500 transition-colors">
+                <button type="button" title="Attach file" className="p-2 text-slate-400 transition-colors">
                   <Paperclip size={18} />
                 </button>
                 <input
@@ -163,7 +163,7 @@ const Chatbot = () => {
                   title="Message Input"
                   className="flex-1 bg-transparent border-none outline-none font-medium text-slate-700 dark:text-slate-200 py-2 px-1 text-sm placeholder:text-slate-400"
                 />
-                <button type="button" title="Emojis" className="p-2 text-slate-400 hover:text-teal-500 transition-colors hidden sm:block">
+                <button type="button" title="Emojis" className="p-2 text-slate-400 transition-colors hidden sm:block">
                   <Smile size={18} />
                 </button>
                 <button

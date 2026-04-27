@@ -44,7 +44,7 @@ const Stats = () => {
       <div className="container-max">
         <div className="text-center mb-16 relative z-10">
           <span className="badge-text italic">Global Scholarly Metrics</span>
-          <h2 className="section-title italic tracking-tighter mb-4">Institutional <span className="text-transparent bg-clip-text gradient-primary">Impact Data</span></h2>
+          <h2 className="section-title italic tracking-tighter mb-4">Institutional Impact Data</h2>
           <p className="section-subtitle max-w-xl mx-auto uppercase tracking-widest text-[10px] font-black opacity-60">Synchronizing excellence across thousands of knowledge nodes worldwide.</p>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">

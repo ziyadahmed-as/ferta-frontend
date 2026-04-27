@@ -49,7 +49,7 @@ const Features = () => {
       <div className="container-max">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <span className="badge-text italic">Platform Architecture</span>
-          <h2 className="section-title italic tracking-tighter mb-6">Optimized <span className="text-transparent bg-clip-text gradient-primary">Pedagogical Framework</span></h2>
+          <h2 className="section-title italic tracking-tighter mb-6">Optimized Pedagogical Framework</h2>
           <p className="section-subtitle uppercase tracking-[0.2em] text-xs font-bold opacity-70 italic">
             Engineered for high-fidelity knowledge transfer and institutional scaling.
           </p>

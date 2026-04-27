@@ -26,7 +26,7 @@ const LoginContent = () => {
     try {
       await login(formData);
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Invalid credentials. Please try again.");
+      setError("Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ const LoginContent = () => {
         )}
 
         {error && (
-          <div className="mb-5 p-4 bg-red-500/20 border border-red-400/40 rounded-2xl text-sm text-red-200 text-center">
+          <div className="mb-5 p-4 bg-white border border-red-500 rounded-2xl text-sm text-red-600 font-semibold text-center shadow-sm">
             {error}
           </div>
         )}

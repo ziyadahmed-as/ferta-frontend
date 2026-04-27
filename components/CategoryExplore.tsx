@@ -76,7 +76,7 @@ const CategoryExplore = () => {
               Elite selection
             </span>
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">
-              Explore Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-violet-600 uppercase">Top Categories</span>
+              Explore Our TOP CATEGORIES
             </h2>
             <p className="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-base font-medium">
               Choose from our elite selection of professional disciplines and begin your journey.
@@ -129,7 +129,7 @@ const CategoryExplore = () => {
                             Explore Node
                           </span>
                         </div>
-                        <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-800 flex items-center justify-center text-slate-400 group-hover:bg-teal-600 group-hover:text-white transition-all shadow-sm">
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-zinc-800 flex items-center justify-center text-slate-400 group-hover:bg-teal-600 transition-all shadow-sm">
                           <ArrowRight size={18} />
                         </div>
                       </div>

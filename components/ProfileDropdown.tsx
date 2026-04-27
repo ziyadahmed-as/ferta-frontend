@@ -109,7 +109,7 @@ const DropdownLink = ({ href, icon, label, className = "", onClick }: any) => (
   <Link 
     href={href} 
     onClick={onClick}
-    className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 hover:text-teal-600 transition-all italic ${className}`}
+    className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-all italic ${className}`}
   >
     {icon} {label}
   </Link>

@@ -39,9 +39,9 @@ const FeaturedCourses = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
           <div>
             <span className="badge-text italic">Elite Selections</span>
-            <h2 className="section-title italic tracking-tighter">Featured <span className="text-transparent bg-clip-text gradient-primary">Courses</span></h2>
+            <h2 className="section-title italic tracking-tighter">Featured Courses</h2>
           </div>
-          <Link href="/courses" className="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 hover:text-teal-700 transition-colors italic">
+          <Link href="/courses" className="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 transition-colors italic">
             Synchronize with Registry <ArrowRight size={16} />
           </Link>
         </div>
