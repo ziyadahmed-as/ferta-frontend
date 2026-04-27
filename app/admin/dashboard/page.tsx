@@ -15,7 +15,7 @@ import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend
+  ResponsiveContainer, Legend, BarChart, Bar, Cell
 } from "recharts";
 
 const platformGrowthData = [
@@ -536,29 +536,29 @@ const AdminDashboard = () => {
   const statCards = [
     {
       label: "Total Users",
-      value: stats?.users?.students + (stats?.users?.instructors || 0) || "50,234",
-      sub: "+2,543 this month",
+      value: stats?.users?.total || "0",
+      sub: `+${stats?.users?.new_this_month || 0} this month`,
       icon: Users,
       iconClass: "icon-blue",
     },
     {
       label: "Active Courses",
-      value: stats?.courses?.total || 256,
-      sub: "+14 this month",
+      value: stats?.courses?.total || 0,
+      sub: `+${stats?.courses?.approved || 0} authenticated`,
       icon: BookOpen,
       iconClass: "icon-teal",
     },
     {
       label: "Platform Revenue",
-      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total / 1000)}K Birr` : "168K Birr",
-      sub: "+23K Birr this month",
+      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total / 1000)}K Birr` : "0 Birr",
+      sub: `+${Math.round(stats?.revenue?.this_month || 0)} Birr this month`,
       icon: DollarSign,
       iconClass: "icon-purple",
     },
     {
       label: "Growth Rate",
-      value: "+23%",
-      sub: "+5% from last month",
+      value: "+18%",
+      sub: "Institutional baseline",
       icon: TrendingUp,
       iconClass: "icon-green",
     },
@@ -699,26 +699,52 @@ const AdminDashboard = () => {
                     })}
                   </div>
 
-                  {/* Platform Growth Chart */}
-                  <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
-                    <div className="flex items-center justify-between mb-5">
-                      <h3 className="font-semibold text-slate-800 dark:text-white">Platform Growth Overview</h3>
-                      <div className="flex gap-4 text-xs text-slate-500">
-                        <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-teal-500 inline-block rounded" /> Users</span>
-                        <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-sky-500 inline-block rounded" /> Revenue</span>
+                  {/* Platform Charts Grid */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    {/* Platform Growth Chart */}
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <h3 className="font-semibold text-slate-800 dark:text-white">Platform Growth Overview</h3>
+                        <div className="flex gap-4 text-xs text-slate-500">
+                          <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-teal-500 inline-block rounded" /> Users</span>
+                          <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-sky-500 inline-block rounded" /> Revenue</span>
+                        </div>
+                      </div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                          <LineChart data={stats?.monthly_growth || platformGrowthData}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                            <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
+                            <YAxis hide />
+                            <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "12px" }} />
+                            <Line type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={3} dot={false} />
+                            <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={3} dot={false} />
+                          </LineChart>
+                        </ResponsiveContainer>
                       </div>
                     </div>
-                    <div className="h-64">
-                      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                        <LineChart data={stats?.monthly_growth || platformGrowthData}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                          <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
-                          <YAxis hide />
-                          <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "12px" }} />
-                          <Line type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={3} dot={false} />
-                          <Line type="monotone" dataKey="revenue" stroke="#7c3aed" strokeWidth={3} dot={false} />
-                        </LineChart>
-                      </ResponsiveContainer>
+
+                    {/* Category Distribution Chart */}
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
+                      <div className="flex items-center justify-between mb-5">
+                        <h3 className="font-semibold text-slate-800 dark:text-white">Category Knowledge Distribution</h3>
+                        <p className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Node Density</p>
+                      </div>
+                      <div className="h-64">
+                        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+                          <BarChart data={stats?.category_distribution || []}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                            <XAxis dataKey="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#94a3b8" }} />
+                            <YAxis hide />
+                            <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: "12px", border: "1px solid #e2e8f0", fontSize: "11px" }} />
+                            <Bar dataKey="courses" radius={[6, 6, 0, 0]}>
+                              {(stats?.category_distribution || []).map((entry: any, index: number) => (
+                                <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#0d9488' : '#0891b2'} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
                     </div>
                   </div>
 
@@ -821,6 +847,53 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
+                  {/* Top Performing Courses */}
+                  <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+                    <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
+                      <div>
+                        <h3 className="font-black text-slate-800 dark:text-white tracking-tight">Top Performing Knowledge Nodes</h3>
+                        <p className="text-xs text-slate-500 font-medium">Most impactful artifacts by enrollment and revenue</p>
+                      </div>
+                      <button 
+                        onClick={() => setActiveModule("courses")}
+                        className="text-xs font-black text-teal-600 uppercase tracking-widest hover:underline"
+                      >
+                        Registry Analysis →
+                      </button>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left">
+                        <thead className="text-slate-400 text-[10px] font-black uppercase tracking-[2px] border-b border-slate-50 dark:border-slate-700">
+                          <tr>
+                            <th className="px-6 py-4">Node Title</th>
+                            <th className="px-6 py-4 text-center">Enrollments</th>
+                            <th className="px-6 py-4 text-right">Yield (Birr)</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50 dark:divide-slate-700">
+                          {(stats?.top_courses || []).map((c: any) => (
+                            <tr key={c.id} className="hover:bg-slate-50/30 dark:hover:bg-slate-700/20 transition-colors">
+                              <td className="px-6 py-4">
+                                <p className="text-sm font-bold text-slate-800 dark:text-white leading-none">{c.title}</p>
+                              </td>
+                              <td className="px-6 py-4 text-center">
+                                <span className="text-xs font-black text-teal-600 bg-teal-50 dark:bg-teal-900/20 px-3 py-1 rounded-full">{c.enrollments}</span>
+                              </td>
+                              <td className="px-6 py-4 text-right">
+                                <p className="text-sm font-black text-slate-700 dark:text-slate-200">{c.revenue.toLocaleString()}</p>
+                              </td>
+                            </tr>
+                          ))}
+                          {(!stats?.top_courses || stats.top_courses.length === 0) && (
+                            <tr>
+                              <td colSpan={3} className="px-6 py-10 text-center text-xs text-slate-400 font-medium">No performance data yet.</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
                   {/* Recent Users Registry */}
                   <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
                     <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
@@ -839,6 +912,7 @@ const AdminDashboard = () => {
                       <table className="w-full text-left">
                         <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-[10px] font-black uppercase tracking-[2px]">
                           <tr>
+                            <th className="px-6 py-4">ID</th>
                             <th className="px-6 py-4">Identity</th>
                             <th className="px-6 py-4">Role from DB</th>
                             <th className="px-6 py-4">Registry Date</th>
@@ -848,6 +922,7 @@ const AdminDashboard = () => {
                         <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                           {(stats?.recent_users || []).map((u: any) => (
                             <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                              <td className="px-6 py-4 text-xs font-bold text-slate-500">#{u.id}</td>
                               <td className="px-6 py-4">
                                 <div className="flex items-center gap-3">
                                   <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-[10px] font-black">{u.username?.[0]?.toUpperCase()}</div>
@@ -978,6 +1053,7 @@ const AdminDashboard = () => {
                         <table className="w-full text-left">
                           <thead className="bg-slate-50/50 dark:bg-slate-900/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
                             <tr>
+                              <th className="px-6 py-4">ID</th>
                               <th className="px-6 py-4">User Identity</th>
                               <th className="px-6 py-4">Institutional Role</th>
                               <th className="px-6 py-4">Registry / Expertise</th>
@@ -988,6 +1064,7 @@ const AdminDashboard = () => {
                           <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
                             {currentUsers.map((u) => (
                               <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30">
+                                <td className="px-6 py-4 text-xs font-bold text-slate-500">#{u.id}</td>
                                 <td className="px-6 py-4">
                                   <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white text-xs font-bold">{u.username?.[0]?.toUpperCase() || "U"}</div>
@@ -1682,12 +1759,12 @@ const AdminDashboard = () => {
                         </div>
                         <div className="h-72">
                           <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                            <LineChart data={platformGrowthData}>
+                            <LineChart data={stats?.monthly_growth || platformGrowthData}>
                               <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.1} />
                               <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: "#94a3b8" }} />
                               <YAxis hide />
                               <Tooltip contentStyle={{ borderRadius: "20px", border: "none", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.15)" }} />
-                              <Line type="monotone" dataKey="revenue" stroke="#4f46e5" strokeWidth={4} dot={{ r: 6, fill: "#4f46e5", strokeWidth: 3, stroke: "#fff" }} activeDot={{ r: 8 }} />
+                              <Line type="monotone" dataKey="revenue" stroke="#0d9488" strokeWidth={4} dot={{ r: 6, fill: "#0d9488", strokeWidth: 3, stroke: "#fff" }} activeDot={{ r: 8 }} />
                             </LineChart>
                           </ResponsiveContainer>
                         </div>
@@ -1731,20 +1808,25 @@ const AdminDashboard = () => {
                                 </tr>
                              </thead>
                              <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                   <tr key={i} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
-                                      <td className="px-8 py-6 text-xs font-black text-slate-400">TX-9902{i}</td>
+                                {(stats?.recent_payments || []).map((p: any) => (
+                                   <tr key={p.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition-colors">
+                                      <td className="px-8 py-6 text-xs font-black text-slate-400">{p.id}</td>
                                       <td className="px-8 py-6">
-                                         <p className="text-sm font-bold text-slate-800 dark:text-white">Knowledge Node Enrollment</p>
-                                         <p className="text-[10px] text-slate-500 font-medium italic">Protocol: Stripe_L2</p>
+                                         <p className="text-sm font-bold text-slate-800 dark:text-white">{p.subject}</p>
+                                         <p className="text-[10px] text-slate-500 font-medium italic">Scholarly Node: @{p.student}</p>
                                       </td>
-                                      <td className="px-8 py-6 text-sm font-black text-slate-800 dark:text-white">49.99 Birr</td>
-                                      <td className="px-8 py-6 text-xs font-medium text-slate-500">2026.04.{15-i}</td>
+                                      <td className="px-8 py-6 text-sm font-black text-slate-800 dark:text-white">{p.amount.toLocaleString()} Birr</td>
+                                      <td className="px-8 py-6 text-xs font-medium text-slate-500">{p.timestamp}</td>
                                       <td className="px-8 py-6 text-right">
-                                         <span className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black rounded-lg uppercase">Confirmed</span>
+                                         <span className="px-3 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black rounded-lg uppercase">{p.status}</span>
                                       </td>
                                    </tr>
                                 ))}
+                                {(!stats?.recent_payments || stats.recent_payments.length === 0) && (
+                                  <tr>
+                                    <td colSpan={5} className="px-8 py-20 text-center text-slate-400 text-sm">No recent transactions detected in the protocol ledger.</td>
+                                  </tr>
+                                )}
                              </tbody>
                           </table>
                        </div>
