@@ -59,7 +59,7 @@ const AdminDashboard = () => {
 
   /* Pagination State */
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 50;
+  const itemsPerPage = 10;
 
   const [liveStreams, setLiveStreams] = useState<any[]>([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
@@ -279,7 +279,20 @@ const AdminDashboard = () => {
       fetchAllUsers();
       fetchStats();
     } catch (err: any) {
-      alert(err.response?.data?.detail || "Error adding user");
+      const data = err.response?.data;
+      if (data && typeof data === "object") {
+        // DRF returns field-keyed errors: { username: [...], email: [...], ... }
+        const messages = Object.entries(data)
+          .map(([field, msgs]) => {
+            const label = field.charAt(0).toUpperCase() + field.slice(1);
+            const msgStr = Array.isArray(msgs) ? msgs.join(" ") : String(msgs);
+            return `${label}: ${msgStr}`;
+          })
+          .join("\n");
+        alert(messages || "Error adding user");
+      } else {
+        alert("Error adding user");
+      }
     }
   };
 
@@ -309,14 +322,25 @@ const AdminDashboard = () => {
     if (!editUser) return;
     try {
       const { password, ...updateData } = editUser;
-      // Only include password if it's being changed
       const payload = password ? { ...updateData, password } : updateData;
       await api.patch(`/users/manage/${editUser.id}/`, payload);
       setShowEditModal(false);
       fetchAllUsers();
       fetchStats();
     } catch (err: any) {
-      alert(err.response?.data?.detail || "Error updating user");
+      const data = err.response?.data;
+      if (data && typeof data === "object") {
+        const messages = Object.entries(data)
+          .map(([field, msgs]) => {
+            const label = field.charAt(0).toUpperCase() + field.slice(1);
+            const msgStr = Array.isArray(msgs) ? msgs.join(" ") : String(msgs);
+            return `${label}: ${msgStr}`;
+          })
+          .join("\n");
+        alert(messages || "Error updating user");
+      } else {
+        alert("Error updating user");
+      }
     }
   };
 
@@ -642,27 +666,15 @@ const AdminDashboard = () => {
                   </button>
 
                   <button
-                    onClick={() => { setActiveModule("users"); setRoleFilter("INSTRUCTOR"); }}
+                    onClick={() => { setActiveModule("users"); setRoleFilter("all"); setUserTab("all"); }}
                     className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
-                      activeModule === "users" && roleFilter === "INSTRUCTOR"
-                        ? "text-teal-500" 
-                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
-                    }`}
-                  >
-                    <User size={18} />
-                    Instructors
-                  </button>
-
-                  <button
-                    onClick={() => { setActiveModule("users"); setRoleFilter("STUDENT"); }}
-                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
-                      activeModule === "users" && roleFilter === "STUDENT"
-                        ? "text-teal-500" 
+                      activeModule === "users" && roleFilter === "all" && userTab === "all"
+                        ? "text-teal-500 bg-teal-500/5" 
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
                     }`}
                   >
                     <Users size={18} />
-                    Students
+                    All Users
                   </button>
 
                   <button
@@ -1064,7 +1076,7 @@ const AdminDashboard = () => {
                           <tr>
                             <th className="px-6 py-4">ID</th>
                             <th className="px-6 py-4">Identity</th>
-                            <th className="px-6 py-4">Role from DB</th>
+                            <th className="px-6 py-4">Institutional Role</th>
                             <th className="px-6 py-4">Registry Date</th>
                             <th className="px-6 py-4 text-right">Status</th>
                           </tr>
