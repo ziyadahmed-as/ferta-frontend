@@ -34,6 +34,7 @@ const AdminDashboard = () => {
   const [activeModule, setActiveModule] = useState("overview");
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isCourseManagementOpen, setIsCourseManagementOpen] = useState(true);
 
   useEffect(() => {
     setMounted(true);
@@ -58,7 +59,7 @@ const AdminDashboard = () => {
 
   /* Pagination State */
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 15;
+  const itemsPerPage = 50;
 
   const [liveStreams, setLiveStreams] = useState<any[]>([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
@@ -240,8 +241,12 @@ const AdminDashboard = () => {
     setCurrentPage(1);
   }, [userSearch, roleFilter]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [userSearch, roleFilter, allUsers.length]);
+
   const filteredUsers = allUsers.filter(u => 
-    u.username.toLowerCase().includes(userSearch.toLowerCase()) && 
+    (u.username || "").toLowerCase().includes(userSearch.toLowerCase()) && 
     (roleFilter === "all" || u.role === roleFilter)
   );
 
@@ -549,17 +554,24 @@ const AdminDashboard = () => {
       iconClass: "icon-teal",
     },
     {
-      label: "Platform Revenue",
-      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total / 1000)}K Birr` : "0 Birr",
-      sub: `+${Math.round(stats?.revenue?.this_month || 0)} Birr this month`,
-      icon: DollarSign,
+      label: "Instructors",
+      value: stats?.users?.instructors || "0",
+      sub: "Approved Faculty",
+      icon: User,
+      iconClass: "icon-teal",
+    },
+    {
+      label: "Active Students",
+      value: stats?.users?.students || "0",
+      sub: "Learning Scholars",
+      icon: Users,
       iconClass: "icon-purple",
     },
     {
-      label: "Growth Rate",
-      value: "+18%",
-      sub: "Institutional baseline",
-      icon: TrendingUp,
+      label: "Total Revenue",
+      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total / 1000)}K Birr` : "0 Birr",
+      sub: `+${Math.round(stats?.revenue?.this_month || 0)} this month`,
+      icon: DollarSign,
       iconClass: "icon-green",
     },
   ];
@@ -567,51 +579,189 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 flex">
       {/* Sidebar */}
-      <aside className="w-64 shrink-0 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex flex-col hidden md:flex">
-        <div className="p-6 border-b border-slate-100 dark:border-slate-700">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-9 h-9 gradient-primary rounded-xl flex items-center justify-center">
-              <BookOpen size={18} className="text-white" />
+      <aside className="w-72 shrink-0 bg-[#0B1120] text-slate-300 flex flex-col hidden md:flex h-screen sticky top-0 overflow-y-auto custom-scrollbar">
+        <div className="p-8">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20">
+              <BookOpen size={22} className="text-white" />
             </div>
-            <span className="text-lg font-bold text-slate-800 dark:text-white">Fatra<span className="text-teal-600"> Academy</span></span>
+            <span className="text-xl font-bold text-white tracking-tight">Fatra<span className="text-teal-500"> Academy</span></span>
           </Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = activeModule === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveModule(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                  active ? "sidebar-active" : "text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700"
-                }`}
+        <nav className="flex-1 px-4 space-y-1">
+          {/* Dashboard Item */}
+          <button
+            onClick={() => setActiveModule("overview")}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              activeModule === "overview" 
+                ? "bg-teal-600/10 text-teal-500" 
+                : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+            }`}
+          >
+            <LayoutDashboard size={18} />
+            Dashboard
+          </button>
+
+          {/* Course Management Collapsible */}
+          <div className="pt-4 pb-2">
+            <button 
+              onClick={() => setIsCourseManagementOpen(!isCourseManagementOpen)}
+              className="w-full flex items-center justify-between px-4 py-2 text-[11px] font-black uppercase tracking-[2px] text-slate-500 hover:text-slate-300 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <FileText size={14} />
+                Course Management
+              </div>
+              <motion.div
+                animate={{ rotate: isCourseManagementOpen ? 0 : 180 }}
+                transition={{ duration: 0.2 }}
               >
-                <Icon size={18} />
-                {item.label}
-              </button>
-            );
-          })}
+                <ChevronRight size={14} className="rotate-90" />
+              </motion.div>
+            </button>
+
+            <AnimatePresence>
+              {isCourseManagementOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden space-y-1 mt-2"
+                >
+                  <button
+                    onClick={() => setActiveModule("overview")}
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "overview"
+                        ? "text-teal-500 bg-teal-500/5" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <BarChart3 size={18} />
+                    Course Dashboard
+                  </button>
+
+                  <button
+                    onClick={() => { setActiveModule("users"); setRoleFilter("INSTRUCTOR"); }}
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "users" && roleFilter === "INSTRUCTOR"
+                        ? "text-teal-500" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <User size={18} />
+                    Instructors
+                  </button>
+
+                  <button
+                    onClick={() => { setActiveModule("users"); setRoleFilter("STUDENT"); }}
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "users" && roleFilter === "STUDENT"
+                        ? "text-teal-500" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <Users size={18} />
+                    Students
+                  </button>
+
+                  <button
+                    onClick={() => setActiveModule("courses")}
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "courses" 
+                        ? "text-teal-500" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <BookOpen size={18} />
+                    Courses
+                  </button>
+
+                  <button
+                    onClick={() => setActiveModule("categories")}
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "categories" 
+                        ? "text-teal-500" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <Tag size={18} />
+                    Course Categories
+                  </button>
+
+                  <button
+                    onClick={() => setActiveModule("revenue")}
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "revenue" 
+                        ? "text-teal-500" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <DollarSign size={18} />
+                    Course Payments
+                  </button>
+
+                  <button
+                    onClick={() => setActiveModule("overview")} // Assuming notifications are in overview or separate
+                    className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
+                      activeModule === "notifications" 
+                        ? "text-teal-500" 
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
+                    }`}
+                  >
+                    <Bell size={18} />
+                    Notification
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="pt-4 border-t border-slate-800/50 mt-4">
+            <button
+              onClick={() => setActiveModule("knowledge")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeModule === "knowledge" 
+                  ? "bg-teal-600/10 text-teal-500" 
+                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+              }`}
+            >
+              <FileText size={18} />
+              Knowledge Base
+            </button>
+            <button
+              onClick={() => setActiveModule("live")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                activeModule === "live" 
+                  ? "bg-teal-600/10 text-teal-500" 
+                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"
+              }`}
+            >
+              <Cpu size={18} />
+              Live Sessions
+            </button>
+          </div>
         </nav>
 
-        <div className="p-4 border-t border-slate-100 dark:border-slate-700">
-          <div className="flex items-center gap-3 mb-3 px-2">
-            <div className="w-8 h-8 gradient-primary rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0">
-              {user.username?.[0]?.toUpperCase()}
+        <div className="p-6 mt-auto">
+          <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center text-white font-bold shrink-0 shadow-lg shadow-teal-500/20">
+                {user.username?.[0]?.toUpperCase()}
+              </div>
+              <div className="min-w-0">
+                <p className="text-sm font-bold text-white truncate">{user.username}</p>
+                <p className="text-[10px] text-slate-500 uppercase tracking-wider font-bold">Protocol Admin</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm font-semibold text-slate-800 dark:text-white">{user.username}</p>
-              <p className="text-xs text-slate-500">Administrator</p>
-            </div>
+            <button
+              onClick={logout}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-rose-500/10 text-rose-500 rounded-xl text-xs font-bold hover:bg-rose-500 hover:text-white transition-all group"
+            >
+              <LogOut size={14} className="group-hover:translate-x-0.5 transition-transform" /> 
+              Sign Out
+            </button>
           </div>
-          <button
-            onClick={logout}
-            className="w-full flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-          >
-            <LogOut size={16} /> Sign Out
-          </button>
         </div>
       </aside>
 
