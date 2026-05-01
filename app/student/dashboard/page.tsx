@@ -6,11 +6,10 @@ import {
   BookOpen, Clock, Award, TrendingUp, Home, Calendar, Trophy,
   Bell, LogOut, PlayCircle, GraduationCap, ChevronRight, Star, X, FileText, Link2, ArrowRight, ShieldAlert, Globe
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import api from "@/lib/api";
 import Link from "next/link";
 import Image from "next/image";
-import { AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -54,6 +53,7 @@ const StudentDashboard = () => {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submittingRating, setSubmittingRating] = useState(false);
+  const [showLearnModal, setShowLearnModal] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
