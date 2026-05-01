@@ -49,11 +49,22 @@ const CourseDetail = () => {
     }
     setEnrolling(true);
     try {
-      await api.post(`/courses/courses/${id}/enroll/`);
-      setIsEnrolled(true);
+      const res = await api.post(`/courses/courses/${id}/enroll/`);
+      
+      if (res.data.payment_required) {
+        const checkoutRes = await api.post(`/finance/payments/${res.data.payment_id}/create_checkout_session/`);
+        if (checkoutRes.data.url) {
+          window.location.href = checkoutRes.data.url;
+        } else {
+          alert("Failed to initiate checkout");
+          setEnrolling(false);
+        }
+      } else {
+        setIsEnrolled(true);
+        setEnrolling(false);
+      }
     } catch (err) {
       console.error("Enrollment error:", err);
-    } finally {
       setEnrolling(false);
     }
   };

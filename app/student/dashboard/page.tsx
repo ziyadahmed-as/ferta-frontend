@@ -48,8 +48,8 @@ const StudentDashboard = () => {
   const [activeNav, setActiveNav] = useState("dashboard");
   const [activeTab, setActiveTab] = useState<"video" | "live">("video");
   const [showRatingModal, setShowRatingModal] = useState(false);
-  const [showLearnModal, setShowLearnModal] = useState(false);
-  const [selectedStreamForRating, setSelectedStreamForRating] = useState<any>(null);
+  const [itemForRating, setItemForRating] = useState<any>(null);
+  const [itemTypeForRating, setItemTypeForRating] = useState<"stream" | "course">("stream");
   const [selectedStreamForLearn, setSelectedStreamForLearn] = useState<any>(null);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -82,14 +82,22 @@ const StudentDashboard = () => {
     if (user) fetchData();
   }, [user]);
 
-  const handleRateStream = async () => {
-    if (!selectedStreamForRating) return;
+  const handleRateItem = async () => {
+    if (!itemForRating) return;
     setSubmittingRating(true);
     try {
-      await api.post(`/courses/live-streams/${selectedStreamForRating.id}/rate_instructor/`, {
-        rating,
-        comment
-      });
+      if (itemTypeForRating === "stream") {
+        await api.post(`/courses/live-streams/${itemForRating.id}/rate_instructor/`, {
+          rating,
+          comment
+        });
+      } else {
+        await api.post(`/interactions/reviews/`, {
+          course: itemForRating.id,
+          rating,
+          comment
+        });
+      }
       setShowRatingModal(false);
       setRating(5);
       setComment("");
@@ -448,7 +456,15 @@ const StudentDashboard = () => {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-slate-500">{course.completion_percentage || 0}% Complete</span>
-                          <Link href={`/courses/${course.id}/learn`} className="text-xs text-cyan-600 font-semibold hover:text-cyan-700">Continue →</Link>
+                          <div className="flex gap-2">
+                            <button 
+                              onClick={() => { setItemForRating(course); setItemTypeForRating("course"); setShowRatingModal(true); }}
+                              className="text-xs text-amber-500 font-semibold hover:text-amber-600"
+                            >
+                              Rate
+                            </button>
+                            <Link href={`/courses/${course.id}/learn`} className="text-xs text-cyan-600 font-semibold hover:text-cyan-700">Continue →</Link>
+                          </div>
                         </div>
                       </div>
                     </motion.div>
@@ -498,7 +514,7 @@ const StudentDashboard = () => {
                         </div>
                           <div className="flex items-center gap-2">
                             <button 
-                              onClick={() => { setSelectedStreamForRating(stream); setShowRatingModal(true); }}
+                              onClick={() => { setItemForRating(stream); setItemTypeForRating("stream"); setShowRatingModal(true); }}
                               title="Rate Stream"
                               aria-label={`Submit rating for ${stream.title}`}
                               className="px-3 py-1.5 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
@@ -555,7 +571,13 @@ const StudentDashboard = () => {
 
               <div className="space-y-6">
                 <div>
-                  <p className="text-sm text-slate-500 mb-3">How was your session with <b>{selectedStreamForRating?.instructor_name}</b>?</p>
+                  <p className="text-sm text-slate-500 mb-3">
+                    {itemTypeForRating === "stream" ? (
+                      <>How was your session with <b>{itemForRating?.instructor_name}</b>?</>
+                    ) : (
+                      <>How would you rate the course <b>{itemForRating?.title}</b>?</>
+                    )}
+                  </p>
                   <div className="flex items-center gap-2">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
@@ -589,7 +611,7 @@ const StudentDashboard = () => {
                     Maybe Later
                   </button>
                   <button
-                    onClick={handleRateStream}
+                    onClick={handleRateItem}
                     disabled={submittingRating}
                     className="flex-1 py-3 gradient-primary text-white rounded-2xl font-bold text-sm shadow-lg shadow-cyan-500/20 disabled:opacity-50"
                   >
