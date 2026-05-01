@@ -293,6 +293,50 @@ const CourseDetail = () => {
                 )}
               </div>
             </section>
+
+            {/* Student Feedback Area */}
+            <section>
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Student Feedback</h2>
+                <div className="flex items-center gap-2">
+                  <Star size={20} className="text-amber-500 fill-amber-500" />
+                  <span className="text-xl font-bold text-slate-800 dark:text-white">{course.rating}</span>
+                </div>
+              </div>
+              
+              <div className="space-y-6">
+                {course.reviews && course.reviews.length > 0 ? (
+                  course.reviews.map((review: any) => (
+                    <div key={review.id} className="p-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600 font-bold">
+                            {review.student_name?.[0]?.toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-slate-800 dark:text-white">{review.student_name}</p>
+                            <p className="text-xs text-slate-500">{new Date(review.created_at).toLocaleDateString()}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 text-amber-500">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star key={star} size={14} fill={star <= review.rating ? "currentColor" : "none"} className={star > review.rating ? "text-slate-300" : ""} />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
+                        {review.comment || "No comment provided."}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl bg-white dark:bg-slate-800/50">
+                    <Star className="mx-auto text-slate-300 mb-4" size={48} />
+                    <p className="text-slate-500 font-medium">No reviews yet. Be the first to rate this course!</p>
+                  </div>
+                )}
+              </div>
+            </section>
           </div>
 
           {/* Right Sidebar Components */}
