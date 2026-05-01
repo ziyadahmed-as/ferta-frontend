@@ -17,7 +17,7 @@ const ProfilePage = () => {
                     <div className="absolute top-0 right-0 w-64 h-64 bg-teal-600/5 rounded-full blur-[100px] -z-1 group-hover:scale-150 transition-all duration-1000" />
                     
                     <div className="w-32 h-32 bg-teal-600 rounded-[2.5rem] flex items-center justify-center text-white text-5xl font-black shadow-xl shadow-teal-600/20 group-hover:rotate-6 transition-all">
-                        {user.username?.[0].toUpperCase()}
+                        {user.username?.[0]?.toUpperCase()}
                     </div>
                     
                     <div className="flex-1 text-center md:text-left">

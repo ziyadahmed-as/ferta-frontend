@@ -184,3 +184,28 @@ body {
     background-position: 1000px 0;
   }
 }
+
+/* Global Input Styles */
+input, 
+textarea, 
+select {
+  color: #000000 !important;
+}
+
+.dark input, 
+.dark textarea, 
+.dark select {
+  color: #ffffff !important;
+}
+
+/* Ensure placeholders are also visible */
+input::placeholder,
+textarea::placeholder {
+  color: #64748b !important; /* text-slate-500 */
+  opacity: 1;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8 !important; /* text-slate-400 */
+}

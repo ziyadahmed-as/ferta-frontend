@@ -107,7 +107,7 @@ const CourseDetail = () => {
               </span>
               <div className="flex items-center gap-1 text-amber-500">
                 <Star size={14} fill="currentColor" />
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">4.8 (2.4k reviews)</span>
+                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{course.rating} ({course.reviews?.length || 0} reviews)</span>
               </div>
             </div>
             
@@ -345,18 +345,18 @@ const CourseDetail = () => {
             <div className="p-8 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center">
               <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6">About Instructor</h3>
               <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-teal-600 rounded-full flex items-center justify-center text-white font-bold text-3xl mx-auto mb-6 shadow-lg shadow-cyan-500/20">
-                {course.instructor_name?.[0].toUpperCase()}
+                {course.instructor_name?.[0]?.toUpperCase()}
               </div>
               <h4 className="text-lg font-bold text-slate-800 dark:text-white mb-1">{course.instructor_name}</h4>
               <p className="text-sm text-slate-500 font-medium mb-6">Expert Instructor & Practitioner</p>
               
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="text-center">
-                  <p className="text-xl font-bold text-slate-800 dark:text-white">4.8</p>
+                  <p className="text-xl font-bold text-slate-800 dark:text-white">{course.rating}</p>
                   <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Rating</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-slate-800 dark:text-white">1,245</p>
+                  <p className="text-xl font-bold text-slate-800 dark:text-white">{course.enrollment_count || 0}</p>
                   <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">Students</p>
                 </div>
               </div>

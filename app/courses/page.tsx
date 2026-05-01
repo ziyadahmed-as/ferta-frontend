@@ -78,7 +78,7 @@ const CatalogContent = () => {
               placeholder="Search for courses, skills, or instructors..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-600/10 outline-none font-medium transition-all text-slate-800 dark:text-white shadow-sm"
+              className="w-full pl-14 pr-6 py-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-600/10 outline-none font-medium transition-all text-black dark:text-white shadow-sm"
             />
             {search && (
               <button 

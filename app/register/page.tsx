@@ -392,7 +392,7 @@ const RegisterContent = () => {
                           name="instructor_type"
                           value={formData.instructor_type}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all appearance-none cursor-pointer"
+                          className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all appearance-none cursor-pointer"
                         >
                           <option value="VIDEO_CREATOR">🎬 Video Creator</option>
                           <option value="LIVE_STREAMER">📡 Live Streamer</option>
@@ -437,7 +437,7 @@ const RegisterContent = () => {
                         placeholder="Tell students about your background and teaching style..."
                         value={formData.bio}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 resize-none transition-all"
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 resize-none transition-all"
                       />
                     </div>
 
@@ -473,7 +473,7 @@ const RegisterContent = () => {
                         placeholder="What courses are you planning to teach? e.g. Python for Beginners, Advanced SQL..."
                         value={formData.proposed_courses}
                         onChange={handleChange}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 resize-none transition-all"
+                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 resize-none transition-all"
                       />
                     </div>
 
@@ -559,7 +559,7 @@ const FormField = ({
         required={required}
         value={value}
         onChange={onChange}
-        className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all`}
+        className={`w-full ${icon ? "pl-11" : "px-4"} pr-4 py-3 bg-white border border-slate-200 rounded-xl text-sm text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/20 focus:border-cyan-400 transition-all`}
       />
     </div>
   </div>

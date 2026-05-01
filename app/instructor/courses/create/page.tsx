@@ -121,7 +121,7 @@ const CreateCoursePage = () => {
                                         placeholder="e.g. Master UX/UI Design in 2026"
                                         value={formData.title}
                                         onChange={handleChange}
-                                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-600/10 outline-none font-bold text-slate-800 dark:text-white transition-all text-lg placeholder:text-slate-300"
+                                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-4 focus:ring-cyan-600/10 outline-none font-bold text-black dark:text-white transition-all text-lg placeholder:text-slate-300"
                                     />
                                 </div>
 
@@ -136,7 +136,7 @@ const CreateCoursePage = () => {
                                             title="Select Course Category"
                                             value={formData.category}
                                             onChange={handleChange}
-                                            className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-bold text-slate-700 dark:text-white transition-all text-sm appearance-none cursor-pointer"
+                                            className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-bold text-black dark:text-white transition-all text-sm appearance-none cursor-pointer"
                                         >
                                             <option value="">Select Domain</option>
                                             {categories.map(cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
@@ -157,7 +157,7 @@ const CreateCoursePage = () => {
                                                 min="0"
                                                 value={formData.price}
                                                 onChange={handleChange}
-                                                className="w-full pl-12 pr-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-bold text-slate-700 dark:text-white transition-all text-sm"
+                                                className="w-full pl-12 pr-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-bold text-black dark:text-white transition-all text-sm"
                                             />
                                         </div>
                                     </div>
@@ -175,7 +175,7 @@ const CreateCoursePage = () => {
                                         rows={5}
                                         value={formData.description}
                                         onChange={handleChange}
-                                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-medium text-slate-700 dark:text-slate-300 transition-all text-sm leading-relaxed"
+                                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-2xl outline-none font-medium text-black dark:text-white transition-all text-sm leading-relaxed"
                                     />
                                 </div>
 

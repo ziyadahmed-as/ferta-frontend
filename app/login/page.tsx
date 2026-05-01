@@ -87,7 +87,7 @@ const LoginContent = () => {
                 placeholder="yourname or your@email.com"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-300 focus:bg-white transition-all text-sm"
+                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-black dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-300 focus:bg-white transition-all text-sm"
               />
             </div>
           </div>
@@ -104,7 +104,7 @@ const LoginContent = () => {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:border-teal-300 focus:bg-white transition-all text-sm"
+                className="w-full pl-11 pr-12 py-3.5 bg-slate-50 border border-slate-200 rounded-xl text-black dark:text-white placeholder-slate-400 focus:outline-none focus:border-teal-300 focus:bg-white transition-all text-sm"
               />
               <button
                 type="button"
