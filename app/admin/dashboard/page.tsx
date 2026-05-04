@@ -18,15 +18,6 @@ import {
   ResponsiveContainer, Legend, BarChart, Bar, Cell
 } from "recharts";
 
-const platformGrowthData = [
-  { month: "Jan", users: 42000, revenue: 85000 },
-  { month: "Feb", users: 44500, revenue: 92000 },
-  { month: "Mar", users: 46000, revenue: 98000 },
-  { month: "Apr", users: 47200, revenue: 112000 },
-  { month: "May", users: 49100, revenue: 135000 },
-  { month: "Jun", users: 50234, revenue: 168000 },
-];
-
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<any>(null);
@@ -598,27 +589,20 @@ const AdminDashboard = () => {
     {
       label: "Active Courses",
       value: stats?.courses?.total || 0,
-      sub: `+${stats?.courses?.approved || 0} authenticated`,
+      sub: `+${stats?.courses?.approved || 0} approved`,
       icon: BookOpen,
       iconClass: "icon-teal",
     },
     {
       label: "Instructors",
       value: stats?.users?.instructors || "0",
-      sub: "Approved Faculty",
+      sub: `${stats?.pending_instructors?.length || 0} applications`,
       icon: User,
       iconClass: "icon-teal",
     },
     {
-      label: "Active Students",
-      value: stats?.users?.students || "0",
-      sub: "Learning Scholars",
-      icon: Users,
-      iconClass: "icon-purple",
-    },
-    {
       label: "Total Revenue",
-      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total / 1000)}K Birr` : "0 Birr",
+      value: stats?.revenue?.total ? `${Math.round(stats.revenue.total)} Birr` : "0 Birr",
       sub: `+${Math.round(stats?.revenue?.this_month || 0)} this month`,
       icon: DollarSign,
       iconClass: "icon-green",
@@ -1951,21 +1935,58 @@ const AdminDashboard = () => {
                       <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 p-8">
                         <div className="flex items-center justify-between mb-8">
                           <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Platform Revenue Growth</h3>
-                          <div className="flex items-center gap-2">
-                            <span className="w-3 h-3 bg-teal-600 rounded-full" />
-                            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Gross (ETB)</span>
+                      <div className="lg:col-span-2 space-y-8">
+                        <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                          <div className="flex items-center justify-between mb-8">
+                            <div>
+                              <h3 className="text-lg font-bold text-slate-800 dark:text-white">Platform Growth</h3>
+                              <p className="text-xs text-slate-500">Users & Revenue metrics (6 months)</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="w-3 h-3 bg-teal-600 rounded-full" />
+                              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Users</span>
+                              <span className="w-3 h-3 bg-purple-500 rounded-full ml-4" />
+                              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Revenue</span>
+                            </div>
                           </div>
-                        </div>
-                        <div className="h-72">
-                          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                            <LineChart data={stats?.monthly_growth || platformGrowthData}>
-                              <CartesianGrid strokeDasharray="3 3" vertical={false} strokeOpacity={0.1} />
-                              <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: "#94a3b8" }} />
-                              <YAxis hide />
-                              <Tooltip contentStyle={{ borderRadius: "20px", border: "none", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.15)" }} />
-                              <Line type="monotone" dataKey="revenue" stroke="#0d9488" strokeWidth={4} dot={{ r: 6, fill: "#0d9488", strokeWidth: 3, stroke: "#fff" }} activeDot={{ r: 8 }} />
-                            </LineChart>
-                          </ResponsiveContainer>
+                          <div className="h-[350px]">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={stats?.monthly_growth || []}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                                <XAxis 
+                                    dataKey="month" 
+                                    axisLine={false} 
+                                    tickLine={false} 
+                                    tick={{ fontSize: 12, fill: "#94a3b8" }} 
+                                />
+                                <YAxis 
+                                    axisLine={false} 
+                                    tickLine={false} 
+                                    tick={{ fontSize: 12, fill: "#94a3b8" }} 
+                                    tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(1)}k` : val}
+                                />
+                                <Tooltip 
+                                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)' }}
+                                />
+                                <Line 
+                                    type="monotone" 
+                                    dataKey="users" 
+                                    stroke="#0d9488" 
+                                    strokeWidth={4} 
+                                    dot={{ r: 4, fill: "#0d9488", strokeWidth: 2, stroke: "#fff" }} 
+                                    activeDot={{ r: 6 }} 
+                                />
+                                <Line 
+                                    type="monotone" 
+                                    dataKey="revenue" 
+                                    stroke="#8b5cf6" 
+                                    strokeWidth={4} 
+                                    dot={{ r: 4, fill: "#8b5cf6", strokeWidth: 2, stroke: "#fff" }} 
+                                    activeDot={{ r: 6 }} 
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </div>
                         </div>
                       </div>
 
