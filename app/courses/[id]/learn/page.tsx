@@ -331,28 +331,51 @@ const LearnPage = () => {
 
                 {/* Main Media Player / Content */}
                 <div className="bg-slate-950 rounded-[2.5rem] overflow-hidden aspect-video shadow-2xl relative group ring-1 ring-white/10">
-                  {/* Placeholder for Video Player */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex flex-col items-center gap-4 text-white/30 group-hover:scale-110 transition-transform duration-500">
-                      <PlayCircle size={80} strokeWidth={1} />
-                      <p className="font-bold text-xs uppercase tracking-[0.3em]">Initialize Stream</p>
+                  {currentLesson?.video_file || currentLesson?.video_url ? (
+                    <div className="w-full h-full">
+                      {currentLesson.video_url && (currentLesson.video_url.includes('youtube.com') || currentLesson.video_url.includes('youtu.be')) ? (
+                        <iframe
+                          src={`https://www.youtube.com/embed/${currentLesson.video_url.split('v=')[1] || currentLesson.video_url.split('/').pop()}`}
+                          className="w-full h-full border-none"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
+                      ) : (
+                        <video
+                          key={currentLesson.video_file || currentLesson.video_url}
+                          src={currentLesson.video_file || currentLesson.video_url}
+                          controls
+                          controlsList="nodownload"
+                          className="w-full h-full object-contain"
+                          poster={course?.thumbnail}
+                        />
+                      )}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex flex-col items-center gap-4 text-white/30 group-hover:scale-110 transition-transform duration-500">
+                        <PlayCircle size={80} strokeWidth={1} />
+                        <p className="font-bold text-xs uppercase tracking-[0.3em]">Initialize Stream</p>
+                      </div>
+                    </div>
+                  )}
 
-                  {/* Overlay Controls Preview */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
-                        <SkipBack size={20} />
-                      </div>
-                      <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                        <div className="w-1/3 h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-                      </div>
-                      <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
-                        <SkipForward size={20} />
+                  {/* Overlay Controls Preview - Only show if no video is playing or as an overlay */}
+                  {!currentLesson?.video_file && !currentLesson?.video_url && (
+                    <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                          <SkipBack size={20} />
+                        </div>
+                        <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
+                          <div className="w-1/3 h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                        </div>
+                        <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                          <SkipForward size={20} />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 {/* Lesson Description & Content Blocks */}
