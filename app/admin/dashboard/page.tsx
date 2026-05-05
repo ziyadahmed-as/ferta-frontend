@@ -22,6 +22,7 @@ const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeModule, setActiveModule] = useState("overview");
   const [actionLoading, setActionLoading] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -150,8 +151,10 @@ const AdminDashboard = () => {
     try {
       const res = await api.get("/users/admin-stats/");
       setStats(res.data);
-    } catch (err) {
+      setError(null);
+    } catch (err: any) {
       console.error("Admin stats fetch error:", err);
+      setError("Unable to connect to the server. Please ensure the backend is running.");
     } finally {
       setLoading(false);
     }
@@ -567,6 +570,24 @@ const AdminDashboard = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-white dark:bg-slate-900 px-6">
+        <div className="bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 p-8 rounded-[32px] border border-red-100 dark:border-red-900/30 max-w-md text-center shadow-xl">
+          <ShieldAlert size={48} className="mx-auto mb-4" />
+          <h2 className="text-xl font-bold mb-2">Connection Failed</h2>
+          <p className="text-sm opacity-80 mb-6">{error}</p>
+          <button 
+            onClick={() => { setError(null); setLoading(true); fetchStats(); fetchAllUsers(); fetchCourses(); fetchCategories(); fetchLiveStreams(); }}
+            className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium transition-all shadow-lg shadow-red-500/20"
+          >
+            Retry Connection
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const navItems = [
     { id: "overview", label: "Overview", icon: Home },
     { id: "users", label: "Users", icon: Users },
@@ -895,7 +916,7 @@ const AdminDashboard = () => {
                       </div>
                       <div className="h-64">
                         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
-                          <LineChart data={stats?.monthly_growth || platformGrowthData}>
+                          <LineChart data={stats?.monthly_growth || []}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
                             <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "#94a3b8" }} />
                             <YAxis hide />
@@ -1932,9 +1953,6 @@ const AdminDashboard = () => {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                      <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-[48px] border border-slate-200 dark:border-slate-700 p-8">
-                        <div className="flex items-center justify-between mb-8">
-                          <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Platform Revenue Growth</h3>
                       <div className="lg:col-span-2 space-y-8">
                         <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
                           <div className="flex items-center justify-between mb-8">

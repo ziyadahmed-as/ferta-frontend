@@ -120,6 +120,8 @@ const EditLessonPage = () => {
                     <div className="flex items-center gap-6">
                         <button 
                             onClick={() => router.back()}
+                            title="Go Back"
+                            aria-label="Go Back"
                             className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl text-slate-500 transition-all"
                         >
                             <ArrowLeft size={20} />
@@ -155,6 +157,8 @@ const EditLessonPage = () => {
                                 <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Lesson Title</label>
                                 <input 
                                     type="text" 
+                                    title="Lesson Title"
+                                    placeholder="Enter lesson title"
                                     value={lesson.title}
                                     onChange={(e) => setLesson({ ...lesson, title: e.target.value })}
                                     className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl outline-none font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-cyan-500/20"
@@ -165,6 +169,8 @@ const EditLessonPage = () => {
                                 <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Description</label>
                                 <textarea 
                                     rows={4}
+                                    title="Lesson Description"
+                                    placeholder="Enter lesson description"
                                     value={lesson.description}
                                     onChange={(e) => setLesson({ ...lesson, description: e.target.value })}
                                     className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl outline-none font-medium text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-cyan-500/20"
@@ -178,6 +184,8 @@ const EditLessonPage = () => {
                                     </label>
                                     <input 
                                         type="number" 
+                                        title="Lesson Duration"
+                                        placeholder="0"
                                         value={lesson.duration}
                                         onChange={(e) => setLesson({ ...lesson, duration: e.target.value })}
                                         className="w-full px-5 py-3.5 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 rounded-2xl outline-none font-bold text-slate-800 dark:text-white"
@@ -224,6 +232,8 @@ const EditLessonPage = () => {
                                     </div>
                                     <button 
                                         onClick={() => handleDeleteBlock(block.id)}
+                                        title="Delete block"
+                                        aria-label="Delete block"
                                         className="p-2 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
                                     >
                                         <Trash2 size={16} />
@@ -264,6 +274,8 @@ const EditLessonPage = () => {
                                 <div className="border-2 border-dashed border-slate-700 rounded-3xl p-8 flex flex-col items-center justify-center gap-4 hover:border-cyan-500 transition-all cursor-pointer relative overflow-hidden bg-slate-800/30">
                                     <input 
                                         type="file" 
+                                        title="Upload video file"
+                                        aria-label="Upload video file"
                                         accept="video/*"
                                         onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
                                         className="absolute inset-0 opacity-0 cursor-pointer z-10"
