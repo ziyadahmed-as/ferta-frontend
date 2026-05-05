@@ -43,12 +43,12 @@ const CourseHighlights = () => {
 
   if (loading) {
     return (
-      <section className="py-24 bg-white dark:bg-zinc-950 px-6">
+      <section className="py-24 bg-white dark:bg-slate-950 px-6">
         <div className="max-w-7xl mx-auto flex flex-col items-center">
-          <div className="w-48 h-8 bg-white dark:bg-zinc-800 rounded animate-pulse mb-8" />
+          <div className="w-48 h-8 bg-slate-100 dark:bg-slate-800 rounded-xl animate-pulse mb-8" />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-            {[1, 2, 3, 4].map(idx => (
-              <div key={idx} className="h-96 bg-white dark:bg-zinc-800 rounded-3xl animate-pulse" />
+            {[1, 2, 3, 4].map((idx) => (
+              <div key={idx} className="h-96 bg-slate-50 dark:bg-slate-800 rounded-3xl animate-pulse" />
             ))}
           </div>
         </div>
@@ -57,20 +57,39 @@ const CourseHighlights = () => {
   }
 
   return (
-    <section className="section-padding bg-white dark:bg-zinc-950 overflow-hidden">
-      <div className="container-max">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div className="max-w-2xl">
-            <span className="badge-text italic">Curated Excellence</span>
-            <h2 className="section-title italic tracking-tighter mb-6">Mastery Highlights</h2>
-            <p className="section-subtitle uppercase tracking-[0.2em] text-[10px] font-black opacity-60 italic">Synchronizing academic rigor with professional trajectory through elite programs.</p>
-          </div>
-          <Link href="/courses" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 hover:gap-4 transition-all duration-300 italic">
-            Synchronize All <ArrowRight size={20} />
+    <section className="py-24 bg-slate-50 dark:bg-slate-900/50 px-6 relative overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-sky-50 dark:bg-sky-950/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/3 opacity-60" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-2xl"
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 font-bold text-[11px] uppercase tracking-widest mb-4">
+              Most Popular
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-4">
+              Top Rated Courses
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-base font-medium max-w-lg">
+              Handpicked courses loved by students across the globe.
+            </p>
+          </motion.div>
+          <Link
+            href="/courses"
+            className="hidden md:inline-flex items-center gap-2 text-sm font-bold text-teal-600 dark:text-teal-400 hover:gap-3 transition-all duration-300"
+          >
+            View All Courses <ArrowRight size={16} />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Course Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {courses.map((course, idx) => (
             <motion.div
               key={course.id}
@@ -78,64 +97,76 @@ const CourseHighlights = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="p-6 sm:p-8 lg:p-10 bg-white dark:bg-zinc-900/50 rounded-[2.5rem] lg:rounded-[3rem] border border-zinc-200 dark:border-zinc-800 hover:border-teal-600/30 transition-all duration-300 hover:-translate-y-2"
             >
-              <div className="relative h-56 w-full overflow-hidden">
-                <Image
-                  src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
-                  alt={course.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1 bg-white/90 dark:bg-black/90 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-widest text-zinc-900 dark:text-white border border-white/20">
-                    {course.category_name}
-                  </span>
-                </div>
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100 duration-500">
-                  <PlayCircle size={48} className="text-white drop-shadow-xl" />
-                </div>
-              </div>
-
-              <div className="p-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="flex items-center gap-0.5 text-amber-400">
-                    <Star size={16} fill="currentColor" />
-                    <Star size={16} fill="currentColor" />
-                    <Star size={16} fill="currentColor" />
-                    <Star size={16} fill="currentColor" />
-                    <Star size={16} fill="currentColor" />
-                  </div>
-                  <span className="text-xs font-bold text-zinc-500">{course.rating || 4.9} (120+)</span>
-                </div>
-
-                <h4 className="text-xl font-bold text-zinc-900 dark:text-white mb-3 line-clamp-2 leading-tight transition-colors">
-                  {course.title}
-                </h4>
-
-                <div className="flex items-center gap-4 text-zinc-500 dark:text-zinc-500 text-sm mb-6 pb-6 border-b border-zinc-100 dark:border-zinc-800">
-                  <div className="flex items-center gap-1.5 font-medium">
-                    <Users size={16} />
-                    <span>{course.enrollment_count} Students</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 font-medium">
-                    <Clock size={16} />
-                    <span>8 Weeks</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex flex-col">
-                    <span className="text-[10px] font-black text-teal-600 uppercase tracking-tighter">Lifetime access</span>
-                    <span className="text-2xl font-black text-zinc-900 dark:text-white">
-                      {course.price ? `${course.price} Birr` : "Free"}
+              <Link
+                href={`/courses/${course.slug}`}
+                className="group flex flex-col bg-white dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700/50 overflow-hidden hover:shadow-xl hover:shadow-teal-500/8 transition-all duration-400 h-full hover:-translate-y-1"
+              >
+                {/* Thumbnail */}
+                <div className="relative h-52 bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                  <Image
+                    src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
+                    alt={course.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-lg text-xs font-bold text-slate-800 dark:text-white">
+                      {course.category_name}
                     </span>
                   </div>
-                  <Link href={`/courses/${course.slug}`} className="w-12 h-12 bg-zinc-900 dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black hover:bg-teal-600 dark:hover:bg-teal-600 transition-all duration-300">
-                    <ArrowRight size={20} />
-                  </Link>
+                  {/* Price Badge */}
+                  <div className="absolute top-4 right-4">
+                    <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${
+                      course.price === 0
+                        ? "bg-teal-500 text-white"
+                        : "bg-white/90 dark:bg-slate-900/90 text-slate-800 dark:text-white"
+                    }`}>
+                      {course.price === 0 ? "Free" : `${course.price} Birr`}
+                    </span>
+                  </div>
+                  {/* Hover Play Overlay */}
+                  <div className="absolute inset-0 bg-teal-900/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-400">
+                    <PlayCircle size={48} className="text-white drop-shadow-xl" />
+                  </div>
                 </div>
-              </div>
+
+                {/* Content */}
+                <div className="p-6 flex flex-col flex-1">
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-0.5 text-amber-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} size={14} fill="currentColor" />
+                      ))}
+                    </div>
+                    <span className="text-xs font-semibold text-slate-500">{course.rating || 4.9}</span>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-bold text-slate-900 dark:text-white text-base line-clamp-2 mb-2 leading-snug">
+                    {course.title}
+                  </h3>
+
+                  {/* Instructor */}
+                  {course.instructor_name && (
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">by {course.instructor_name}</p>
+                  )}
+
+                  {/* Stats Row */}
+                  <div className="flex items-center gap-4 mt-auto pt-4 border-t border-slate-100 dark:border-slate-700/50">
+                    <div className="flex items-center gap-1.5 text-slate-400">
+                      <Users size={14} />
+                      <span className="text-xs font-medium">{course.enrollment_count} Students</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-slate-400 ml-auto">
+                      <Clock size={14} />
+                      <span className="text-xs font-medium">8 Weeks</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </motion.div>
           ))}
         </div>

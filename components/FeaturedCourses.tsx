@@ -25,27 +25,47 @@ const FeaturedCourses = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/courses/courses/popular/").then((response) => {
-      const data = Array.isArray(response.data) ? response.data : response.data.results;
-      if (Array.isArray(data)) setCourses(data.slice(0, 8));
-    }).catch(() => {}).finally(() => setLoading(false));
+    api
+      .get("/courses/courses/popular/")
+      .then((response) => {
+        const data = Array.isArray(response.data) ? response.data : response.data.results;
+        if (Array.isArray(data)) setCourses(data.slice(0, 8));
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading || courses.length === 0) return null;
 
   return (
-    <section className="section-padding bg-white dark:bg-zinc-950">
-      <div className="container-max">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-          <div>
-            <span className="badge-text italic">Elite Selections</span>
-            <h2 className="section-title italic tracking-tighter">Featured Courses</h2>
-          </div>
-          <Link href="/courses" className="hidden md:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-teal-600 transition-colors italic">
-            Synchronize with Registry <ArrowRight size={16} />
+    <section className="py-24 bg-white dark:bg-slate-950 px-6 relative overflow-hidden">
+      {/* Decorative */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-sky-50 dark:bg-sky-950/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 opacity-50" />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 font-bold text-[11px] uppercase tracking-widest mb-4">
+              Featured
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+              Featured Courses
+            </h2>
+          </motion.div>
+          <Link
+            href="/courses"
+            className="hidden md:inline-flex items-center gap-2 text-sm font-bold text-teal-600 dark:text-teal-400 hover:gap-3 transition-all duration-300"
+          >
+            View All Courses <ArrowRight size={16} />
           </Link>
         </div>
 
+        {/* Course Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {courses.map((course, idx) => (
             <motion.div
@@ -57,10 +77,10 @@ const FeaturedCourses = () => {
             >
               <Link
                 href={`/courses/${course.slug}`}
-                className="group flex flex-col bg-white dark:bg-zinc-900/50 rounded-2xl border border-slate-200 dark:border-zinc-800 overflow-hidden hover:shadow-lg transition-all h-full"
+                className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden hover:shadow-lg hover:shadow-teal-500/5 transition-all h-full hover:-translate-y-1 duration-300"
               >
                 {/* Thumbnail */}
-                <div className="relative h-44 bg-slate-100 dark:bg-zinc-800/50 overflow-hidden">
+                <div className="relative h-44 bg-slate-100 dark:bg-slate-800 overflow-hidden">
                   <Image
                     src={course.thumbnail || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&q=80"}
                     alt={course.title}
@@ -68,26 +88,28 @@ const FeaturedCourses = () => {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   {course.category_name && (
-                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-teal-600 text-white text-xs font-semibold rounded-lg">
+                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-teal-600 text-white text-xs font-bold rounded-lg">
                       {course.category_name}
                     </span>
                   )}
-                  <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-bold ${
-                    course.price === 0 ? "bg-emerald-100 text-emerald-700" : "bg-white text-slate-800"
-                  }`}>
+                  <span
+                    className={`absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-bold ${
+                      course.price === 0 ? "bg-teal-100 text-teal-700" : "bg-white text-slate-800"
+                    }`}
+                  >
                     {course.price === 0 ? "Free" : `${course.price} Birr`}
                   </span>
                 </div>
 
                 {/* Content */}
-                <div className="p-4 flex flex-col flex-1">
-                  <h3 className="font-semibold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug transition-colors">
+                <div className="p-5 flex flex-col flex-1">
+                  <h3 className="font-bold text-slate-800 dark:text-white text-sm line-clamp-2 mb-2 leading-snug">
                     {course.title}
                   </h3>
                   {course.instructor_name && (
                     <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{course.instructor_name}</p>
                   )}
-                  <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-zinc-800/50">
+                  <div className="flex items-center gap-3 mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/50">
                     <div className="flex items-center gap-1 text-amber-500">
                       <Star size={13} fill="currentColor" />
                       <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">4.8</span>
@@ -107,8 +129,12 @@ const FeaturedCourses = () => {
           ))}
         </div>
 
+        {/* Mobile CTA */}
         <div className="mt-10 text-center md:hidden">
-          <Link href="/courses" className="inline-flex items-center gap-2 px-6 py-3 gradient-primary text-white rounded-xl font-semibold text-sm">
+          <Link
+            href="/courses"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-2xl font-bold text-sm shadow-lg shadow-teal-600/20"
+          >
             View All Courses <ArrowRight size={16} />
           </Link>
         </div>

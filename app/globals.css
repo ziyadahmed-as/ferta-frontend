@@ -42,7 +42,7 @@ body {
 }
 
 .badge-text {
-  @apply text-[10px] font-black uppercase tracking-[0.3em] text-teal-600 dark:text-teal-400 mb-4 inline-block;
+  @apply text-[11px] font-bold uppercase tracking-widest text-teal-600 dark:text-teal-400 mb-4 inline-block;
 }
 
 /* Layout Standards */
@@ -158,6 +158,11 @@ body {
   background: #94a3b8;
 }
 
+/* Smooth Section Transitions */
+section {
+  position: relative;
+}
+
 /* Animation */
 @keyframes fadeIn {
   from {
@@ -183,6 +188,19 @@ body {
   100% {
     background-position: 1000px 0;
   }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
 /* Global Input Styles */

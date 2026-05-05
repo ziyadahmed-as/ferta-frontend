@@ -2,93 +2,162 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
-
-const HERO_BG =
-  "https://images.pexels.com/photos/8197543/pexels-photo-8197543.jpeg?auto=compress&cs=tinysrgb&w=1600";
+import { ArrowRight, Play, CheckCircle2 } from "lucide-react";
 
 const Hero = () => {
-
   return (
-    <>
-      {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden bg-slate-50 dark:bg-slate-950">
-        {/* Subtle Background Elements */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[radial-gradient(#cbd5e1_1px,transparent_1px)] dark:bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-50" />
-          {/* Top Gradient */}
-          <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-slate-100 dark:from-slate-900 to-transparent" />
-          {/* Bottom Gradient */}
-          <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-slate-50 dark:from-slate-950 to-transparent" />
-        </div>
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-slate-950">
+      {/* Decorative Background Elements */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        {/* Large Teal Circle - Top Right */}
+        <div className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-teal-50 to-sky-50 dark:from-teal-950/30 dark:to-sky-950/30 opacity-80" />
+        {/* Small Circle - Bottom Left */}
+        <div className="absolute -bottom-20 -left-20 w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-teal-50 to-transparent dark:from-teal-950/20 dark:to-transparent opacity-60" />
+        {/* Floating Dots Pattern */}
+        <div className="absolute inset-0 bg-[radial-gradient(#0d948810_1.5px,transparent_1.5px)] dark:bg-[radial-gradient(#0d948808_1.5px,transparent_1.5px)] [background-size:32px_32px] opacity-60" />
+        {/* Gradient Accent Bar */}
+        <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-teal-500 via-sky-500 to-teal-600 opacity-30" />
+      </div>
 
-        {/* Navbar spacer */}
-        <div className="h-[72px]" />
+      {/* Navbar spacer */}
+      <div className="h-[72px] absolute top-0 w-full" />
 
-        {/* Hero Content */}
-        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-20">
+      {/* Hero Content - Split Screen Layout */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-8 pt-28 pb-16 lg:py-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[calc(100vh-72px)]">
+          
+          {/* Left Column - Text Content */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="max-w-4xl mx-auto"
+            className="flex flex-col justify-center"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-50 dark:bg-teal-900/30 border border-teal-100 dark:border-teal-800/50 mb-8">
-              <span className="w-2 h-2 rounded-full bg-teal-600 animate-pulse" />
-              <span className="text-xs font-semibold text-teal-700 dark:text-teal-400 tracking-wide uppercase">
-                World-Class Education
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-teal-50 dark:bg-teal-900/20 border border-teal-100 dark:border-teal-800/40 mb-8 w-fit">
+              <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+              <span className="text-xs font-bold text-teal-700 dark:text-teal-400 tracking-wide uppercase">
+                #1 Learning Platform
               </span>
             </div>
-            
-            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black text-slate-900 dark:text-white mb-8 leading-[0.95] tracking-tighter italic">
-              Architecting Mastery Through Artificial Intelligence
+
+            {/* Headline */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.05] tracking-tight mb-6">
+              Learn Without
+              <span className="block mt-1">
+                <span className="bg-gradient-to-r from-teal-600 to-sky-600 bg-clip-text text-transparent">Limits</span>
+              </span>
             </h1>
-            
-            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-3xl mx-auto font-medium">
-              Start your journey today and experience the future of education with AI-driven learning. Prepare smarter, learn faster, and achieve better results through interactive live classes and expert-led recorded courses.
+
+            {/* Subheadline */}
+            <p className="text-lg md:text-xl text-slate-500 dark:text-slate-400 leading-relaxed mb-8 max-w-lg font-medium">
+              Access world-class courses, live interactive sessions, and AI-powered learning tools designed for your success in entrance exams and beyond.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+            {/* Feature Checks */}
+            <div className="flex flex-col sm:flex-row gap-4 mb-10">
+              {["AI-Powered Study Plans", "Expert Instructors", "Live & Recorded"].map((feature) => (
+                <div key={feature} className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 font-medium">
+                  <CheckCircle2 size={18} className="text-teal-500 flex-shrink-0" />
+                  {feature}
+                </div>
+              ))}
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/courses"
-                className="w-full sm:w-auto px-8 py-4 bg-teal-600 text-white rounded-xl font-bold text-sm hover:bg-teal-700 transition-all shadow-xl shadow-teal-600/20 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                id="hero-cta-explore"
+                className="group px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-2xl font-bold text-sm transition-all shadow-xl shadow-teal-600/25 hover:shadow-teal-600/40 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2.5"
               >
-                Explore Programs
+                Explore Courses
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/register"
-                className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold text-sm hover:border-teal-600 dark:hover:border-teal-500 transition-all hover:scale-105 active:scale-95"
+                id="hero-cta-register"
+                className="px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl font-bold text-sm hover:border-teal-500 dark:hover:border-teal-500 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2.5"
               >
-                Join as Faculty
+                <Play size={16} className="text-teal-600" />
+                Watch Demo
               </Link>
             </div>
           </motion.div>
-        </div>
 
-        {/* Trusted By Banner */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="relative z-10 w-full max-w-5xl mx-auto px-6 pb-12 pt-8 border-t border-slate-200 dark:border-slate-800/50"
-        >
-          <p className="text-center text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">
-            Trusted by professionals from leading institutions
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-             {/* Abstract institutional placeholder logos */}
-             {['University Alliance', 'Tech Institute', 'Global Business School', 'Innovation Lab'].map((name, i) => (
-                <div key={i} className="text-lg font-black text-slate-700 dark:text-slate-300 tracking-tighter flex items-center gap-2">
-                   <div className="w-6 h-6 rounded bg-teal-600/20 flex items-center justify-center">
-                     <div className="w-3 h-3 rounded-sm bg-teal-600" />
-                   </div>
-                   {name}
+          {/* Right Column - Image & Decorative Elements */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            className="relative flex items-center justify-center lg:justify-end"
+          >
+            {/* Main Image Container */}
+            <div className="relative w-full max-w-[540px]">
+              {/* Decorative circle behind image */}
+              <div className="absolute -top-6 -right-6 w-full h-full rounded-[2rem] bg-gradient-to-br from-teal-100 to-sky-100 dark:from-teal-900/20 dark:to-sky-900/20 rotate-3" />
+              
+              {/* Image */}
+              <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-900/10 dark:shadow-black/30 border border-white/50 dark:border-slate-800">
+                <Image
+                  src="/hero-students.png"
+                  alt="Students learning on Fatra Academy platform"
+                  width={540}
+                  height={420}
+                  className="w-full h-auto object-cover"
+                  priority
+                />
+              </div>
+
+              {/* Floating Stats Card - Top Left */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="absolute -top-4 -left-4 md:-left-8 bg-white dark:bg-slate-900 rounded-2xl px-5 py-4 shadow-xl shadow-slate-900/10 dark:shadow-black/30 border border-slate-100 dark:border-slate-800"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">🎓</span>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Active Students</p>
+                    <p className="text-lg font-extrabold text-slate-900 dark:text-white">2,500+</p>
+                  </div>
                 </div>
-             ))}
-          </div>
-        </motion.div>
-      </section>
-    </>
+              </motion.div>
+
+              {/* Floating Rating Card - Bottom Right */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1, duration: 0.6 }}
+                className="absolute -bottom-4 -right-4 md:-right-8 bg-white dark:bg-slate-900 rounded-2xl px-5 py-4 shadow-xl shadow-slate-900/10 dark:shadow-black/30 border border-slate-100 dark:border-slate-800"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">⭐</span>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Course Rating</p>
+                    <p className="text-lg font-extrabold text-slate-900 dark:text-white">4.9/5.0</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Bottom Wave Divider */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
+          <path d="M0 40L48 36C96 32 192 24 288 28C384 32 480 48 576 52C672 56 768 48 864 40C960 32 1056 24 1152 28C1248 32 1344 48 1392 56L1440 64V80H1392C1344 80 1248 80 1152 80C1056 80 960 80 864 80C768 80 672 80 576 80C480 80 384 80 288 80C192 80 96 80 48 80H0V40Z" className="fill-slate-50 dark:fill-slate-900/50" />
+        </svg>
+      </div>
+    </section>
   );
 };
 
