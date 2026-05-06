@@ -62,7 +62,11 @@ const AdminDashboard = () => {
   const [allCourses, setAllCourses] = useState<any[]>([]);
   const [courseSearch, setCourseSearch] = useState("");
   const [courseTab, setCourseTab] = useState("all"); // "all" or "pending"
+  const [coursePage, setCoursePage] = useState(1);
+  const courseItemsPerPage = 8;
   const [showCourseModal, setShowCourseModal] = useState(false);
+  const [showInspectModal, setShowInspectModal] = useState(false);
+  const [inspectCourse, setInspectCourse] = useState<any>(null);
   const [editCourseData, setEditCourseData] = useState<any>(null);
   const [newCourse, setNewCourse] = useState({
     title: "",
@@ -257,11 +261,11 @@ const AdminDashboard = () => {
   // Reset to first page whenever search or filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [userSearch, roleFilter]);
+  }, [userSearch, roleFilter, allUsers.length]);
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [userSearch, roleFilter, allUsers.length]);
+    setCoursePage(1);
+  }, [courseSearch, courseTab, allCourses.length]);
 
   const filteredUsers = allUsers.filter(u => 
     (u.username || "").toLowerCase().includes(userSearch.toLowerCase()) && 
@@ -684,9 +688,9 @@ const AdminDashboard = () => {
                   className="overflow-hidden space-y-1 mt-2"
                 >
                   <button
-                    onClick={() => setActiveModule("overview")}
+                    onClick={() => setActiveModule("course_analytics")}
                     className={`w-full flex items-center gap-3 px-8 py-3 rounded-xl text-sm font-medium transition-all ${
-                      activeModule === "overview"
+                      activeModule === "course_analytics"
                         ? "text-teal-500 bg-teal-500/5" 
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/30"
                     }`}
@@ -1184,6 +1188,103 @@ const AdminDashboard = () => {
                 </div>
               )}
 
+              {activeModule === "course_analytics" && (
+                <div className="space-y-8">
+                  <div className="welcome-banner p-10 rounded-[40px] relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl -mr-32 -mt-32" />
+                    <div className="relative z-10">
+                      <h2 className="text-3xl font-black text-slate-800 dark:text-white mb-2 tracking-tighter flex items-center gap-3">
+                        <BarChart3 className="text-teal-600" size={32} />
+                        Course Insights Engine
+                      </h2>
+                      <p className="text-slate-500 dark:text-slate-400 font-medium">Deep analytics and performance metrics for knowledge artifacts</p>
+                    </div>
+                  </div>
+
+                  {/* Course Specific Stats */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Enrollments</p>
+                      <p className="text-3xl font-black text-slate-800 dark:text-white">{stats?.courses?.total_enrollments || "0"}</p>
+                      <div className="mt-4 flex items-center gap-2 text-xs font-bold text-teal-600">
+                        <TrendingUp size={14} />
+                        <span>+12% vs last month</span>
+                      </div>
+                    </div>
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Avg. Course Rating</p>
+                      <p className="text-3xl font-black text-slate-800 dark:text-white">{stats?.courses?.avg_rating || "4.8"}</p>
+                      <div className="mt-4 flex items-center gap-1 text-amber-500">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Award key={i} size={12} fill={i < 4 ? "currentColor" : "none"} />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Revenue Yield</p>
+                      <p className="text-3xl font-black text-slate-800 dark:text-white">{stats?.revenue?.total ? `${Math.round(stats.revenue.total).toLocaleString()} ETB` : "0 ETB"}</p>
+                      <div className="mt-4 text-xs font-bold text-slate-400">Total processed volume</div>
+                    </div>
+                    <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Completion Rate</p>
+                      <p className="text-3xl font-black text-slate-800 dark:text-white">68%</p>
+                      <div className="mt-4 w-full bg-slate-100 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                        <div className="bg-teal-500 h-full w-[68%]" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Category Distribution - Moved and Enhanced */}
+                    <div className="bg-white dark:bg-slate-800 rounded-[40px] border border-slate-200 dark:border-slate-700 p-8 shadow-sm">
+                      <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Taxonomy Density</h3>
+                        <span className="px-3 py-1 bg-teal-50 dark:bg-teal-900/30 text-teal-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Artifact Distribution</span>
+                      </div>
+                      <div className="h-80">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <BarChart data={stats?.category_distribution || []} layout="vertical">
+                            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
+                            <XAxis type="number" hide />
+                            <YAxis dataKey="category" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: "#64748b" }} width={100} />
+                            <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: "20px", border: "none", boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)" }} />
+                            <Bar dataKey="courses" radius={[0, 10, 10, 0]} barSize={20}>
+                              {(stats?.category_distribution || []).map((entry: any, index: number) => (
+                                <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#0d9488' : '#0ea5e9'} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* Top Performing Nodes */}
+                    <div className="bg-white dark:bg-slate-800 rounded-[40px] border border-slate-200 dark:border-slate-700 p-8 shadow-sm">
+                      <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">High-Yield Artifacts</h3>
+                        <button onClick={() => setActiveModule("courses")} className="text-[10px] font-black text-teal-600 uppercase tracking-[2px] hover:underline">Full Registry →</button>
+                      </div>
+                      <div className="space-y-6">
+                        {(stats?.top_courses || []).map((c: any, idx: number) => (
+                          <div key={c.id} className="flex items-center gap-4 group">
+                            <div className="w-10 h-10 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center text-sm font-black text-slate-400 group-hover:bg-teal-500 group-hover:text-white transition-all">
+                              {idx + 1}
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-sm font-black text-slate-700 dark:text-slate-200 line-clamp-1">{c.title}</p>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{c.enrollments} Scholars</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm font-black text-teal-600">{(c.revenue || 0).toLocaleString()} ETB</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {activeModule === "users" && (
                 <div className="space-y-6">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -1514,8 +1615,8 @@ const AdminDashboard = () => {
                         <div className="flex flex-col sm:flex-row items-center gap-6">
                            <div className="flex items-center gap-4">
                              <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-2xl px-8 py-5 rounded-[32px] border border-white/60 shadow-2xl shadow-teal-500/10 text-center">
-                                <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Artifact Content</p>
-                                <p className="text-5xl font-black text-teal-600 tracking-tighter">{allCourses.length}</p>
+                                <p className="text-[10px] uppercase font-black text-slate-400 tracking-[3px] mb-1">Authenticated</p>
+                                <p className="text-5xl font-black text-teal-600 tracking-tighter">{allCourses.filter(c => c.is_approved).length}</p>
                              </div>
                              <div className="bg-amber-500 px-8 py-5 rounded-[32px] shadow-2xl shadow-amber-500/30 text-white text-center">
                                 <p className="text-[10px] uppercase font-black text-amber-100 tracking-[3px] mb-1">Queue Size</p>
@@ -1582,69 +1683,124 @@ const AdminDashboard = () => {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                            {allCourses
-                              .filter(c => courseSearch === "" || c.title.toLowerCase().includes(courseSearch.toLowerCase()))
-                              .map((c: any) => (
-                                <tr key={c.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-900/50 group transition-all">
-                                  <td className="px-10 py-8">
-                                    <div className="flex items-center gap-6">
-                                      <div className="w-20 h-16 rounded-[22px] overflow-hidden bg-slate-100 border-4 border-white dark:border-slate-800 shadow-lg group-hover:scale-110 transition-transform">
-                                        <img src={c.thumbnail || "/api/placeholder/120/80"} alt={c.title} className="w-full h-full object-cover" />
-                                      </div>
-                                      <div>
-                                        <span className="text-[9px] font-black text-teal-600 bg-teal-50 dark:bg-teal-900/30 px-2 py-0.5 rounded-md uppercase tracking-widest mb-1.5 inline-block">{c.category_name || "General"}</span>
-                                        <p className="text-base font-black text-slate-800 dark:text-white tracking-tight leading-tight">{c.title}</p>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="px-10 py-8">
-                                    <div className="flex items-center gap-3">
-                                      <div className="w-10 h-10 rounded-2xl gradient-primary flex items-center justify-center text-white text-[10px] font-black uppercase shadow-xl">
-                                         {c.instructor_username?.charAt(0)}
-                                      </div>
-                                      <div className="flex flex-col">
-                                        <span className="text-sm font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">@{c.instructor_username}</span>
-                                        <span className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Validated Faculty</span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="px-10 py-8">
-                                    <div className="flex justify-center">
-                                      {c.is_approved ? (
-                                        <span className="flex items-center gap-2 px-4 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black uppercase tracking-[2px] rounded-[14px] border border-emerald-100/50 dark:border-emerald-800/30">
-                                          <CheckCircle2 size={14} /> Authenticated
-                                        </span>
-                                      ) : c.is_submitted ? (
-                                        <span className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 text-[10px] font-black uppercase tracking-[2px] rounded-[14px] border border-amber-100/50 dark:border-amber-800/30">
-                                          <ShieldAlert size={14} /> Validation Req.
-                                        </span>
-                                      ) : (
-                                        <span className="flex items-center gap-2 px-4 py-1.5 bg-slate-100 dark:bg-slate-700/50 text-slate-400 text-[10px] font-black uppercase tracking-[2px] rounded-[14px]">
-                                          Draft Artifact
-                                        </span>
-                                      )}
-                                    </div>
-                                  </td>
-                                  <td className="px-10 py-8 text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                      <button 
-                                        onClick={() => { setEditCourseData(c); setShowCourseModal(true); }}
-                                        className="p-4 bg-slate-50 dark:bg-slate-900/50 text-slate-400 hover:text-teal-600 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
-                                        title="Modify Artifact"
-                                      >
-                                        <Edit size={18} />
-                                      </button>
-                                      <button 
-                                        onClick={() => handleDeleteCourse(c.id)}
-                                        className="p-4 bg-slate-50 dark:bg-slate-900/50 text-slate-400 hover:text-rose-500 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
-                                        title="De-provision Artifact"
-                                      >
-                                        <Trash2 size={18} />
-                                      </button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
+                             {(() => {
+                               const filtered = allCourses.filter(c => courseSearch === "" || c.title.toLowerCase().includes(courseSearch.toLowerCase()));
+                               const totalCoursePages = Math.ceil(filtered.length / courseItemsPerPage);
+                               const courseStartIndex = (coursePage - 1) * courseItemsPerPage;
+                               const currentCourses = filtered.slice(courseStartIndex, courseStartIndex + courseItemsPerPage);
+                               
+                               return (
+                                 <>
+                                   {currentCourses.map((c: any) => (
+                                     <tr key={c.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-900/50 group transition-all">
+                                       <td className="px-10 py-8">
+                                         <div className="flex items-center gap-6">
+                                           <div className="w-20 h-16 rounded-[22px] overflow-hidden bg-slate-100 border-4 border-white dark:border-slate-800 shadow-lg group-hover:scale-110 transition-transform">
+                                             <img src={c.thumbnail || "/api/placeholder/120/80"} alt={c.title} className="w-full h-full object-cover" />
+                                           </div>
+                                           <div>
+                                             <span className="text-[9px] font-black text-teal-600 bg-teal-50 dark:bg-teal-900/30 px-2 py-0.5 rounded-md uppercase tracking-widest mb-1.5 inline-block">{c.category_name || "General"}</span>
+                                             <p className="text-base font-black text-slate-800 dark:text-white tracking-tight leading-tight">{c.title}</p>
+                                           </div>
+                                         </div>
+                                       </td>
+                                       <td className="px-10 py-8">
+                                         <div className="flex items-center gap-3">
+                                           <div className="w-10 h-10 rounded-2xl gradient-primary flex items-center justify-center text-white text-[10px] font-black uppercase shadow-xl">
+                                              {c.instructor_username?.charAt(0)}
+                                           </div>
+                                           <div className="flex flex-col">
+                                             <span className="text-sm font-black text-slate-700 dark:text-slate-200 uppercase tracking-tight">@{c.instructor_username}</span>
+                                             <span className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Validated Faculty</span>
+                                           </div>
+                                         </div>
+                                       </td>
+                                       <td className="px-10 py-8">
+                                         <div className="flex justify-center">
+                                           {c.is_approved ? (
+                                             <span className="flex items-center gap-2 px-4 py-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 text-[10px] font-black uppercase tracking-[2px] rounded-[14px] border border-emerald-100/50 dark:border-emerald-800/30">
+                                               <CheckCircle2 size={14} /> Authenticated
+                                             </span>
+                                           ) : c.is_submitted ? (
+                                             <span className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 text-[10px] font-black uppercase tracking-[2px] rounded-[14px] border border-amber-100/50 dark:border-amber-800/30">
+                                               <ShieldAlert size={14} /> Validation Req.
+                                             </span>
+                                           ) : (
+                                             <span className="flex items-center gap-2 px-4 py-1.5 bg-slate-100 dark:bg-slate-700/50 text-slate-400 text-[10px] font-black uppercase tracking-[2px] rounded-[14px]">
+                                               Draft Artifact
+                                             </span>
+                                           )}
+                                         </div>
+                                       </td>
+                                       <td className="px-10 py-8 text-right">
+                                         <div className="flex items-center justify-end gap-2">
+                                           <button 
+                                             onClick={() => { setInspectCourse(c); setShowInspectModal(true); }}
+                                             className="p-4 bg-white dark:bg-slate-900 text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-900/30 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
+                                             title="Inspect Artifact"
+                                           >
+                                             <Eye size={18} />
+                                           </button>
+                                           <button 
+                                             onClick={() => { setEditCourseData(c); setShowCourseModal(true); }}
+                                             className="p-4 bg-white dark:bg-slate-900 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
+                                             title="Modify Artifact"
+                                           >
+                                             <Edit size={18} />
+                                           </button>
+                                           <button 
+                                             onClick={() => handleDeleteCourse(c.id)}
+                                             className="p-4 bg-white dark:bg-slate-900 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
+                                             title="De-provision Artifact"
+                                           >
+                                             <Trash2 size={18} />
+                                           </button>
+                                         </div>
+                                       </td>
+                                     </tr>
+                                   ))}
+                                   {/* Pagination Controls for Courses */}
+                                   {totalCoursePages > 1 && (
+                                     <tr>
+                                       <td colSpan={4} className="px-10 py-6 bg-slate-50/30 dark:bg-slate-900/30 border-t border-slate-100 dark:border-slate-800">
+                                         <div className="flex items-center justify-between">
+                                           <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                                             Artifacts <span className="text-slate-800 dark:text-white">{courseStartIndex + 1}-{Math.min(courseStartIndex + courseItemsPerPage, filtered.length)}</span> / {filtered.length}
+                                           </p>
+                                           <div className="flex items-center gap-2">
+                                             <button 
+                                               onClick={() => setCoursePage(prev => Math.max(1, prev - 1))}
+                                               disabled={coursePage === 1}
+                                               className="p-2 text-slate-400 hover:text-teal-600 disabled:opacity-20 transition-colors"
+                                             >
+                                               <ChevronLeft size={20} />
+                                             </button>
+                                             <div className="flex gap-1">
+                                               {Array.from({ length: totalCoursePages }).map((_, i) => (
+                                                 <button
+                                                   key={i}
+                                                   onClick={() => setCoursePage(i + 1)}
+                                                   className={`w-8 h-8 rounded-xl text-[10px] font-black transition-all ${coursePage === i + 1 ? "bg-teal-600 text-white shadow-lg" : "text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"}`}
+                                                 >
+                                                   {i + 1}
+                                                 </button>
+                                               ))}
+                                             </div>
+                                             <button 
+                                               onClick={() => setCoursePage(prev => Math.min(totalCoursePages, prev + 1))}
+                                               disabled={coursePage === totalCoursePages}
+                                               className="p-2 text-slate-400 hover:text-teal-600 disabled:opacity-20 transition-colors"
+                                             >
+                                               <ChevronRight size={20} />
+                                             </button>
+                                           </div>
+                                         </div>
+                                       </td>
+                                     </tr>
+                                   )}
+                                 </>
+                               );
+                             })()}
                           </tbody>
                         </table>
                       </div>
