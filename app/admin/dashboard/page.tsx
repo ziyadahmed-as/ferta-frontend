@@ -3462,6 +3462,153 @@ const AdminDashboard = () => {
           </div>
         )}
       </AnimatePresence>
+      
+      <AnimatePresence>
+        {showInspectModal && inspectCourse && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowInspectModal(false)}
+              className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 30 }}
+              className="relative w-full max-w-5xl bg-white dark:bg-slate-900 rounded-[48px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-800"
+            >
+              <div className="flex flex-col lg:flex-row h-[85vh]">
+                {/* Left: Artifact Visual & Identity */}
+                <div className="lg:w-1/3 bg-slate-50 dark:bg-slate-900/50 border-r border-slate-100 dark:border-slate-800 flex flex-col">
+                  <div className="relative aspect-video lg:aspect-square overflow-hidden">
+                    <img src={inspectCourse.thumbnail || "/api/placeholder/400/400"} alt="Artifact Preview" className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60" />
+                    <div className="absolute bottom-6 left-6">
+                      <span className="px-3 py-1 bg-teal-500 text-white text-[10px] font-black uppercase tracking-widest rounded-lg mb-2 inline-block shadow-lg">ID: MOD-{inspectCourse.id}</span>
+                      <h3 className="text-2xl font-black text-white tracking-tighter leading-tight">{inspectCourse.title}</h3>
+                    </div>
+                  </div>
+                  <div className="p-8 space-y-8 flex-1 overflow-y-auto custom-scrollbar">
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Faculty Custodian</h4>
+                      <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                        <div className="w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center text-white text-sm font-black uppercase">
+                          {inspectCourse.instructor_username?.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-1">@{inspectCourse.instructor_username}</p>
+                          <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Validated Faculty</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Institutional Category</h4>
+                      <div className="flex items-center gap-3">
+                        <div className="p-3 bg-teal-50 dark:bg-teal-900/30 text-teal-600 rounded-2xl">
+                          <Tag size={20} />
+                        </div>
+                        <span className="text-lg font-black text-slate-700 dark:text-slate-200 tracking-tight">{inspectCourse.category_name || "Uncategorized"}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right: Deep Analytics & Content */}
+                <div className="flex-1 flex flex-col bg-white dark:bg-slate-900">
+                  <div className="p-8 border-b border-slate-50 dark:border-slate-800 flex items-center justify-between">
+                    <div>
+                      <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Artifact Deep-Inspection</h2>
+                      <p className="text-xs text-slate-500 font-medium">Internal registry audit & performance monitoring</p>
+                    </div>
+                    <button onClick={() => setShowInspectModal(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-rose-500 transition-all hover:rotate-90">
+                      <X size={20} />
+                    </button>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto p-10 custom-scrollbar space-y-10">
+                    {/* Performance Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700/50">
+                        <div className="flex items-center gap-3 text-cyan-600 mb-3">
+                          <Users size={16} />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Enrolled Scholars</span>
+                        </div>
+                        <p className="text-3xl font-black text-slate-800 dark:text-white">{inspectCourse.enrollment_count || 0}</p>
+                      </div>
+                      <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700/50">
+                        <div className="flex items-center gap-3 text-emerald-600 mb-3">
+                          <DollarSign size={16} />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Total Yield (ETB)</span>
+                        </div>
+                        <p className="text-3xl font-black text-slate-800 dark:text-white">{(inspectCourse.price * (inspectCourse.enrollment_count || 0)).toLocaleString()}</p>
+                      </div>
+                      <div className="p-6 bg-slate-50 dark:bg-slate-800/50 rounded-3xl border border-slate-100 dark:border-slate-700/50">
+                        <div className="flex items-center gap-3 text-amber-500 mb-3">
+                          <Award size={16} />
+                          <span className="text-[10px] font-black uppercase tracking-widest">Quality Rating</span>
+                        </div>
+                        <p className="text-3xl font-black text-slate-800 dark:text-white">4.9</p>
+                      </div>
+                    </div>
+
+                    {/* Descriptive Summary */}
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2px] pb-2 border-b border-slate-100 dark:border-slate-800">Intellectual Abstract</h4>
+                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                        {inspectCourse.description || "No intellectual abstract provided for this knowledge node."}
+                      </p>
+                    </div>
+
+                    {/* Content Registry Preview */}
+                    <div className="space-y-4">
+                       <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+                         <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[2px]">Knowledge Components (Lessons)</h4>
+                         <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-500 rounded-md">8 Artifacts</span>
+                       </div>
+                       <div className="grid grid-cols-1 gap-3">
+                          {[1,2,3].map(i => (
+                            <div key={i} className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 flex items-center justify-between group hover:border-teal-500 transition-all">
+                              <div className="flex items-center gap-4">
+                                <div className="w-8 h-8 bg-slate-50 dark:bg-slate-900 rounded-lg flex items-center justify-center text-xs font-black text-slate-400">0{i}</div>
+                                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">Systematic Module {i}: Advanced Orchestration</span>
+                              </div>
+                              <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-all">
+                                <span className="text-[10px] font-black text-slate-400">12:45 MIN</span>
+                                <Eye size={14} className="text-teal-500" />
+                              </div>
+                            </div>
+                          ))}
+                          <div className="text-center py-4">
+                             <button className="text-[10px] font-black text-teal-600 uppercase tracking-widest hover:underline">View Full Registry Registry →</button>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+
+                  <div className="p-10 border-t border-slate-50 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 flex gap-4">
+                    <button 
+                      onClick={() => { setEditCourseData(inspectCourse); setShowCourseModal(true); setShowInspectModal(false); }}
+                      className="flex-1 py-5 gradient-primary text-white text-xs font-black uppercase tracking-[3px] rounded-[24px] shadow-2xl shadow-teal-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                    >
+                      <Edit size={18} /> Modify Registry Entry
+                    </button>
+                    {!inspectCourse.is_approved && inspectCourse.is_submitted && (
+                      <button 
+                        onClick={() => { handleCourseAction(inspectCourse.id, true); setShowInspectModal(false); }}
+                        className="px-10 py-5 bg-emerald-600 text-white text-xs font-black uppercase tracking-[3px] rounded-[24px] shadow-2xl shadow-emerald-500/30 hover:scale-[1.02] transition-all flex items-center justify-center gap-3"
+                      >
+                        <CheckCircle2 size={18} /> Authenticate
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Add Category Modal */}
       <AnimatePresence>
