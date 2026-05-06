@@ -1247,7 +1247,7 @@ const AdminDashboard = () => {
                             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
                             <XAxis type="number" hide />
                             <YAxis dataKey="category" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 12, fontWeight: 600, fill: "#64748b" }} width={100} />
-                            <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: "20px", border: "none", boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.15)" }} />
+                            <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ borderRadius: "20px", border: "none", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)" }} />
                             <Bar dataKey="courses" radius={[0, 10, 10, 0]} barSize={20}>
                               {(stats?.category_distribution || []).map((entry: any, index: number) => (
                                 <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#0d9488' : '#0ea5e9'} />
@@ -1684,7 +1684,7 @@ const AdminDashboard = () => {
                           </thead>
                           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                              {(() => {
-                               const filtered = allCourses.filter(c => courseSearch === "" || c.title.toLowerCase().includes(courseSearch.toLowerCase()));
+                               const filtered = allCourses.filter(c => courseSearch === "" || (c.title || "").toLowerCase().includes(courseSearch.toLowerCase()));
                                const totalCoursePages = Math.ceil(filtered.length / courseItemsPerPage);
                                const courseStartIndex = (coursePage - 1) * courseItemsPerPage;
                                const currentCourses = filtered.slice(courseStartIndex, courseStartIndex + courseItemsPerPage);
