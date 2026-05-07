@@ -3208,7 +3208,9 @@ const AdminDashboard = () => {
             </motion.div>
           </div>
         )}
+      </AnimatePresence>
 
+      <AnimatePresence>
         {showDetailModal && userDetail && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div 
@@ -3462,7 +3464,7 @@ const AdminDashboard = () => {
           </div>
         )}
       </AnimatePresence>
-      
+
       <AnimatePresence>
         {showInspectModal && inspectCourse && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
