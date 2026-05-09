@@ -17,6 +17,22 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, Legend, BarChart, Bar, Cell
 } from "recharts";
+import { AdminSidebar } from "./components/AdminSidebar";
+import { AdminHeader } from "./components/AdminHeader";
+import { OverviewModule } from "./components/OverviewModule";
+import { UserManagementModule } from "./components/UserManagementModule";
+import { CourseAnalyticsModule } from "./components/CourseAnalyticsModule";
+import { CoursesModule } from "./components/CoursesModule";
+import { CategoriesModule } from "./components/CategoriesModule";
+import { LiveSessionsModule } from "./components/LiveSessionsModule";
+import { RevenueModule } from "./components/RevenueModule";
+import { WithdrawalsModule } from "./components/WithdrawalsModule";
+import { KnowledgeBaseModule } from "./components/KnowledgeBaseModule";
+import { UserModals } from "./components/UserModals";
+import { CourseModals } from "./components/CourseModals";
+import { StreamModals } from "./components/StreamModals";
+import { CategoryModals } from "./components/CategoryModals";
+import { KnowledgeModals } from "./components/KnowledgeModals";
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
