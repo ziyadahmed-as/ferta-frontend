@@ -9,7 +9,7 @@ interface AiTutorSidebarProps {
   setAiSidebarOpen: (open: boolean) => void;
   chatHistory: { role: 'user' | 'ai', content: string }[];
   isAiTyping: boolean;
-  chatEndRef: RefObject<HTMLDivElement>;
+  chatEndRef: RefObject<HTMLDivElement | null>;
   chatQuery: string;
   setChatQuery: (query: string) => void;
   handleAskAI: (e: React.FormEvent) => void;

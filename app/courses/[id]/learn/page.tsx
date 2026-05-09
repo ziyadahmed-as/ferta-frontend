@@ -2,17 +2,13 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import Navbar from "@/components/Navbar";
 import api from "@/lib/api";
-import {
-  PlayCircle, CheckCircle2, ChevronRight, ChevronLeft,
-  Lock, Loader2, BookOpen, Clock, Award,
-  MessageSquare, FileText, Globe, SkipForward, SkipBack,
-  Menu, X, Check, Video, Download, ExternalLink, Sparkles, Info, Layers,
-  Bot, Send, MessageCircle
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { X, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { LearnHeader } from "./components/LearnHeader";
+import { LearnSidebar } from "./components/LearnSidebar";
+import { LessonContent } from "./components/LessonContent";
+import { AiTutorSidebar } from "./components/AiTutorSidebar";
 
 const LearnPage = () => {
   const { id } = useParams();
@@ -88,6 +84,24 @@ const LearnPage = () => {
     router.replace(`/courses/${id}/learn?lessonId=${lesson.id}`);
   };
 
+  const goToNextLesson = () => {
+    if (!course || !currentLesson) return;
+    const allLessons = course.chapters.flatMap((c: any) => c.lessons);
+    const currentIndex = allLessons.findIndex((l: any) => l.id === currentLesson?.id);
+    if (currentIndex < allLessons.length - 1) {
+      handleLessonSelect(allLessons[currentIndex + 1]);
+    }
+  };
+
+  const goToPrevLesson = () => {
+    if (!course || !currentLesson) return;
+    const allLessons = course.chapters.flatMap((c: any) => c.lessons);
+    const currentIndex = allLessons.findIndex((l: any) => l.id === currentLesson.id);
+    if (currentIndex > 0) {
+      handleLessonSelect(allLessons[currentIndex - 1]);
+    }
+  };
+
   const handleMarkComplete = async () => {
     if (!currentLesson || completing) return;
 
@@ -106,24 +120,6 @@ const LearnPage = () => {
       }
     } finally {
       setCompleting(false);
-    }
-  };
-
-  const goToNextLesson = () => {
-    if (!course || !currentLesson) return;
-    const allLessons = course.chapters.flatMap((c: any) => c.lessons);
-    const currentIndex = allLessons.findIndex((l: any) => l.id === currentLesson?.id);
-    if (currentIndex < allLessons.length - 1) {
-      handleLessonSelect(allLessons[currentIndex + 1]);
-    }
-  };
-
-  const goToPrevLesson = () => {
-    if (!course || !currentLesson) return;
-    const allLessons = course.chapters.flatMap((c: any) => c.lessons);
-    const currentIndex = allLessons.findIndex((l: any) => l.id === currentLesson.id);
-    if (currentIndex > 0) {
-      handleLessonSelect(allLessons[currentIndex - 1]);
     }
   };
 
@@ -174,417 +170,34 @@ const LearnPage = () => {
 
   return (
     <div className="flex flex-col h-screen bg-white dark:bg-slate-950 overflow-hidden font-sans">
-      {/* Header */}
-      <div className="h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 bg-white dark:bg-slate-900 shadow-sm z-30">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            title={sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-            className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors text-slate-500"
-          >
-            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white">
-              <BookOpen size={16} />
-            </div>
-            <h1 className="font-bold text-slate-800 dark:text-white truncate max-w-[200px] sm:max-w-md">
-              {course?.title}
-            </h1>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <div className="hidden sm:flex flex-col items-end mr-4">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Progress</span>
-            <div className="w-32 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full mt-1 overflow-hidden">
-              <div
-                className="h-full gradient-primary rounded-full transition-all duration-500"
-                title={`Progress: ${Math.round((completedLessons.length / (allLessons.length || 1)) * 100)}%`}
-                style={{ width: `${(completedLessons.length / (allLessons.length || 1)) * 100}%` } as React.CSSProperties}
-              />
-            </div>
-          </div>
-          <button
-            onClick={() => router.push(`/student/dashboard`)}
-            className="px-4 py-2 text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-cyan-600 transition-colors hidden sm:block"
-          >
-            Exit
-          </button>
-          <button
-            onClick={() => setAiSidebarOpen(!aiSidebarOpen)}
-            className={`p-2 rounded-xl border flex items-center gap-2 transition-all ${aiSidebarOpen
-              ? 'bg-cyan-50 dark:bg-cyan-900/30 border-cyan-200 dark:border-cyan-800 text-cyan-600 dark:text-cyan-400'
-              : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-cyan-300'
-              }`}
-            title="AI Learning Assistant"
-          >
-            <Bot size={18} />
-            <span className="text-xs font-bold hidden sm:block">AI Tutor</span>
-          </button>
-        </div>
-      </div>
+      <LearnHeader 
+        course={course} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} 
+        aiSidebarOpen={aiSidebarOpen} setAiSidebarOpen={setAiSidebarOpen} 
+        completedLessons={completedLessons} allLessons={allLessons} 
+      />
 
       <div className="flex flex-1 overflow-hidden relative">
-        {/* Sidebar */}
-        <motion.div
-          initial={false}
-          animate={{ width: sidebarOpen ? 350 : 0, opacity: sidebarOpen ? 1 : 0 }}
-          className={`flex-shrink-0 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 overflow-y-auto z-20 absolute lg:relative h-full transition-all`}
-        >
-          <div className="p-6">
-            <h2 className="text-sm font-black uppercase text-slate-400 tracking-[0.2em] mb-6">Course Curriculum</h2>
+        <LearnSidebar 
+          course={course} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} 
+          currentLesson={currentLesson} handleLessonSelect={handleLessonSelect} 
+          completedLessons={completedLessons} 
+        />
 
-            <div className="space-y-6">
-              {course?.chapters?.map((chapter: any, idx: number) => (
-                <div key={chapter.id}>
-                  <h3 className="text-xs font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4">
-                    <span className="w-6 h-6 rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[10px] text-cyan-600">
-                      {idx + 1}
-                    </span>
-                    {chapter.title}
-                  </h3>
-                  <div className="space-y-1 ml-3 border-l-2 border-slate-100 dark:border-slate-800 pl-4">
-                    {chapter.lessons.map((lesson: any) => {
-                      const isActive = currentLesson?.id === lesson.id;
-                      const isDone = completedLessons.includes(lesson.id);
+        <LessonContent 
+          course={course} currentLesson={currentLesson} allLessons={allLessons} 
+          currentIndex={currentIndex} isFirstLesson={isFirstLesson} isLastLesson={isLastLesson} 
+          goToPrevLesson={goToPrevLesson} goToNextLesson={goToNextLesson} 
+          completedLessons={completedLessons} handleMarkComplete={handleMarkComplete} 
+          completing={completing} 
+        />
 
-                      return (
-                        <button
-                          key={lesson.id}
-                          onClick={() => handleLessonSelect(lesson)}
-                          className={`w-full flex items-start gap-3 p-3 rounded-xl transition-all group text-left ${isActive
-                            ? "bg-white dark:bg-slate-800 shadow-md ring-1 ring-cyan-500/10"
-                            : "hover:bg-white dark:hover:bg-slate-800"
-                            }`}
-                        >
-                          <div className={`mt-0.5 shrink-0 ${isDone ? "text-green-500" : isActive ? "text-cyan-500" : "text-slate-300"}`}>
-                            {isDone ? <CheckCircle2 size={16} /> : <PlayCircle size={16} />}
-                          </div>
-                          <div className="flex-1">
-                            <p className={`text-xs font-bold leading-snug ${isActive ? "text-cyan-600 dark:text-cyan-400" : "text-slate-600 dark:text-slate-400"}`}>
-                              {lesson.title}
-                            </p>
-                            <div className="flex items-center gap-2 mt-1">
-                              {lesson.is_preview && <span className="text-[8px] font-black uppercase text-cyan-500 bg-cyan-50 px-1 rounded">Preview</span>}
-                              <span className="text-[9px] text-slate-400 font-medium">10 Min</span>
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Backdrop for mobile */}
-        {sidebarOpen && (
-          <div
-            className="lg:hidden absolute inset-0 bg-black/20 backdrop-blur-sm z-10"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto flex flex-col bg-white dark:bg-slate-950/20">
-          <div className="max-w-5xl mx-auto w-full p-6 sm:p-10 flex-1">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentLesson?.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-8"
-              >
-                {/* Lesson Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                  <div>
-                    <div className="flex items-center gap-2 mb-2 text-cyan-600 font-bold text-[10px] uppercase tracking-wider">
-                      <Sparkles size={14} /> Lesson Content
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                      {currentLesson?.title}
-                    </h2>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={goToPrevLesson}
-                      disabled={isFirstLesson}
-                      title="Previous Lesson"
-                      className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 hover:text-cyan-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-                    >
-                      <ChevronLeft size={20} />
-                    </button>
-                    <button
-                      onClick={goToNextLesson}
-                      disabled={isLastLesson}
-                      title="Next Lesson"
-                      className="p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-400 hover:text-cyan-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-                    >
-                      <ChevronRight size={20} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Main Media Player / Content */}
-                <div className="bg-slate-950 rounded-[2.5rem] overflow-hidden aspect-video shadow-2xl relative group ring-1 ring-white/10">
-                  {currentLesson?.video_file || currentLesson?.video_url ? (
-                    <div className="w-full h-full">
-                      {currentLesson.video_url && (currentLesson.video_url.includes('youtube.com') || currentLesson.video_url.includes('youtu.be')) ? (
-                        <iframe
-                          title="Lesson Video Player"
-                          src={`https://www.youtube.com/embed/${currentLesson.video_url.split('v=')[1] || currentLesson.video_url.split('/').pop()}`}
-                          className="w-full h-full border-none"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        />
-                      ) : (
-                        <video
-                          key={currentLesson.video_file || currentLesson.video_url}
-                          src={currentLesson.video_file || currentLesson.video_url}
-                          controls
-                          controlsList="nodownload"
-                          className="w-full h-full object-contain"
-                          poster={course?.thumbnail}
-                        />
-                      )}
-                    </div>
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="flex flex-col items-center gap-4 text-white/30 group-hover:scale-110 transition-transform duration-500">
-                        <PlayCircle size={80} strokeWidth={1} />
-                        <p className="font-bold text-xs uppercase tracking-[0.3em]">Initialize Stream</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Overlay Controls Preview - Only show if no video is playing or as an overlay */}
-                  {!currentLesson?.video_file && !currentLesson?.video_url && (
-                    <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black/80 to-transparent">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
-                          <SkipBack size={20} />
-                        </div>
-                        <div className="flex-1 h-1 bg-white/10 rounded-full overflow-hidden">
-                          <div className="w-1/3 h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
-                        </div>
-                        <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
-                          <SkipForward size={20} />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Lesson Description & Content Blocks */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                  <div className="lg:col-span-2 space-y-10">
-                    <div>
-                      <h3 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-4 flex items-center gap-2">
-                        <Info size={16} /> Overview
-                      </h3>
-                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-lg">
-                        {currentLesson?.description || "In this session, we explore the core principles of the subject matter, focusing on practical implementation and conceptual mastery."}
-                      </p>
-                    </div>
-
-                    {/* Content Blocks Display */}
-                    {currentLesson?.content_blocks?.length > 0 && (
-                      <div className="space-y-6">
-                        <h3 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-2 flex items-center gap-2">
-                          <Layers size={16} /> Learning Resources
-                        </h3>
-                        {currentLesson?.content_blocks?.map((block: any) => (
-                          <div key={block.id} className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-sm">
-                            {block.type === 'text' && (
-                              <div className="prose prose-slate dark:prose-invert max-w-none prose-sm sm:prose-base font-medium text-slate-700 dark:text-slate-300">
-                                <div dangerouslySetInnerHTML={{ __html: block.text_content }} />
-                              </div>
-                            )}
-                            {block.type === 'image' && block.file && (
-                              <div className="rounded-2xl overflow-hidden">
-                                <img src={block.file} alt={block.title} className="w-full h-auto" />
-                              </div>
-                            )}
-                            {(block.type === 'pdf' || block.type === 'file') && (
-                              <div className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-cyan-500/50 transition-all cursor-pointer">
-                                <div className="flex items-center gap-4">
-                                  <div className="w-10 h-10 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 flex items-center justify-center">
-                                    <FileText size={20} />
-                                  </div>
-                                  <div>
-                                    <p className="text-sm font-bold text-slate-800 dark:text-white">{block.title || "Resource PDF"}</p>
-                                    <p className="text-[10px] text-slate-500 font-bold uppercase trekking-widest">Mastery Artifact</p>
-                                  </div>
-                                </div>
-                                <Download className="text-slate-400" size={20} />
-                              </div>
-                            )}
-                            {block.type === 'video_link' && block.url && (
-                              <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                                <div className="w-10 h-10 rounded-xl bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 flex items-center justify-center">
-                                  <Globe size={20} />
-                                </div>
-                                <div className="flex-1">
-                                  <p className="text-sm font-bold text-slate-800 dark:text-white">{block.title || "External Content"}</p>
-                                  <a href={block.url} target="_blank" rel="noopener noreferrer" className="text-xs text-cyan-600 font-bold hover:underline">View Source Artifact</a>
-                                </div>
-                                <ExternalLink className="text-slate-400" size={16} />
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-6">
-                    <div className="p-8 gradient-primary rounded-[2.5rem] text-white shadow-xl shadow-cyan-500/20 sticky top-0">
-                      <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                        <Award size={22} className="text-white fill-white/20" /> Completion Logic
-                      </h4>
-                      <p className="text-xs text-cyan-100 leading-relaxed mb-8 font-medium">
-                        Signals processed for this lesson will be recorded in your scholarly registry once validated. Mark as complete to advance.
-                      </p>
-
-                      {completedLessons.includes(currentLesson?.id) ? (
-                        <div className="w-full py-4 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center gap-3 text-white font-bold text-sm uppercase tracking-widest border border-white/20">
-                          <CheckCircle2 size={24} /> Lesson Mastered
-                        </div>
-                      ) : (
-                        <button
-                          onClick={handleMarkComplete}
-                          disabled={completing}
-                          className="w-full py-4 bg-white text-cyan-600 rounded-2xl font-bold text-sm uppercase tracking-widest shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
-                        >
-                          {completing ? <Loader2 className="animate-spin" size={20} /> : <><Check size={20} /> Complete Lesson</>}
-                        </button>
-                      )}
-
-                      <div className="mt-8 pt-8 border-t border-white/10">
-                        <div className="flex items-center justify-between mb-4">
-                          <span className="text-[10px] font-black uppercase text-cyan-100 tracking-widest">Next Lesson</span>
-                          <ChevronRight size={14} className="text-cyan-100" />
-                        </div>
-                        <p className="text-sm font-bold truncate opacity-90">
-                          {allLessons[currentIndex + 1]?.title || "Course Completed"}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="p-8 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-sm">
-                      <h4 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-6 flex items-center gap-2">
-                        <MessageSquare size={16} /> Peer Discussion
-                      </h4>
-                      <div className="space-y-6">
-                        <div className="flex gap-3">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-black text-slate-500 uppercase">JS</div>
-                          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex-1">
-                            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">Could anyone explain the implementation detail at 5:20?</p>
-                          </div>
-                        </div>
-                        <div className="flex gap-3">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-black text-slate-500 uppercase">AM</div>
-                          <div className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-2xl flex-1">
-                            <p className="text-xs text-slate-600 dark:text-slate-400 font-medium leading-relaxed">I found a useful doc for that part, attaching it above.</p>
-                          </div>
-                        </div>
-                        <button className="w-full py-3 border border-slate-200 dark:border-slate-700 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-cyan-600 hover:border-cyan-500/30 transition-all">Join Pulse Conversation</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* AI Tutor Sidebar */}
-        <AnimatePresence>
-          {aiSidebarOpen && (
-            <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 350, opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
-              className="flex-shrink-0 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col z-20 absolute right-0 lg:relative h-full"
-            >
-              <div className="p-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white">
-                    <Bot size={16} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-800 dark:text-white">AI Learning Assistant</h3>
-                    <p className="text-[10px] text-cyan-600 uppercase font-bold tracking-widest flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" /> Online
-                    </p>
-                  </div>
-                </div>
-                <button
-                  title="Close AI Assistant"
-                  aria-label="Close AI Assistant"
-                  onClick={() => setAiSidebarOpen(false)}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
-                >
-                  <X size={16} />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
-                {chatHistory.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[85%] rounded-2xl p-3 text-sm ${msg.role === 'user'
-                      ? 'bg-cyan-600 text-white rounded-tr-sm'
-                      : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-tl-sm border border-slate-200 dark:border-slate-700'
-                      }`}>
-                      <div className="prose prose-sm dark:prose-invert" dangerouslySetInnerHTML={{ __html: (msg.content || "").replace(/\n/g, '<br/>') }} />
-                    </div>
-                  </div>
-                ))}
-                {isAiTyping && (
-                  <div className="flex justify-start">
-                    <div className="max-w-[85%] rounded-2xl rounded-tl-sm p-4 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" />
-                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]" />
-                      <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]" />
-                    </div>
-                  </div>
-                )}
-                <div ref={chatEndRef} />
-              </div>
-
-              <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
-                <form onSubmit={handleAskAI} className="relative flex items-center">
-                  <input
-                    type="text"
-                    value={chatQuery}
-                    onChange={(e) => setChatQuery(e.target.value)}
-                    placeholder="Ask a question about this lesson..."
-                    className="w-full pl-4 pr-12 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-sm outline-none focus:ring-2 focus:ring-cyan-500 text-slate-800 dark:text-slate-200"
-                  />
-                  <button
-                    type="submit"
-                    title="Send Message"
-                    aria-label="Send Message"
-                    disabled={!chatQuery.trim() || isAiTyping}
-                    className="absolute right-2 p-1.5 gradient-primary text-white rounded-lg disabled:opacity-50"
-                  >
-                    <Send size={16} />
-                  </button>
-                </form>
-                <p className="text-center mt-2 text-[9px] text-slate-400 uppercase tracking-widest font-bold">
-                  Context-Aware AI Protocol Active
-                </p>
-              </div>
-            </motion.div>
-          )
-          }
-        </AnimatePresence >
-      </div >
-    </div >
+        <AiTutorSidebar 
+          aiSidebarOpen={aiSidebarOpen} setAiSidebarOpen={setAiSidebarOpen} 
+          chatHistory={chatHistory} isAiTyping={isAiTyping} chatEndRef={chatEndRef} 
+          chatQuery={chatQuery} setChatQuery={setChatQuery} handleAskAI={handleAskAI} 
+        />
+      </div>
+    </div>
   );
 };
 

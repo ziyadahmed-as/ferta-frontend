@@ -246,10 +246,10 @@ export const CourseModals: React.FC<CourseModalsProps> = ({
                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Faculty Custodian</h4>
                       <div className="flex items-center gap-4 p-4 bg-white dark:bg-slate-800 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm">
                         <div className="w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center text-white text-sm font-black uppercase">
-                          {inspectCourse.instructor_username?.charAt(0)}
+                          {inspectCourse.instructor_name?.charAt(0)}
                         </div>
                         <div>
-                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-1">@{inspectCourse.instructor_username}</p>
+                          <p className="text-sm font-black text-slate-800 dark:text-white leading-none mb-1">@{inspectCourse.instructor_name}</p>
                           <p className="text-[10px] text-slate-400 font-bold tracking-widest uppercase">Validated Faculty</p>
                         </div>
                       </div>
@@ -332,7 +332,7 @@ export const CourseModals: React.FC<CourseModalsProps> = ({
                             </div>
                           ))}
                           <div className="text-center py-4">
-                             <button className="text-[10px] font-black text-teal-600 uppercase tracking-widest hover:underline">View Full Registry Registry →</button>
+                             <button className="text-[10px] font-black text-teal-600 uppercase tracking-widest hover:underline">View Full Registry →</button>
                           </div>
                        </div>
                     </div>
