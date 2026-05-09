@@ -3524,7 +3524,7 @@ const AdminDashboard = () => {
                       <h2 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Artifact Deep-Inspection</h2>
                       <p className="text-xs text-slate-500 font-medium">Internal registry audit & performance monitoring</p>
                     </div>
-                    <button onClick={() => setShowInspectModal(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-rose-500 transition-all hover:rotate-90">
+                    <button id ="closeInspectModal" aria-label="Close Modal"  onClick={() => setShowInspectModal(false)} className="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl text-slate-400 hover:text-rose-500 transition-all hover:rotate-90">
                       <X size={20} />
                     </button>
                   </div>
