@@ -1,21 +1,21 @@
 "use client";
 
 import React from "react";
-import { 
-  BookOpen, 
-  PlusCircle, 
-  Search, 
-  Filter, 
-  LayoutDashboard, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  CheckCircle2, 
-  ShieldAlert, 
-  XCircle, 
-  Book, 
-  ChevronLeft, 
-  ChevronRight 
+import {
+  BookOpen,
+  PlusCircle,
+  Search,
+  Filter,
+  LayoutDashboard,
+  Eye,
+  Edit,
+  Trash2,
+  CheckCircle2,
+  ShieldAlert,
+  XCircle,
+  Book,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 interface CoursesModuleProps {
@@ -51,11 +51,11 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
   handleDeleteCourse,
   handleCourseAction,
 }) => {
-  const filteredCourses = allCourses.filter(c => 
-    courseSearch === "" || 
+  const filteredCourses = allCourses.filter(c =>
+    courseSearch === "" ||
     (c.title || "").toLowerCase().includes(courseSearch.toLowerCase())
   );
-  
+
   const totalCoursePages = Math.ceil(filteredCourses.length / courseItemsPerPage);
   const courseStartIndex = (coursePage - 1) * courseItemsPerPage;
   const currentCourses = filteredCourses.slice(courseStartIndex, courseStartIndex + courseItemsPerPage);
@@ -88,7 +88,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                 <p className="text-5xl font-black tracking-tighter">{allCourses.filter(c => !c.is_approved && c.is_submitted).length}</p>
               </div>
             </div>
-            <button 
+            <button
               type="button"
               onClick={() => { setEditCourseData(null); setShowCourseModal(true); }}
               className="w-full sm:w-auto h-20 px-10 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-[32px] font-black text-xs uppercase tracking-[3px] shadow-2xl hover:scale-[1.05] active:scale-[0.95] transition-all flex items-center justify-center gap-4"
@@ -101,14 +101,14 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
 
       {/* Tabs Section */}
       <div className="flex items-center gap-4 p-2 bg-slate-100 dark:bg-slate-800/80 rounded-[28px] w-fit border border-slate-200 dark:border-slate-700/50">
-        <button 
+        <button
           type="button"
           onClick={() => setCourseTab("all")}
           className={`px-10 py-4 rounded-[22px] text-xs font-black uppercase tracking-[2px] transition-all ${courseTab === "all" ? "bg-white dark:bg-slate-700 text-teal-600 shadow-2xl" : "text-slate-500 hover:text-slate-700"}`}
         >
           Institutional Registry
         </button>
-        <button 
+        <button
           type="button"
           onClick={() => setCourseTab("moderation")}
           className={`px-10 py-4 rounded-[22px] text-xs font-black uppercase tracking-[2px] transition-all flex items-center gap-4 ${courseTab === "moderation" ? "bg-white dark:bg-slate-700 text-rose-500 shadow-2xl" : "text-slate-500 hover:text-slate-700"}`}
@@ -128,8 +128,8 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
           <div className="p-8 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 flex flex-col md:flex-row gap-6 items-center justify-between">
             <div className="relative w-full md:w-[450px] shadow-2xl shadow-teal-500/5">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Search Knowledge Artifacts..."
                 value={courseSearch}
                 onChange={(e) => setCourseSearch(e.target.value)}
@@ -138,10 +138,10 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
             </div>
             <div className="flex items-center gap-4">
               <button type="button" title="Global Filter" className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 text-slate-400">
-                <Filter size={20}/>
+                <Filter size={20} />
               </button>
               <button type="button" title="Density Toggle" className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 text-slate-400">
-                <LayoutDashboard size={20}/>
+                <LayoutDashboard size={20} />
               </button>
             </div>
           </div>
@@ -206,7 +206,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                     </td>
                     <td className="px-10 py-8 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button 
+                        <button
                           type="button"
                           onClick={() => { setInspectCourse(c); setShowInspectModal(true); }}
                           className="p-4 bg-white dark:bg-slate-900 text-cyan-600 hover:bg-cyan-50 dark:hover:bg-cyan-900/30 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
@@ -214,7 +214,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                         >
                           <Eye size={18} />
                         </button>
-                        <button 
+                        <button
                           type="button"
                           onClick={() => { setEditCourseData(c); setShowCourseModal(true); }}
                           className="p-4 bg-white dark:bg-slate-900 text-teal-600 hover:bg-teal-50 dark:hover:bg-teal-900/30 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
@@ -222,7 +222,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                         >
                           <Edit size={18} />
                         </button>
-                        <button 
+                        <button
                           type="button"
                           onClick={() => handleDeleteCourse(c.id)}
                           className="p-4 bg-white dark:bg-slate-900 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-2xl transition-all border border-slate-100 dark:border-slate-800"
@@ -234,7 +234,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                     </td>
                   </tr>
                 ))}
-                
+
                 {/* Pagination Controls */}
                 {totalCoursePages > 1 && (
                   <tr>
@@ -244,7 +244,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                           Artifacts <span className="text-slate-800 dark:text-white">{courseStartIndex + 1}-{Math.min(courseStartIndex + courseItemsPerPage, filteredCourses.length)}</span> / {filteredCourses.length}
                         </p>
                         <div className="flex items-center gap-2">
-                          <button 
+                          <button title="previce"
                             type="button"
                             onClick={() => setCoursePage(prev => Math.max(1, typeof prev === "number" ? prev - 1 : 1))}
                             disabled={coursePage === 1}
@@ -264,7 +264,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                               </button>
                             ))}
                           </div>
-                          <button 
+                          <button title="Total course"
                             type="button"
                             onClick={() => setCoursePage(prev => Math.min(totalCoursePages, typeof prev === "number" ? prev + 1 : 1))}
                             disabled={coursePage === totalCoursePages}
@@ -315,14 +315,14 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                 </div>
               </div>
               <div className="flex gap-4">
-                <button 
+                <button
                   type="button"
                   onClick={() => handleCourseAction(c.id, true)}
                   className="flex-1 py-5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-[28px] text-xs font-black uppercase tracking-[3px] shadow-2xl shadow-emerald-500/30 transition-all flex items-center justify-center gap-4"
                 >
                   <CheckCircle2 size={24} /> Authenticate
                 </button>
-                <button 
+                <button
                   type="button"
                   onClick={() => handleCourseAction(c.id, false)}
                   title="Reject Course Submission"
@@ -333,7 +333,7 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
               </div>
             </div>
           ))}
-          
+
           {allCourses.filter(c => !c.is_approved && c.is_submitted).length === 0 && (
             <div className="col-span-full py-40 text-center bg-slate-50 dark:bg-slate-900/30 rounded-[64px] border-4 border-dashed border-slate-200 dark:border-slate-800">
               <div className="w-32 h-32 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-10">
