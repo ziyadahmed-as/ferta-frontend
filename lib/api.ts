@@ -12,11 +12,14 @@ api.interceptors.request.use((config) => {
     delete config.headers["Content-Type"];
   }
   
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  // Only attach token if it exists and is a valid non-empty string
-  // Prevents sending "undefined" or "null" strings that cause 401s on public endpoints
-  if (token && token !== "undefined" && token !== "null" && token.length > 10) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Do not send Authorization header for login or register endpoints
+  const isAuthEndpoint = config.url?.includes("/users/login/") || config.url?.includes("/users/register/");
+  
+  if (!isAuthEndpoint) {
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+    if (token && token !== "undefined" && token !== "null" && token.length > 10) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
