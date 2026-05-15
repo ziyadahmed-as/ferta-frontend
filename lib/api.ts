@@ -8,14 +8,14 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  // If data is FormData (file upload), delete the default application/json header
-  // so the browser can automatically set multipart/form-data with the correct boundary
   if (config.data instanceof FormData) {
     delete config.headers["Content-Type"];
   }
   
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  if (token) {
+  // Only attach token if it exists and is a valid non-empty string
+  // Prevents sending "undefined" or "null" strings that cause 401s on public endpoints
+  if (token && token !== "undefined" && token !== "null" && token.length > 10) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
