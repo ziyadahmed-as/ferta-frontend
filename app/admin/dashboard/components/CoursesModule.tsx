@@ -51,10 +51,17 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
   handleDeleteCourse,
   handleCourseAction,
 }) => {
-  const filteredCourses = allCourses.filter(c =>
-    courseSearch === "" ||
-    (c.title || "").toLowerCase().includes(courseSearch.toLowerCase())
-  );
+  const [statusFilter, setStatusFilter] = React.useState<string>("all");
+
+  const filteredCourses = allCourses.filter(c => {
+    const matchesSearch = (c.title || "").toLowerCase().includes(courseSearch.toLowerCase());
+    const matchesStatus = 
+      statusFilter === "all" || 
+      (statusFilter === "approved" && c.is_approved) ||
+      (statusFilter === "pending" && !c.is_approved && c.is_submitted) ||
+      (statusFilter === "draft" && !c.is_approved && !c.is_submitted);
+    return matchesSearch && matchesStatus;
+  });
 
   const totalCoursePages = Math.ceil(filteredCourses.length / courseItemsPerPage);
   const courseStartIndex = (coursePage - 1) * courseItemsPerPage;
@@ -137,6 +144,32 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
               />
             </div>
             <div className="flex items-center gap-4">
+              <div className="flex bg-white dark:bg-slate-900 p-1 rounded-2xl border border-slate-100 dark:border-slate-800">
+                <button 
+                  onClick={() => setStatusFilter("all")}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${statusFilter === "all" ? "bg-teal-600 text-white shadow-lg" : "text-slate-400 hover:text-slate-600"}`}
+                >
+                  All
+                </button>
+                <button 
+                  onClick={() => setStatusFilter("approved")}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${statusFilter === "approved" ? "bg-emerald-500 text-white shadow-lg" : "text-slate-400 hover:text-slate-600"}`}
+                >
+                  Approved
+                </button>
+                <button 
+                  onClick={() => setStatusFilter("pending")}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${statusFilter === "pending" ? "bg-amber-500 text-white shadow-lg" : "text-slate-400 hover:text-slate-600"}`}
+                >
+                  Pending
+                </button>
+                <button 
+                  onClick={() => setStatusFilter("draft")}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${statusFilter === "draft" ? "bg-slate-600 text-white shadow-lg" : "text-slate-400 hover:text-slate-600"}`}
+                >
+                  Drafts
+                </button>
+              </div>
               <button type="button" title="Global Filter" className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 text-slate-400">
                 <Filter size={20} />
               </button>
@@ -153,6 +186,8 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                   <th className="px-10 py-6">Knowledge Artifact</th>
                   <th className="px-10 py-6">Assigned Faculty</th>
                   <th className="px-10 py-6 text-center">Status Protocol</th>
+                  <th className="px-10 py-6 text-center">Scholars</th>
+                  <th className="px-10 py-6 text-center">Yield (ETB)</th>
                   <th className="px-10 py-6 text-right">Registry Actions</th>
                 </tr>
               </thead>
@@ -203,6 +238,12 @@ export const CoursesModule: React.FC<CoursesModuleProps> = ({
                           </span>
                         )}
                       </div>
+                    </td>
+                    <td className="px-10 py-8 text-center">
+                      <span className="text-sm font-black text-slate-700 dark:text-slate-200">{c.enrollment_count || 0}</span>
+                    </td>
+                    <td className="px-10 py-8 text-center">
+                      <span className="text-sm font-black text-teal-600">{(c.price * (c.enrollment_count || 0)).toLocaleString()}</span>
                     </td>
                     <td className="px-10 py-8 text-right">
                       <div className="flex items-center justify-end gap-2">

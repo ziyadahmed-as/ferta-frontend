@@ -88,134 +88,131 @@ const CourseDetail = () => {
   );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900">
+    <div className="min-h-screen bg-slate-50/30 dark:bg-slate-900/50">
       <Navbar />
       
-      {/* Hero Section */}
-      <div className="relative pt-32 pb-20 px-6 overflow-hidden bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
+      {/* High-Fidelity Hero Header */}
+      <div className="relative pt-40 pb-24 px-6 overflow-hidden bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] dark:opacity-[0.05]" />
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-cyan-50/50 to-teal-50/30 dark:from-cyan-900/10 dark:to-transparent -z-10" />
         
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <motion.div 
-            initial={{ opacity: 0, x: -20 }} 
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }}
             className="lg:col-span-7"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <span className="px-3 py-1 bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 rounded-lg text-xs font-bold uppercase tracking-wider">
+            <div className="flex flex-wrap items-center gap-4 mb-8">
+              <span className="px-4 py-1.5 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 rounded-xl text-[10px] font-black uppercase tracking-[3px] border border-cyan-100/50 dark:border-cyan-800/30">
                 {course.category_name}
               </span>
-              <div className="flex items-center gap-1 text-amber-500">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded-xl border border-amber-100/50 dark:border-amber-800/30">
                 <Star size={14} fill="currentColor" />
-                <span className="text-xs font-bold text-slate-700 dark:text-slate-300">{course.rating} ({course.reviews?.length || 0} reviews)</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">{course.rating} Core Sync</span>
               </div>
             </div>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-black text-slate-800 dark:text-white mb-8 tracking-tighter leading-[0.9]">
               {course.title}
             </h1>
             
-            <p className="text-slate-600 dark:text-slate-400 text-lg mb-8 leading-relaxed max-w-2xl">
+            <p className="text-xl font-medium text-slate-500 dark:text-slate-400 mb-10 leading-relaxed max-w-2xl">
               {course.description}
             </p>
             
-            <div className="flex flex-wrap items-center gap-8 mb-10">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600">
+            <div className="flex flex-wrap items-center gap-10">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-[20px] gradient-primary flex items-center justify-center text-white text-xl font-black shadow-xl">
                   {course.instructor_name?.[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-tight">Created by</p>
-                  <p className="text-sm font-bold text-slate-800 dark:text-white">{course.instructor_name}</p>
+                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-[2px] mb-1">Curator Node</p>
+                  <p className="text-base font-black text-slate-800 dark:text-white tracking-tight">@{course.instructor_name}</p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600">
-                  <Clock size={18} />
-                </div>
-                <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-tight">Duration</p>
-                  <p className="text-sm font-bold text-slate-800 dark:text-white">12 Hours</p>
-                </div>
-              </div>
+              <div className="h-10 w-px bg-slate-100 dark:bg-slate-800 hidden md:block" />
               
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-cyan-600">
-                  <Users size={18} />
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 rounded-[20px] bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-teal-600 border border-slate-100 dark:border-slate-700">
+                  <Clock size={24} />
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500 font-medium uppercase tracking-tight">Students</p>
-                  <p className="text-sm font-bold text-slate-800 dark:text-white">{course.enrollment_count || 0} enrolled</p>
+                  <p className="text-[10px] text-slate-400 font-black uppercase tracking-[2px] mb-1">Scholastic Value</p>
+                  <p className="text-base font-black text-slate-800 dark:text-white tracking-tight">12+ Hours Logic</p>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Checkout Card - Sticky on desktop */}
+          {/* Institutional Provisioning Card */}
           <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }} 
+            animate={{ opacity: 1, scale: 1 }}
             className="lg:col-span-5"
           >
-            <div className="glass-card p-6 rounded-3xl border border-white dark:border-slate-700 shadow-xl relative z-10 overflow-hidden">
-              <div className="relative h-60 rounded-2xl overflow-hidden mb-6 group">
+            <div className="bg-white dark:bg-slate-800 p-8 rounded-[48px] border border-slate-200 dark:border-slate-700 shadow-2xl shadow-slate-200/50 dark:shadow-none relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-teal-500/5 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-150 transition-all duration-1000" />
+              
+              <div className="relative h-64 rounded-[32px] overflow-hidden mb-8 shadow-2xl border-4 border-slate-50 dark:border-slate-900">
                 {course.thumbnail ? (
-                  <Image fill src={course.thumbnail} alt={course.title} className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <Image fill src={course.thumbnail} alt={course.title} className="object-cover group-hover:scale-110 transition-transform duration-700" />
                 ) : (
-                  <div className="w-full h-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center">
-                    <PlayCircle size={48} className="text-slate-300" />
+                  <div className="w-full h-full bg-slate-50 dark:bg-slate-800 flex items-center justify-center">
+                    <PlayCircle size={64} className="text-slate-200" />
                   </div>
                 )}
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg">
-                    <Play size={24} className="text-cyan-600 fill-cyan-600 ml-1" />
+                <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                  <div className="w-20 h-20 bg-white rounded-[24px] flex items-center justify-center shadow-2xl hover:scale-110 transition-transform cursor-pointer">
+                    <Play size={28} className="text-teal-600 fill-teal-600 ml-1" />
                   </div>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4 text-center">
-                   <p className="text-white text-sm font-medium drop-shadow-md">Preview this course</p>
                 </div>
               </div>
               
-              <div className="space-y-6">
-                <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-slate-900 dark:text-white">${course.price}</span>
-                  {course.price > 0 && <span className="text-slate-500 line-through text-lg">${Math.round(course.price * 1.5)}</span>}
+              <div className="space-y-8 relative z-10">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Enrollment Price</p>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-5xl font-black text-slate-800 dark:text-white tracking-tighter">${course.price}</span>
+                      {course.price > 0 && <span className="text-slate-400 line-through text-lg font-bold">${Math.round(course.price * 1.5)}</span>}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-black text-teal-600 uppercase tracking-widest mb-1">Status</p>
+                    <span className="text-xs font-black text-slate-800 dark:text-white tracking-widest uppercase">Verified Node</span>
+                  </div>
                 </div>
                 
                 {isEnrolled ? (
                   <button 
                     onClick={() => router.push(`/courses/${id}/learn`)} 
-                    className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-95 transition-all"
+                    className="w-full py-6 gradient-primary text-white rounded-[24px] text-xs font-black uppercase tracking-[3px] shadow-2xl shadow-teal-500/30 active:scale-95 transition-all flex items-center justify-center gap-4"
                   >
-                    Continue Learning <ArrowRight size={18}/>
+                    Continue Mastery <ArrowRight size={20}/>
                   </button>
                 ) : (
                   <button 
                     onClick={handleEnroll} 
                     disabled={enrolling} 
-                    className="w-full py-4 gradient-primary text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 hover:opacity-90 active:scale-95 transition-all disabled:opacity-50"
+                    className="w-full py-6 gradient-primary text-white rounded-[24px] text-xs font-black uppercase tracking-[3px] shadow-2xl shadow-teal-500/30 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-4"
                   >
-                    {enrolling ? <Loader2 className="animate-spin" size={18}/> : <>Enroll Now <ArrowRight size={18}/></>}
+                    {enrolling ? <Loader2 className="animate-spin" size={20}/> : <>Initialize Access <ArrowRight size={20}/></>}
                   </button>
                 )}
                 
-                <div className="space-y-3">
-                  <p className="text-sm font-semibold text-slate-800 dark:text-white">This course includes:</p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <Check size={16} className="text-green-500" /> Full lifetime access
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <Check size={16} className="text-green-500" /> Certificate of completion
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <Check size={16} className="text-green-500" /> Access on mobile and TV
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      <Check size={16} className="text-green-500" /> Practical assignments
-                    </li>
-                  </ul>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { icon: <Check size={16} />, text: "Lifetime Access" },
+                    { icon: <Shield size={16} />, text: "Secure Certs" },
+                    { icon: <Globe size={16} />, text: "Global Node" },
+                    { icon: <Layout size={16} />, text: "Asset Library" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-2.5 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800/50">
+                      <div className="text-teal-600">{item.icon}</div>
+                      <span className="text-[10px] font-black text-slate-600 dark:text-slate-400 uppercase tracking-wider">{item.text}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
