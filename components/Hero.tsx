@@ -103,7 +103,7 @@ const Hero = () => {
               <div className="relative rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-900/10 dark:shadow-black/30 border border-white/50 dark:border-slate-800">
                 <Image
                   src="/hero-students.png"
-                  alt="Students learning on Fatra Academy platform"
+                  alt="Fatra Academy Students"
                   width={540}
                   height={420}
                   className="w-full h-auto object-cover"
@@ -111,41 +111,7 @@ const Hero = () => {
                 />
               </div>
 
-              {/* Floating Stats Card - Top Left */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-                className="absolute -top-4 -left-4 md:-left-8 bg-white dark:bg-slate-900 rounded-2xl px-5 py-4 shadow-xl shadow-slate-900/10 dark:shadow-black/30 border border-slate-100 dark:border-slate-800"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">🎓</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Active Students</p>
-                    <p className="text-lg font-extrabold text-slate-900 dark:text-white">2,500+</p>
-                  </div>
-                </div>
-              </motion.div>
 
-              {/* Floating Rating Card - Bottom Right */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1, duration: 0.6 }}
-                className="absolute -bottom-4 -right-4 md:-right-8 bg-white dark:bg-slate-900 rounded-2xl px-5 py-4 shadow-xl shadow-slate-900/10 dark:shadow-black/30 border border-slate-100 dark:border-slate-800"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">⭐</span>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">Course Rating</p>
-                    <p className="text-lg font-extrabold text-slate-900 dark:text-white">4.9/5.0</p>
-                  </div>
-                </div>
-              </motion.div>
             </div>
           </motion.div>
         </div>

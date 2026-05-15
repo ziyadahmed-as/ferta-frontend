@@ -32,7 +32,7 @@ export const WithdrawalsModule: React.FC<WithdrawalsModuleProps> = ({
               {withdrawals.map((req: any) => (
                 <tr key={req.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/30">
                   <td className="px-6 py-4 text-sm text-slate-500">{req.id}</td>
-                  <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">{req.instructor}</td>
+                  <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">@{req.instructor_name || req.instructor}</td>
                   <td className="px-6 py-4 text-sm font-bold text-slate-800 dark:text-slate-200">{parseFloat(req.amount).toLocaleString()}</td>
                   <td className="px-6 py-4 text-sm text-slate-500">{req.account_details}</td>
                   <td className="px-6 py-4 text-sm text-slate-500">{new Date(req.created_at).toLocaleDateString()}</td>
