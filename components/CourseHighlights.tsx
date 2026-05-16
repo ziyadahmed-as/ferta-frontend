@@ -32,8 +32,19 @@ const CourseHighlights = () => {
         if (Array.isArray(coursesData)) {
           setCourses(coursesData.slice(0, 4));
         }
-      } catch (error) {
-        console.error("Error fetching popular courses:", error);
+      } catch (error: any) {
+        // Professional Error Protocol: Categorize synchronized delivery failure
+        const errorContext = {
+          hub: "Popular Courses Feed",
+          status: error.response?.status || "SIGNAL_LOST",
+          message: error.message || "Endpoint Unreachable",
+          code: error.code || "ERR_NETWORK"
+        };
+        
+        console.error(`[Fatra System] Operational Signal Lost:`, JSON.stringify(errorContext, null, 2));
+        
+        // Ensure UI stability during outages
+        setCourses([]); 
       } finally {
         setLoading(false);
       }

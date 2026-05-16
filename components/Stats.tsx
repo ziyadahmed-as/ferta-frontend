@@ -36,7 +36,7 @@ const Stats = () => {
           code: error.code || "ERR_UNKNOWN"
         };
         
-        console.error(`[Fatra System] Operational Signal Lost:`, errorContext);
+        console.error(`[Fatra System] Operational Signal Lost:`, JSON.stringify(errorContext, null, 2));
         
         // Graceful Degradation: Component will utilize initial registry state (zeros)
         // to maintain UI stability while backend nodes are unreachable.

@@ -47,7 +47,7 @@ export const LiveSessionsModule: React.FC<LiveSessionsModuleProps> = ({
               <p className="text-[10px] uppercase font-black text-teal-100 tracking-[3px] mb-2 opacity-60">Active Hubs</p>
               <p className="text-6xl font-black text-white tracking-tighter">{liveStreams.length}</p>
             </div>
-            <button 
+            <button
               onClick={() => setShowAddStreamModal(true)}
               className="w-full sm:w-auto h-24 px-12 bg-white text-slate-900 rounded-[40px] font-black text-xs uppercase tracking-[4px] shadow-2xl hover:scale-[1.05] active:scale-[0.95] transition-all flex items-center justify-center gap-4 group"
             >
@@ -68,7 +68,7 @@ export const LiveSessionsModule: React.FC<LiveSessionsModuleProps> = ({
               className="group bg-white dark:bg-slate-800 rounded-[56px] border border-slate-100 dark:border-slate-700 p-12 shadow-sm transition-all hover:shadow-2xl hover:shadow-teal-500/10 relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-3 h-full bg-teal-500" />
-              
+
               <div className="flex flex-col lg:flex-row gap-12">
                 <div className="lg:w-2/5 space-y-8">
                   <div className="flex items-start gap-6">
@@ -102,20 +102,20 @@ export const LiveSessionsModule: React.FC<LiveSessionsModuleProps> = ({
                   </div>
 
                   <div className="flex flex-col gap-4">
-                    <button 
+                    <button
                       onClick={() => { setSelectedStreamForSession(stream); setShowAddSessionModal(true); }}
                       className="w-full py-6 bg-teal-600 text-white rounded-[28px] text-[10px] font-black uppercase tracking-[3px] shadow-2xl shadow-teal-500/30 hover:bg-teal-700 transition-all flex items-center justify-center gap-4 group"
                     >
                       <Calendar size={20} className="group-hover:scale-110 transition-transform" /> Provision Sequence
                     </button>
                     <div className="flex gap-4">
-                      <button 
+                      <button
                         onClick={() => { setEditStreamData(stream); setShowEditStreamModal(true); }}
                         className="flex-1 py-5 bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 rounded-[24px] text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
                       >
                         Configure Node
                       </button>
-                      <button 
+                      <button title="Delete Stream"
                         onClick={() => handleDeleteStream(stream.id)}
                         className="w-16 h-16 bg-rose-50 dark:bg-rose-900/20 text-rose-500 rounded-[24px] flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-sm"
                       >
@@ -123,7 +123,7 @@ export const LiveSessionsModule: React.FC<LiveSessionsModuleProps> = ({
                       </button>
                     </div>
                     {stream.enrollment_count >= (stream.max_students || 1) && (
-                      <button 
+                      <button
                         onClick={() => { setSelectedStream(stream); setShowDuplicateModal(true); }}
                         className="w-full py-5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 rounded-[24px] text-[9px] font-black uppercase tracking-[4px] border-2 border-emerald-100 dark:border-emerald-800 animate-pulse"
                       >
@@ -140,7 +140,7 @@ export const LiveSessionsModule: React.FC<LiveSessionsModuleProps> = ({
                     </h5>
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{stream.live_sessions?.length || 0} Sequences</span>
                   </div>
-                  
+
                   <div className="space-y-6 max-h-[450px] overflow-y-auto pr-4 custom-scrollbar">
                     {stream.live_sessions && stream.live_sessions.length > 0 ? stream.live_sessions.map((session: any, idx: number) => (
                       <div key={session.id} className="relative group/session bg-slate-50 dark:bg-slate-900/30 p-8 rounded-[40px] border border-slate-100 dark:border-slate-800 hover:border-teal-500/30 hover:bg-white dark:hover:bg-slate-800 transition-all shadow-sm">
@@ -154,10 +154,10 @@ export const LiveSessionsModule: React.FC<LiveSessionsModuleProps> = ({
                             </div>
                           </div>
                           {session.meeting_link && (
-                            <a 
-                              href={session.meeting_link} 
-                              target="_blank" 
-                              rel="noreferrer" 
+                            <a
+                              href={session.meeting_link}
+                              target="_blank"
+                              rel="noreferrer"
                               className="px-8 py-3.5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-[10px] font-black uppercase tracking-widest rounded-2xl hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-all shadow-xl border border-slate-100 dark:border-slate-800 flex items-center gap-3"
                             >
                               Signal Link <PlusCircle size={16} />

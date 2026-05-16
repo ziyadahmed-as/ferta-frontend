@@ -10,7 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 
-  const CatalogContent = () => {
+const CatalogContent = () => {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category");
   const initialType = searchParams.get("type");
@@ -59,14 +59,14 @@ import { useSearchParams } from "next/navigation";
       {/* Premium Hero Header */}
       <div className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 pt-32 pb-20">
         <div className="container-max px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="flex flex-col lg:flex-row lg:items-end justify-between gap-10"
           >
             <div className="max-w-3xl">
               <span className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 text-[10px] font-black uppercase tracking-[3px] rounded-full border border-cyan-100/50 dark:border-cyan-800/30 mb-6">
-                {viewType === "live" ? <TrendingUp size={14} /> : <BookOpen size={14} />} 
+                {viewType === "live" ? <TrendingUp size={14} /> : <BookOpen size={14} />}
                 {viewType === "live" ? "Synchronous Learning Hub" : "Scholastic Repository"}
               </span>
               <h1 className="text-6xl md:text-7xl font-black text-slate-800 dark:text-white tracking-tighter leading-[0.9] mb-8">
@@ -74,12 +74,12 @@ import { useSearchParams } from "next/navigation";
                 <span className="text-transparent bg-clip-text gradient-primary">{viewType === "live" ? "Sessions" : "Course Registry"}</span>
               </h1>
               <p className="text-lg font-medium text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
-                {viewType === "live" 
+                {viewType === "live"
                   ? "Engage with expert faculty in real-time. Join high-fidelity synchronous sessions designed for immediate knowledge transfer and interactive mastery."
                   : "Explore our curated collection of high-fidelity knowledge nodes, meticulously orchestrated by global faculty to accelerate your professional evolution."}
               </p>
             </div>
-            
+
             {/* Quick Stats / Social Proof */}
             <div className="flex gap-4 pb-2">
               <div className="bg-slate-50 dark:bg-slate-800/50 p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 min-w-[140px]">
@@ -103,15 +103,15 @@ import { useSearchParams } from "next/navigation";
           <div className="flex flex-col lg:flex-row gap-6 items-center">
             <div className="relative flex-1 group w-full">
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-cyan-600 transition-colors" size={22} />
-              <input 
-                type="text" 
-                placeholder="Search Knowledge Registry..." 
+              <input
+                type="text"
+                placeholder="Search Knowledge Registry..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-16 pr-8 py-6 bg-white dark:bg-slate-800 border-none rounded-[28px] shadow-2xl shadow-slate-200/50 dark:shadow-none focus:ring-4 focus:ring-cyan-600/10 outline-none text-base font-bold transition-all text-slate-800 dark:text-white placeholder:text-slate-300"
               />
               {search && (
-                <button 
+                <button title="close"
                   onClick={() => setSearch("")}
                   className="absolute right-6 top-1/2 -translate-y-1/2 p-2 bg-slate-100 dark:bg-slate-700 text-slate-400 hover:text-rose-500 rounded-full transition-all"
                 >
@@ -119,27 +119,25 @@ import { useSearchParams } from "next/navigation";
                 </button>
               )}
             </div>
-            
+
             <div className="flex items-center gap-3 w-full lg:w-auto overflow-x-auto scrollbar-hide pb-2 lg:pb-0">
-               <button 
+              <button
                 onClick={() => setSelectedCategory(null)}
-                className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[2px] transition-all whitespace-nowrap shadow-sm border ${
-                  !selectedCategory 
-                    ? "gradient-primary text-white border-transparent shadow-xl shadow-cyan-500/20" 
+                className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[2px] transition-all whitespace-nowrap shadow-sm border ${!selectedCategory
+                    ? "gradient-primary text-white border-transparent shadow-xl shadow-cyan-500/20"
                     : "bg-white dark:bg-slate-800 text-slate-500 border-slate-100 dark:border-slate-700 hover:border-cyan-200"
-                }`}
+                  }`}
               >
                 All Variants
               </button>
               {categories.map(cat => (
-                <button 
+                <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.slug)}
-                  className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[2px] transition-all whitespace-nowrap shadow-sm border ${
-                    selectedCategory === cat.slug || selectedCategory === cat.name 
-                      ? "gradient-primary text-white border-transparent shadow-xl shadow-cyan-500/20" 
+                  className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[2px] transition-all whitespace-nowrap shadow-sm border ${selectedCategory === cat.slug || selectedCategory === cat.name
+                      ? "gradient-primary text-white border-transparent shadow-xl shadow-cyan-500/20"
                       : "bg-white dark:bg-slate-800 text-slate-500 border-slate-100 dark:border-slate-700 hover:border-cyan-200"
-                  }`}
+                    }`}
                 >
                   {cat.name}
                 </button>
@@ -151,7 +149,7 @@ import { useSearchParams } from "next/navigation";
         {/* Results Grid */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {[1,2,3,4,5,6,7,8].map(i => (
+            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
               <div key={i} className="bg-white dark:bg-slate-800 rounded-[32px] border border-slate-100 dark:border-slate-700 overflow-hidden shadow-sm aspect-[4/5] animate-pulse" />
             ))}
           </div>
@@ -188,7 +186,7 @@ import { useSearchParams } from "next/navigation";
                         </div>
                       </div>
                     </Link>
-                    
+
                     <div className="p-8 flex-1 flex flex-col">
                       <div className="flex items-center gap-2.5 mb-4">
                         <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-400 border border-slate-100 dark:border-slate-600">
@@ -196,18 +194,18 @@ import { useSearchParams } from "next/navigation";
                         </div>
                         <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">@{c.instructor_name}</span>
                       </div>
-                      
+
                       <h3 className="text-xl font-black text-slate-800 dark:text-white mb-4 line-clamp-2 tracking-tight group-hover:text-cyan-600 transition-colors">
                         {c.title}
                       </h3>
 
                       <div className="flex items-center gap-1.5 mb-6">
                         <div className="flex text-amber-500">
-                          {[1,2,3,4,5].map(s => <Star key={s} size={12} fill="currentColor" />)}
+                          {[1, 2, 3, 4, 5].map(s => <Star key={s} size={12} fill="currentColor" />)}
                         </div>
                         <span className="text-[10px] font-black text-slate-400 uppercase">4.8 Logic Sync</span>
                       </div>
-                      
+
                       <div className="mt-auto flex items-center justify-between pt-6 border-t border-slate-50 dark:border-slate-700">
                         <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
                           <Clock size={14} className="text-teal-500" /> 12 Hours
@@ -234,8 +232,8 @@ import { useSearchParams } from "next/navigation";
                 </div>
                 <h3 className="text-3xl font-black text-slate-800 dark:text-white mb-3 tracking-tight">No results in registry</h3>
                 <p className="text-slate-400 max-w-sm mx-auto font-medium">Our global network could not locate knowledge nodes matching your current filter parameters.</p>
-                <button 
-                  onClick={() => {setSearch(""); setSelectedCategory(null);}} 
+                <button
+                  onClick={() => { setSearch(""); setSelectedCategory(null); }}
                   className="mt-8 px-8 py-4 bg-cyan-600 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-all"
                 >
                   Reset Registry Filters

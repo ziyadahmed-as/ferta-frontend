@@ -25,14 +25,32 @@ const FeaturedCourses = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api
-      .get("/courses/courses/popular/")
-      .then((response) => {
+    const fetchFeatured = async () => {
+      try {
+        const response = await api.get("/courses/courses/popular/");
         const data = Array.isArray(response.data) ? response.data : response.data.results;
-        if (Array.isArray(data)) setCourses(data.slice(0, 8));
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+        if (Array.isArray(data)) {
+          setCourses(data.slice(0, 8));
+        }
+      } catch (error: any) {
+        // High-Fidelity Error Orchestration
+        const errorContext = {
+          hub: "Featured Content Registry",
+          status: error.response?.status || "SIGNAL_LOST",
+          message: error.message || "Operational Timeout",
+          code: error.code || "ERR_NETWORK"
+        };
+        
+        console.error(`[Fatra System] Content Delivery Interrupted:`, JSON.stringify(errorContext, null, 2));
+        
+        // Ensure graceful failure
+        setCourses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchFeatured();
   }, []);
 
   if (loading || courses.length === 0) return null;
