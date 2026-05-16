@@ -248,56 +248,131 @@ const CourseDetail = () => {
               </div>
             </section>
 
-            {/* Curriculum Area */}
+            {/* Scholastic Architecture (Curriculum or Schedule) */}
             <section>
               <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Course Content</h2>
-                <span className="text-sm text-slate-500 font-medium">{course.chapters?.length || 0} sections • 12 lectures</span>
+                <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter">
+                  {course.course_type === 'LIVE_STREAM' ? "Synchronous Schedule" : "Scholastic Architecture"}
+                </h2>
+                <div className="flex items-center gap-3">
+                   <div className="h-px w-20 bg-slate-100 dark:bg-slate-800" />
+                   <span className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                     {course.course_type === 'LIVE_STREAM' 
+                       ? `${course.live_streams?.[0]?.live_sessions?.length || 0} Sequences` 
+                       : `${course.chapters?.length || 0} Sections • 12 Lectures`}
+                   </span>
+                </div>
               </div>
               
-              <div className="space-y-4">
-                {course.chapters && course.chapters.length > 0 ? (
-                  course.chapters.map((chapter: any, i: number) => (
-                    <div key={chapter.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden shadow-sm">
-                      <div className="p-5 flex items-center justify-between bg-white dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
-                        <h4 className="font-bold text-slate-800 dark:text-white flex items-center gap-3">
-                          <span className="text-xs text-cyan-600 bg-cyan-50 dark:bg-cyan-900/30 px-2 py-1 rounded">Section {i+1}</span>
-                          {chapter.title}
-                        </h4>
-                        <span className="text-xs text-slate-500 font-medium">{chapter.lessons?.length || 0} lectures</span>
-                      </div>
-                      <div className="divide-y divide-slate-50 dark:divide-slate-700">
-                        {chapter.lessons?.map((lesson: any) => (
-                          <div key={lesson.id} className="flex items-center justify-between p-4 hover:bg-white dark:hover:bg-slate-700/50 transition-colors group cursor-pointer">
-                            <div className="flex items-center gap-4">
-                              <PlayCircle size={18} className="text-slate-400 group-hover:text-cyan-500 transition-colors" />
-                              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{lesson.title}</span>
+              <div className="space-y-6">
+                {course.course_type === 'LIVE_STREAM' ? (
+                  /* High-Fidelity Live Schedule View */
+                  <div className="space-y-6">
+                    {course.live_streams?.[0]?.live_sessions?.length > 0 ? (
+                      course.live_streams[0].live_sessions.map((session: any, idx: number) => (
+                        <motion.div 
+                          key={session.id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: idx * 0.1 }}
+                          className="group relative flex gap-8 pl-8 border-l-2 border-slate-100 dark:border-slate-800 last:border-transparent pb-8"
+                        >
+                          <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-slate-900 border-2 border-teal-500 shadow-lg shadow-teal-500/20 group-hover:scale-125 transition-transform" />
+                          
+                          <div className="flex-1 bg-white dark:bg-slate-800/50 p-8 rounded-[32px] border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-2xl hover:shadow-teal-500/5 hover:border-teal-500/20 transition-all">
+                            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                              <div>
+                                <span className="text-[10px] font-black text-teal-600 uppercase tracking-[2px] mb-2 block">Sequence {idx + 1}</span>
+                                <h4 className="text-xl font-black text-slate-800 dark:text-white tracking-tight leading-none uppercase">{session.title}</h4>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <div className="text-right">
+                                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Transmission Time</p>
+                                  <p className="text-xs font-black text-slate-800 dark:text-white uppercase">
+                                    {new Date(session.scheduled_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} @ {new Date(session.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                  </p>
+                                </div>
+                                <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-teal-600">
+                                  <Clock size={18} />
+                                </div>
+                              </div>
                             </div>
+                            
+                            <p className="text-sm font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-6">
+                              {session.description || "Detailed intellectual abstract for this synchronous exchange node is being finalized by faculty."}
+                            </p>
+                            
                             <div className="flex items-center gap-4">
-                              {lesson.is_preview && <span className="text-[10px] font-bold text-cyan-600 px-2 py-0.5 bg-cyan-50 dark:bg-cyan-900/30 rounded uppercase">Preview</span>}
-                              {!isEnrolled && !lesson.is_preview ? <Lock size={14} className="text-slate-300" /> : <Clock size={14} className="text-slate-300" />}
+                               <div className="flex -space-x-2">
+                                 {[1, 2, 3].map(i => (
+                                   <div key={i} className="w-6 h-6 rounded-full border-2 border-white dark:border-slate-800 bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[8px] font-black">
+                                     {String.fromCharCode(64 + i)}
+                                   </div>
+                                 ))}
+                               </div>
+                               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">32+ Students Synced</span>
                             </div>
                           </div>
-                        ))}
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="p-20 text-center border-4 border-dashed border-slate-100 dark:border-slate-800 rounded-[48px] bg-slate-50/50 dark:bg-slate-900/20">
+                        <Calendar className="mx-auto text-slate-200 mb-6" size={64} />
+                        <h4 className="text-xl font-black text-slate-400 tracking-tight uppercase">Synchronizing Schedule</h4>
+                        <p className="text-sm font-medium text-slate-500 mt-2">Faculty is currently orchestrating the synchronous sequences.</p>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="p-12 text-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl bg-white dark:bg-slate-800/50">
-                    <Layout className="mx-auto text-slate-300 mb-4" size={48} />
-                    <p className="text-slate-500 font-medium">Curriculum is being updated.</p>
+                    )}
                   </div>
+                ) : (
+                  /* Standard Curriculum View */
+                  course.chapters && course.chapters.length > 0 ? (
+                    course.chapters.map((chapter: any, i: number) => (
+                      <div key={chapter.id} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[32px] overflow-hidden shadow-sm hover:shadow-xl transition-all">
+                        <div className="p-6 flex items-center justify-between bg-slate-50/30 dark:bg-slate-900/30 border-b border-slate-100 dark:border-slate-700">
+                          <h4 className="font-black text-slate-800 dark:text-white flex items-center gap-4">
+                            <span className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 flex items-center justify-center text-xs text-teal-600 font-black">
+                              0{i+1}
+                            </span>
+                            <span className="tracking-tight uppercase">{chapter.title}</span>
+                          </h4>
+                          <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{chapter.lessons?.length || 0} Artifacts</span>
+                        </div>
+                        <div className="divide-y divide-slate-50 dark:divide-slate-700/50">
+                          {chapter.lessons?.map((lesson: any) => (
+                            <div key={lesson.id} className="flex items-center justify-between p-5 hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-all group cursor-pointer">
+                              <div className="flex items-center gap-4">
+                                <div className="w-8 h-8 rounded-lg bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-slate-300 group-hover:text-teal-500 transition-colors">
+                                  <PlayCircle size={18} />
+                                </div>
+                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors uppercase tracking-tight">{lesson.title}</span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                {lesson.is_preview && <span className="text-[9px] font-black text-teal-600 px-3 py-1 bg-teal-50 dark:bg-teal-900/30 rounded-full uppercase tracking-widest border border-teal-100 dark:border-teal-800">Preview</span>}
+                                {!isEnrolled && !lesson.is_preview ? <Lock size={14} className="text-slate-300" /> : <Clock size={14} className="text-slate-300" />}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-20 text-center border-4 border-dashed border-slate-100 dark:border-slate-800 rounded-[48px] bg-slate-50/50 dark:bg-slate-900/20">
+                      <Layout className="mx-auto text-slate-200 mb-6" size={64} />
+                      <h4 className="text-xl font-black text-slate-400 tracking-tight uppercase">Registry Updating</h4>
+                      <p className="text-sm font-medium text-slate-500 mt-2">Scholastic architecture is being provisioned.</p>
+                    </div>
+                  )
                 )}
               </div>
             </section>
 
             {/* Student Feedback Area */}
             <section>
-              <div className="flex items-center justify-between mb-8">
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-white">Student Feedback</h2>
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between mb-10">
+                <h2 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter">Scholastic Review</h2>
+                <div className="flex items-center gap-3 px-6 py-2 bg-amber-50 dark:bg-amber-900/20 rounded-2xl border border-amber-100 dark:border-amber-800/30">
                   <Star size={20} className="text-amber-500 fill-amber-500" />
-                  <span className="text-xl font-bold text-slate-800 dark:text-white">{course.rating}</span>
+                  <span className="text-xl font-black text-slate-800 dark:text-white tracking-tighter">{course.rating}</span>
                 </div>
               </div>
               
