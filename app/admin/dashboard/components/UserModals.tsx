@@ -36,88 +36,105 @@ export const UserModals: React.FC<UserModalsProps> = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowAddModal(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+              className="relative w-full max-w-xl bg-white dark:bg-slate-800 rounded-[48px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
             >
-              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <UserPlus className="text-teal-600" size={20} />
-                  Provision New Identity
-                </h3>
+              <div className="p-10 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/30 dark:bg-slate-900/30 backdrop-blur-xl">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 gradient-primary rounded-[24px] flex items-center justify-center shadow-2xl shadow-teal-500/30">
+                    <UserPlus size={32} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter leading-none mb-1">Provision Identity</h3>
+                    <p className="text-[10px] text-teal-600 font-black uppercase tracking-[3px]">New Network Node Registry</p>
+                  </div>
+                </div>
                 <button 
                   onClick={() => setShowAddModal(false)} 
-                  aria-label="Close modal"
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                  className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 text-slate-400 hover:text-rose-500 shadow-sm border border-slate-100 dark:border-slate-700 transition-all"
                 >
-                  <XCircle size={20} />
+                  <X size={24} />
                 </button>
               </div>
               
-              <form onSubmit={handleAddUser} className="p-6 space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Network Username</label>
-                  <input 
-                    required
-                    type="text" 
-                    placeholder="e.g. Satoshi_99"
-                    value={newUser.username}
-                    onChange={e => setNewUser({...newUser, username: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Communication Hub (Email)</label>
-                  <input 
-                    required
-                    type="email" 
-                    placeholder="satoshi@fatra.academy"
-                    value={newUser.email}
-                    onChange={e => setNewUser({...newUser, email: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Access Protocol (Password)</label>
-                  <input 
-                    required
-                    type="password" 
-                    placeholder="••••••••"
-                    value={newUser.password}
-                    onChange={e => setNewUser({...newUser, password: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Institutional Role</label>
-                  <select 
-                    value={newUser.role}
-                    aria-label="New user role"
-                    onChange={e => setNewUser({...newUser, role: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  >
-                    <option value="STUDENT">Student (Default Node)</option>
-                    <option value="INSTRUCTOR">Instructor (Faculty)</option>
-                    <option value="ADMIN">Admin (Protocol Moderator)</option>
-                    <option value="SUPER_ADMIN">Super Admin (System Architect)</option>
-                  </select>
+              <form onSubmit={handleAddUser} className="p-10 space-y-8">
+                <div className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Network Username</label>
+                    <div className="relative">
+                      <input 
+                        required
+                        type="text" 
+                        placeholder="e.g. Satoshi_99"
+                        value={newUser.username}
+                        onChange={e => setNewUser({...newUser, username: e.target.value})}
+                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all pl-12"
+                      />
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Communication Hub (Email)</label>
+                    <div className="relative">
+                      <input 
+                        required
+                        type="email" 
+                        placeholder="satoshi@fatra.academy"
+                        value={newUser.email}
+                        onChange={e => setNewUser({...newUser, email: e.target.value})}
+                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all pl-12"
+                      />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Access Protocol (Password)</label>
+                    <div className="relative">
+                      <input 
+                        required
+                        type="password" 
+                        placeholder="••••••••"
+                        value={newUser.password}
+                        onChange={e => setNewUser({...newUser, password: e.target.value})}
+                        className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all pl-12"
+                      />
+                      <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Institutional Role</label>
+                    <select 
+                      value={newUser.role}
+                      onChange={e => setNewUser({...newUser, role: e.target.value})}
+                      className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-black uppercase tracking-widest focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
+                    >
+                      <option value="STUDENT">Student Node</option>
+                      <option value="INSTRUCTOR">Faculty Node</option>
+                      <option value="ADMIN">Protocol Moderator</option>
+                      <option value="SUPER_ADMIN">System Architect</option>
+                    </select>
+                  </div>
                 </div>
 
-                <div className="pt-4 flex gap-3">
+                <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex gap-4">
                   <button 
                     type="button"
                     onClick={() => setShowAddModal(false)}
-                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                    className="flex-1 py-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-[24px] text-[10px] font-black uppercase tracking-[3px] hover:bg-slate-200 transition-all"
                   >
-                    Cancel
+                    Abort
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-[2] py-5 gradient-primary text-white rounded-[24px] text-[10px] font-black uppercase tracking-[3px] shadow-2xl shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
                     Confirm Provision
                   </button>
@@ -136,187 +153,205 @@ export const UserModals: React.FC<UserModalsProps> = ({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowEditModal(false)}
-              className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
             />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
+              className="relative w-full max-w-4xl bg-white dark:bg-slate-800 rounded-[48px] shadow-2xl overflow-hidden border border-slate-200 dark:border-slate-700"
             >
-              <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-                <h3 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                  <Edit className="text-teal-600" size={20} />
-                  Modify Network Identity
-                </h3>
+              <div className="p-10 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between bg-slate-50/30 dark:bg-slate-900/30 backdrop-blur-xl">
+                <div className="flex items-center gap-6">
+                  <div className="w-16 h-16 gradient-primary rounded-[24px] flex items-center justify-center shadow-2xl shadow-teal-500/30">
+                    <Edit size={32} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter leading-none mb-1">Identity Modification</h3>
+                    <p className="text-[10px] text-teal-600 font-black uppercase tracking-[3px]">Protocol: {editUser.username} Node</p>
+                  </div>
+                </div>
                 <button 
                   onClick={() => setShowEditModal(false)} 
-                  aria-label="Close edit modal"
-                  className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2"
+                  className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 text-slate-400 hover:text-rose-500 shadow-sm border border-slate-100 dark:border-slate-700 transition-all"
                 >
-                  <XCircle size={20} />
+                  <X size={24} />
                 </button>
               </div>
               
-              <form onSubmit={handleEditSubmit} className="p-6 space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Network Username</label>
-                  <input 
-                    required
-                    type="text" 
-                    title="User Network Alias"
-                    placeholder="Username"
-                    value={editUser.username}
-                    onChange={e => setEditUser({...editUser, username: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Communication Hub (Email)</label>
-                  <input 
-                    required
-                    type="email" 
-                    title="User Communication Hub"
-                    placeholder="Email Address"
-                    value={editUser.email}
-                    onChange={e => setEditUser({...editUser, email: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Access Protocol (Password - Leave blank to keep current)</label>
-                  <input 
-                    type="password" 
-                    title="Password"
-                    placeholder="••••••••"
-                    value={editUser.password || ""}
-                    onChange={e => setEditUser({...editUser, password: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">First Name</label>
-                    <input 
-                      type="text" 
-                      title="First Name"
-                      placeholder="e.g. John"
-                      value={editUser.first_name || ""}
-                      onChange={e => setEditUser({...editUser, first_name: e.target.value})}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                    />
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Last Name</label>
-                    <input 
-                      type="text" 
-                      title="Last Name"
-                      placeholder="e.g. Doe"
-                      value={editUser.last_name || ""}
-                      onChange={e => setEditUser({...editUser, last_name: e.target.value})}
-                      className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                    />
-                  </div>
-                </div>
+              <form onSubmit={handleEditSubmit} className="p-10 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                  {/* Section 1: Core Identity */}
+                  <div className="space-y-8">
+                    <div>
+                      <h4 className="text-[12px] font-black text-slate-800 dark:text-white uppercase tracking-[4px] mb-8 flex items-center gap-3">
+                        <User size={16} className="text-teal-600" /> Core Identity Nodes
+                      </h4>
+                      
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Network Username</label>
+                          <div className="relative">
+                            <input 
+                              required
+                              type="text" 
+                              value={editUser.username}
+                              onChange={e => setEditUser({...editUser, username: e.target.value})}
+                              className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all pl-12"
+                            />
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                          </div>
+                        </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Biography / About</label>
-                  <textarea 
-                    title="User Biography"
-                    placeholder="Tell us about this user..."
-                    value={editUser.bio || ""}
-                    onChange={e => setEditUser({...editUser, bio: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none h-20"
-                  />
-                </div>
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Institutional Email</label>
+                          <div className="relative">
+                            <input 
+                              required
+                              type="email" 
+                              value={editUser.email}
+                              onChange={e => setEditUser({...editUser, email: e.target.value})}
+                              className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all pl-12"
+                            />
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                          </div>
+                        </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Institutional Role</label>
-                  <select 
-                    value={editUser.role}
-                    title="Institutional Role"
-                    aria-label="Edit user role"
-                    onChange={e => setEditUser({...editUser, role: e.target.value})}
-                    className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                  >
-                    <option value="STUDENT">Student (Default Node)</option>
-                    <option value="INSTRUCTOR">Instructor (Faculty)</option>
-                    <option value="ADMIN">Admin (Protocol Moderator)</option>
-                    <option value="SUPER_ADMIN">Super Admin (System Architect)</option>
-                  </select>
-                </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Legal First Name</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. John"
+                              value={editUser.first_name || ""}
+                              onChange={e => setEditUser({...editUser, first_name: e.target.value})}
+                              className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Legal Last Name</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. Doe"
+                              value={editUser.last_name || ""}
+                              onChange={e => setEditUser({...editUser, last_name: e.target.value})}
+                              className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
+                            />
+                          </div>
+                        </div>
 
-                {editUser.role === 'INSTRUCTOR' && (
-                  <motion.div 
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="space-y-4 pt-2 border-t border-slate-100 dark:border-slate-700 mt-4"
-                  >
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Expertise</label>
-                        <input 
-                          type="text" 
-                          title="Expertise"
-                          placeholder="e.g. Mathematics"
-                          value={editUser.expertise || ""}
-                          onChange={e => setEditUser({...editUser, expertise: e.target.value})}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                        />
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Access Protocol (Password)</label>
+                          <div className="relative">
+                            <input 
+                              type="password" 
+                              placeholder="Leave blank to maintain current key"
+                              value={editUser.password || ""}
+                              onChange={e => setEditUser({...editUser, password: e.target.value})}
+                              className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all pl-12"
+                            />
+                            <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                          </div>
+                        </div>
                       </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Education</label>
-                        <input 
-                          type="text" 
-                          title="Education"
-                          placeholder="e.g. PhD in AI"
-                          value={editUser.education_level || ""}
-                          onChange={e => setEditUser({...editUser, education_level: e.target.value})}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                        />
+                    </div>
+                  </div>
+
+                  {/* Section 2: Institutional Meta */}
+                  <div className="space-y-8">
+                    <div>
+                      <h4 className="text-[12px] font-black text-slate-800 dark:text-white uppercase tracking-[4px] mb-8 flex items-center gap-3">
+                        <ShieldCheck size={16} className="text-teal-600" /> Institutional Registry
+                      </h4>
+                      
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Governing Role</label>
+                          <select 
+                            value={editUser.role}
+                            onChange={e => setEditUser({...editUser, role: e.target.value})}
+                            className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-black uppercase tracking-widest focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
+                          >
+                            <option value="STUDENT">Student Node</option>
+                            <option value="INSTRUCTOR">Faculty Node</option>
+                            <option value="ADMIN">Protocol Moderator</option>
+                            <option value="SUPER_ADMIN">System Architect</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Scholastic Bio</label>
+                          <textarea 
+                            placeholder="Brief abstract of the identity..."
+                            value={editUser.bio || ""}
+                            onChange={e => setEditUser({...editUser, bio: e.target.value})}
+                            className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all resize-none h-32"
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mt-4">
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Professional Website</label>
-                        <input 
-                          type="text" 
-                          title="Website"
-                          placeholder="https://..."
-                          value={editUser.website || ""}
-                          onChange={e => setEditUser({...editUser, website: e.target.value})}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">Portfolio Link</label>
-                        <input 
-                          type="text" 
-                          title="Portfolio"
-                          placeholder="https://..."
-                          value={editUser.portfolio || ""}
-                          onChange={e => setEditUser({...editUser, portfolio: e.target.value})}
-                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border-none rounded-2xl text-sm focus:ring-2 focus:ring-teal-500 outline-none transition-all"
-                        />
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
+                    {editUser.role === 'INSTRUCTOR' && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-8 bg-teal-50/30 dark:bg-teal-900/10 rounded-[32px] border border-teal-100 dark:border-teal-800/50 space-y-6"
+                      >
+                        <h5 className="text-[10px] font-black text-teal-600 dark:text-teal-400 uppercase tracking-[3px] flex items-center gap-2">
+                           <Award size={14} /> Faculty Credentials
+                        </h5>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Expertise</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. AI Ethics"
+                              value={editUser.expertise || ""}
+                              onChange={e => setEditUser({...editUser, expertise: e.target.value})}
+                              className="w-full px-4 py-3 bg-white dark:bg-slate-800 border-none rounded-xl text-xs font-bold focus:ring-2 focus:ring-teal-500 transition-all"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Education</label>
+                            <input 
+                              type="text" 
+                              placeholder="e.g. PhD"
+                              value={editUser.education_level || ""}
+                              onChange={e => setEditUser({...editUser, education_level: e.target.value})}
+                              className="w-full px-4 py-3 bg-white dark:bg-slate-800 border-none rounded-xl text-xs font-bold focus:ring-2 focus:ring-teal-500 transition-all"
+                            />
+                          </div>
+                        </div>
 
-                <div className="pt-4 flex gap-3">
+                        <div className="space-y-2">
+                          <label className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Global Portfolio Signal (URL)</label>
+                          <input 
+                            type="url" 
+                            placeholder="https://..."
+                            value={editUser.portfolio || ""}
+                            onChange={e => setEditUser({...editUser, portfolio: e.target.value})}
+                            className="w-full px-4 py-3 bg-white dark:bg-slate-800 border-none rounded-xl text-xs font-bold focus:ring-2 focus:ring-teal-500 transition-all"
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-12 pt-10 border-t border-slate-100 dark:border-slate-800 flex gap-4">
                   <button 
                     type="button"
                     onClick={() => setShowEditModal(false)}
-                    className="flex-1 px-6 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 rounded-2xl font-semibold hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-all"
+                    className="flex-1 py-5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-[24px] text-[10px] font-black uppercase tracking-[3px] hover:bg-slate-200 transition-all"
                   >
-                    Cancel
+                    Discard Changes
                   </button>
                   <button 
                     type="submit"
-                    className="flex-1 px-6 py-3 gradient-primary text-white rounded-2xl font-semibold shadow-lg shadow-teal-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="flex-[2] py-5 gradient-primary text-white rounded-[24px] text-[10px] font-black uppercase tracking-[3px] shadow-2xl shadow-teal-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all"
                   >
-                    Update Identity
+                    Update Identity Registry
                   </button>
                 </div>
               </form>
