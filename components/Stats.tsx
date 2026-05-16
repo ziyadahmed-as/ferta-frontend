@@ -24,9 +24,22 @@ const Stats = () => {
     const fetchStats = async () => {
       try {
         const response = await api.get("/courses/courses/platform_stats/");
-        setStatsData(response.data);
-      } catch (error) {
-        console.error("Error fetching platform stats:", error);
+        if (response.data) {
+          setStatsData(response.data);
+        }
+      } catch (error: any) {
+        // Professional Error Orchestration: Categorize the failure mode
+        const errorContext = {
+          protocol: "Analytics Registry Sync",
+          status: error.response?.status || "NETWORK_DISCONNECTED",
+          message: error.message || "Internal Node Failure",
+          code: error.code || "ERR_UNKNOWN"
+        };
+        
+        console.error(`[Fatra System] Operational Signal Lost:`, errorContext);
+        
+        // Graceful Degradation: Component will utilize initial registry state (zeros)
+        // to maintain UI stability while backend nodes are unreachable.
       }
     };
     fetchStats();

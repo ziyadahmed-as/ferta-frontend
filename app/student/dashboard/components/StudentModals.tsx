@@ -49,11 +49,11 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
               className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-[48px] shadow-2xl p-10 border border-slate-200 dark:border-slate-700 overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl -mr-16 -mt-16" />
-              
+
               <div className="flex items-center justify-between mb-10 relative z-10">
                 <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">Scholastic Review</h3>
-                <button 
-                  onClick={() => setShowRatingModal(false)} 
+                <button title="close"
+                  onClick={() => setShowRatingModal(false)}
                   className="w-10 h-10 bg-slate-50 dark:bg-slate-900 rounded-2xl flex items-center justify-center text-slate-400 hover:text-rose-500 transition-all"
                 >
                   <X size={20} />
@@ -71,7 +71,7 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                   </p>
                   <div className="flex items-center justify-center gap-4 py-4 bg-slate-50 dark:bg-slate-900/50 rounded-3xl border border-slate-100 dark:border-slate-800">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <button
+                      <button title="set rating"
                         key={star}
                         onClick={() => setRating(star)}
                         className={`transition-all transform hover:scale-125 ${star <= rating ? "text-amber-400 drop-shadow-xl" : "text-slate-200 dark:text-slate-700"}`}
@@ -139,8 +139,8 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                     <p className="text-[10px] text-teal-600 font-black uppercase tracking-[3px]">{selectedStreamForLearn?.title}</p>
                   </div>
                 </div>
-                <button 
-                  onClick={() => setShowLearnModal(false)} 
+                <button title="close"
+                  onClick={() => setShowLearnModal(false)}
                   className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 text-slate-400 hover:text-rose-500 shadow-sm border border-slate-100 dark:border-slate-700 transition-all"
                 >
                   <X size={24} />
@@ -151,7 +151,7 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                 {selectedStreamForLearn?.live_sessions?.map((session: any, sIdx: number) => (
                   <div key={session.id} className="relative pl-12 border-l-4 border-slate-100 dark:border-slate-800/50 last:border-transparent">
                     <div className="absolute left-[-14px] top-0 w-6 h-6 rounded-full bg-white dark:bg-slate-800 border-4 border-teal-500 shadow-xl shadow-teal-500/20" />
-                    
+
                     <div className="mb-8">
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                         <div>
@@ -161,11 +161,11 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                             {new Date(session.scheduled_at).toLocaleDateString()} @ {new Date(session.scheduled_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </div>
                         </div>
-                        
+
                         {(session.meeting_link || session.link) && (
-                          <a 
-                            href={session.meeting_link || session.link} 
-                            target="_blank" 
+                          <a
+                            href={session.meeting_link || session.link}
+                            target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-3 px-6 py-3 bg-teal-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-2xl shadow-teal-500/30 hover:scale-[1.05] active:scale-95 transition-all"
                           >
@@ -173,7 +173,7 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                           </a>
                         )}
                       </div>
-                      
+
                       <p className="text-sm font-medium text-slate-500 dark:text-slate-400 leading-relaxed mb-6 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-[24px] border border-slate-100 dark:border-slate-800/50">
                         {session.description || "Synthesizing core learning objectives for this synchronous session."}
                       </p>
@@ -185,10 +185,10 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-[3px]">Synchronous Artifacts</p>
                         <div className="h-px flex-1 bg-slate-100 dark:bg-slate-800" />
                       </div>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {session.content_blocks?.map((block: any) => (
-                          <button 
+                          <button
                             key={block.id}
                             onClick={() => {
                               setActiveArtifact(block);
@@ -231,7 +231,7 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
               </div>
 
               <div className="p-8 bg-slate-50 dark:bg-slate-900/80 border-t border-slate-100 dark:border-slate-800 flex justify-center">
-                <button 
+                <button
                   onClick={() => setShowLearnModal(false)}
                   className="px-10 py-3 text-[10px] font-black uppercase tracking-[3px] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-all hover:scale-105"
                 >
@@ -269,14 +269,14 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                       {activeArtifact.title}
                     </h3>
                     <div className="flex items-center gap-3">
-                       <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5">
-                         <ShieldAlert size={12} className="text-amber-500" /> Secure Identity Protocol
-                       </span>
-                       <span className="text-[9px] px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 font-black uppercase tracking-widest border border-teal-100 dark:border-teal-800">Read Only</span>
+                      <span className="text-[9px] text-slate-400 font-black uppercase tracking-widest flex items-center gap-1.5">
+                        <ShieldAlert size={12} className="text-amber-500" /> Secure Identity Protocol
+                      </span>
+                      <span className="text-[9px] px-3 py-1 rounded-full bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 font-black uppercase tracking-widest border border-teal-100 dark:border-teal-800">Read Only</span>
                     </div>
                   </div>
                 </div>
-                <button 
+                <button title="close"
                   onClick={() => setShowArtifactViewer(false)}
                   className="w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800 text-slate-400 hover:text-rose-500 hover:rotate-90 transition-all shadow-sm border border-slate-100 dark:border-slate-700"
                 >
@@ -285,11 +285,11 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
               </div>
 
               <div className="flex-1 relative bg-slate-50 dark:bg-slate-950 overflow-hidden">
-                <div 
+                <div
                   className="absolute inset-0 z-10 select-none pointer-events-auto"
                   onContextMenu={(e) => e.preventDefault()}
                 />
-                
+
                 {activeArtifact.type === 'pdf' ? (
                   <iframe
                     src={`${activeArtifact.file || activeArtifact.url}#toolbar=0&navpanes=0&scrollbar=1`}
@@ -302,18 +302,18 @@ export const StudentModals: React.FC<StudentModalsProps> = ({
                     <h4 className="text-3xl font-black text-slate-800 dark:text-white mb-4 tracking-tighter">External Signal Node</h4>
                     <p className="text-slate-500 font-medium max-w-md mb-12 leading-relaxed">This knowledge artifact is hosted on an external institutional platform. Intellectual property protocols remain active.</p>
                     <div className="w-full max-w-5xl h-[600px] bg-white dark:bg-slate-900 rounded-[32px] border border-slate-200 dark:border-slate-800 overflow-hidden shadow-2xl">
-                       <iframe
-                         src={activeArtifact.url}
-                         className="w-full h-full border-none"
-                         title={activeArtifact.title}
-                       />
+                      <iframe
+                        src={activeArtifact.url}
+                        className="w-full h-full border-none"
+                        title={activeArtifact.title}
+                      />
                     </div>
                   </div>
                 )}
               </div>
 
               <div className="p-6 bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center">
-                 <p className="text-[10px] text-slate-400 font-black uppercase tracking-[4px]"> Scholastic Governance Protected by Fatra Registry</p>
+                <p className="text-[10px] text-slate-400 font-black uppercase tracking-[4px]"> Scholastic Governance Protected by Fatra Registry</p>
               </div>
             </motion.div>
           </div>

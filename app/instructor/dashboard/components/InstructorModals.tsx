@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BarChart3, FileText, Link2, UploadCloud, CheckCircle, X } from "lucide-react";
+import { BarChart3, FileText, Link2, UploadCloud, CheckCircle, X, Clock } from "lucide-react";
 
 interface InstructorModalsProps {
   showManageModal: boolean;
@@ -47,8 +47,8 @@ export const InstructorModals: React.FC<InstructorModalsProps> = ({
                   <p className="text-[10px] text-teal-600 font-black uppercase tracking-[3px]">{selectedStream?.title}</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setShowManageModal(false)} 
+              <button title="close"
+                onClick={() => setShowManageModal(false)}
                 className="w-12 h-12 flex items-center justify-center rounded-2xl bg-white dark:bg-slate-800 text-slate-400 hover:text-rose-500 shadow-sm border border-slate-100 dark:border-slate-700 transition-all"
               >
                 <X size={24} />
@@ -63,11 +63,10 @@ export const InstructorModals: React.FC<InstructorModalsProps> = ({
                   <button
                     key={session.id}
                     onClick={() => setSelectedSessionId(session.id)}
-                    className={`w-full text-left p-5 rounded-[24px] transition-all group ${
-                      selectedSessionId === session.id 
-                      ? "bg-white dark:bg-slate-800 text-teal-600 shadow-2xl shadow-teal-500/10 border border-teal-100 dark:border-teal-900/50" 
-                      : "hover:bg-white/50 dark:hover:bg-slate-800/30 text-slate-500 dark:text-slate-400"
-                    }`}
+                    className={`w-full text-left p-5 rounded-[24px] transition-all group ${selectedSessionId === session.id
+                        ? "bg-white dark:bg-slate-800 text-teal-600 shadow-2xl shadow-teal-500/10 border border-teal-100 dark:border-teal-900/50"
+                        : "hover:bg-white/50 dark:hover:bg-slate-800/30 text-slate-500 dark:text-slate-400"
+                      }`}
                   >
                     <p className={`text-sm font-black uppercase tracking-tight mb-1 truncate ${selectedSessionId === session.id ? "text-teal-600" : "text-slate-700 dark:text-slate-200"}`}>{session.title}</p>
                     <div className="flex items-center gap-2 opacity-60">
@@ -85,8 +84,8 @@ export const InstructorModals: React.FC<InstructorModalsProps> = ({
                     <div>
                       <h4 className="text-xl font-black text-slate-800 dark:text-white tracking-tight mb-8 uppercase">Provision Knowledge Artifacts</h4>
                       <div className="grid grid-cols-2 gap-4 mb-8">
-                        <button 
-                          onClick={() => setArtifactData({...artifactData, type: 'pdf'})}
+                        <button
+                          onClick={() => setArtifactData({ ...artifactData, type: 'pdf' })}
                           className={`p-6 rounded-[24px] border-2 transition-all flex flex-col items-center gap-3 ${artifactData.type === 'pdf' ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20 shadow-lg shadow-teal-500/10' : 'border-slate-100 dark:border-slate-800 hover:border-teal-200 dark:hover:border-teal-800'}`}
                         >
                           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${artifactData.type === 'pdf' ? 'bg-teal-500 text-white shadow-lg' : 'bg-slate-50 dark:bg-slate-900 text-slate-400'}`}>
@@ -94,8 +93,8 @@ export const InstructorModals: React.FC<InstructorModalsProps> = ({
                           </div>
                           <span className="text-[10px] font-black uppercase tracking-widest">Research PDF</span>
                         </button>
-                        <button 
-                          onClick={() => setArtifactData({...artifactData, type: 'link'})}
+                        <button
+                          onClick={() => setArtifactData({ ...artifactData, type: 'link' })}
                           className={`p-6 rounded-[24px] border-2 transition-all flex flex-col items-center gap-3 ${artifactData.type === 'link' ? 'border-teal-500 bg-teal-50 dark:bg-teal-900/20 shadow-lg shadow-teal-500/10' : 'border-slate-100 dark:border-slate-800 hover:border-teal-200 dark:hover:border-teal-800'}`}
                         >
                           <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${artifactData.type === 'link' ? 'bg-teal-500 text-white shadow-lg' : 'bg-slate-50 dark:bg-slate-900 text-slate-400'}`}>
@@ -108,21 +107,21 @@ export const InstructorModals: React.FC<InstructorModalsProps> = ({
                       <div className="space-y-6">
                         <div className="space-y-2">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">Artifact Identity Label</label>
-                          <input 
+                          <input
                             type="text"
                             placeholder="e.g. Theoretical Framework Node"
                             value={artifactData.title}
-                            onChange={(e) => setArtifactData({...artifactData, title: e.target.value})}
+                            onChange={(e) => setArtifactData({ ...artifactData, title: e.target.value })}
                             className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
                           />
                         </div>
 
                         {artifactData.type === 'pdf' ? (
                           <div className="relative border-4 border-dashed border-slate-100 dark:border-slate-800 rounded-[32px] p-12 flex flex-col items-center justify-center gap-4 hover:border-teal-500/30 transition-all group bg-slate-50/30 dark:bg-slate-900/30">
-                            <input 
-                              type="file" 
+                            <input title="upload file"
+                              type="file"
                               accept=".pdf"
-                              onChange={(e) => setArtifactData({...artifactData, file: e.target.files?.[0] || null})}
+                              onChange={(e) => setArtifactData({ ...artifactData, file: e.target.files?.[0] || null })}
                               className="absolute inset-0 opacity-0 cursor-pointer"
                             />
                             <div className="w-20 h-20 rounded-[32px] bg-white dark:bg-slate-800 shadow-2xl flex items-center justify-center text-slate-400 group-hover:text-teal-500 group-hover:scale-110 transition-all">
@@ -133,17 +132,17 @@ export const InstructorModals: React.FC<InstructorModalsProps> = ({
                         ) : (
                           <div className="space-y-2">
                             <label className="text-[10px] font-black text-slate-400 uppercase tracking-[2px] px-1">External Signal URL</label>
-                            <input 
+                            <input
                               type="url"
                               placeholder="https://institutional-source.edu/..."
                               value={artifactData.url}
-                              onChange={(e) => setArtifactData({...artifactData, url: e.target.value})}
+                              onChange={(e) => setArtifactData({ ...artifactData, url: e.target.value })}
                               className="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900/50 border-none rounded-[20px] text-sm font-bold focus:ring-4 focus:ring-teal-500/10 outline-none transition-all"
                             />
                           </div>
                         )}
 
-                        <button 
+                        <button
                           onClick={handleUploadArtifact}
                           disabled={uploading || !artifactData.title}
                           className="w-full py-5 gradient-primary text-white rounded-[24px] text-[10px] font-black uppercase tracking-[3px] shadow-2xl shadow-teal-500/30 disabled:opacity-50 flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all"

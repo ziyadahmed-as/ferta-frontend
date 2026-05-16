@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Plus, Calendar, XCircle } from "lucide-react";
+import { Plus, Calendar, XCircle, TrendingUp as TrendingUpIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface StreamModalsProps {
@@ -55,7 +55,7 @@ export const StreamModals: React.FC<StreamModalsProps> = ({
               className="relative w-full max-w-md bg-white dark:bg-slate-800 rounded-[48px] shadow-2xl p-10 border border-slate-200 dark:border-slate-700"
             >
               <div className="w-20 h-20 bg-teal-50 dark:bg-teal-900/30 rounded-[28px] flex items-center justify-center text-teal-600 mb-8 shadow-inner">
-                 <TrendingUp size={32} />
+                 <TrendingUpIcon size={32} />
               </div>
               <h3 className="text-3xl font-black text-slate-800 dark:text-white mb-3 tracking-tighter">Scale Cohort Node</h3>
               <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mb-8 leading-relaxed">Expand the synchronous registry for <b>{selectedStream?.title}</b> to accommodate rising intellectual demand.</p>
@@ -342,7 +342,7 @@ export const StreamModals: React.FC<StreamModalsProps> = ({
             >
               <div className="p-10 border-b border-slate-100 dark:border-slate-700 bg-slate-50/30 dark:bg-slate-900/30 flex items-center justify-between">
                 <h3 className="text-3xl font-black text-slate-800 dark:text-white tracking-tighter flex items-center gap-4">
-                  <TrendingUp className="text-teal-600" size={28} />
+                  <TrendingUpIcon className="text-teal-600" size={28} />
                   Re-Orchestrate Node
                 </h3>
                 <button 
