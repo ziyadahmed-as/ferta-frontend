@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { UserPlus, Edit, ShieldCheck, Award, Mail, User, TrendingUp, Globe, Link as LinkIcon, ChevronRight, X, XCircle } from "lucide-react";
+import { UserPlus, Edit, ShieldCheck, Award, Mail, User, TrendingUp, Globe, Link as LinkIcon, ChevronRight, X, XCircle, Key } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface UserModalsProps {

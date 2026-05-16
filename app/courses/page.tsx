@@ -4,7 +4,7 @@ import React, { useEffect, useState, Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import api from "@/lib/api";
-import { BookOpen, Search, Layers, Users, Clock, ArrowRight, Filter, SlidersHorizontal, Star, X } from "lucide-react";
+import { BookOpen, Search, Layers, Users, Clock, ArrowRight, Filter, SlidersHorizontal, Star, X, Eye, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
