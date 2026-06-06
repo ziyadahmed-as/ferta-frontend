@@ -71,7 +71,7 @@ const Hero = () => {
               <Link
                 href="/courses"
                 id="hero-cta-explore"
-                className="group px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 text-white rounded-2xl font-bold text-sm transition-all shadow-xl shadow-teal-600/25 hover:shadow-teal-600/40 hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2.5"
+                className="group px-8 py-4 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-2xl font-bold text-sm transition-all shadow-xl shadow-teal-600/25 active:scale-[0.98] flex items-center justify-center gap-2.5"
               >
                 Explore Courses
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -79,7 +79,7 @@ const Hero = () => {
               <Link
                 href="/register"
                 id="hero-cta-register"
-                className="px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl font-bold text-sm hover:border-teal-500 dark:hover:border-teal-500 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2.5"
+                className="px-8 py-4 bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-2xl font-bold text-sm active:scale-[0.98] flex items-center justify-center gap-2.5"
               >
                 <Play size={16} className="text-teal-600" />
                 Watch Demo

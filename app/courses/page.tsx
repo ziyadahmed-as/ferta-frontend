@@ -69,11 +69,8 @@ const CatalogContent = () => {
                 {viewType === "live" ? <TrendingUp size={14} /> : <BookOpen size={14} />}
                 {viewType === "live" ? "Synchronous Learning Hub" : "Scholastic Repository"}
               </span>
-              <h1 className="text-6xl md:text-7xl font-black text-slate-800 dark:text-white tracking-tighter leading-[0.9] mb-8">
-                {viewType === "live" ? "Live Sync" : "Professional"} <br />
-                <span className="text-transparent bg-clip-text gradient-primary">{viewType === "live" ? "Sessions" : "Course Registry"}</span>
-              </h1>
-              <p className="text-lg font-medium text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
+                <h1 className="text-3xl md:text-4xl font-black text-slate-800 dark:text-white tracking-tighter leading-[0.9] mb-2">Professional Sessions</h1>
+              <p className="text-xl font-medium text-slate-500 dark:text-slate-400 max-w-xl leading-relaxed">
                 {viewType === "live"
                   ? "Engage with expert faculty in real-time. Join high-fidelity synchronous sessions designed for immediate knowledge transfer and interactive mastery."
                   : "Explore our curated collection of high-fidelity knowledge nodes, meticulously orchestrated by global faculty to accelerate your professional evolution."}
